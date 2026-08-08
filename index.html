@@ -355,7 +355,7 @@
 <body>
 <header>
   <div class="brand">
-    <b>Arquitetura Epistemológica</b>
+    <b>Arquitetura da Pesquisa</b>
     <small>Editor · PPGET · Jean Cesar</small>
   </div>
   <button class="btn" onclick="addNode()">＋ Conceito</button>
@@ -1162,7 +1162,7 @@ function exportSvg() {
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker>
   </defs>
   <rect width="1600" height="1000" fill="#f8fafc"/>
-  <text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura Epistemológica</text>
+  <text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura da Pesquisa</text>
   <text x="40" y="56" font-family="Segoe UI,Arial" font-size="12" fill="#64748b">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · Jean Cesar</text>
   ${linksSvg}${nodesSvg}${legend}
 </svg>`;
@@ -1237,7 +1237,7 @@ function exportPdf() {
       <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.output};border-radius:2px"></div>Desdobramento</div>
     </div>`;
 
-  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura Epistemológica</title>
+  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
     @page{size:A3 landscape;margin:10mm}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -1248,7 +1248,7 @@ function exportPdf() {
     #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
   </style></head><body>
   <div class="header">
-    <h1>Arquitetura Epistemológica da Pesquisa</h1>
+    <h1>Arquitetura da Pesquisa</h1>
     <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · Jean Cesar</div>
   </div>
   <div id="map">
@@ -1268,14 +1268,14 @@ function exportPdf() {
 // ====================== WORD ======================
 function exportWord() {
   let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-  <head><meta charset="utf-8"><title>Arquitetura Epistemológica</title>
+  <head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}
   h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}
   h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}
   .tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}
   .action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}
   .cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body>
-  <h1>Arquitetura Epistemológica da Pesquisa</h1>
+  <h1>Arquitetura da Pesquisa</h1>
   <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · Jean Cesar</p><hr>`;
   const order = ['macro','core','object','complement','output'];
   const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
@@ -1288,7 +1288,7 @@ function exportWord() {
     <p>${esc(n.desc||'')}</p>
     ${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
   });
-  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura Epistemológica · PPGET</p></body></html>`;
+  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura da Pesquisa · PPGET</p></body></html>`;
   const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1845,7 +1845,7 @@ function exportPdf() {
     paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
-  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura Epistemológica</title>
+  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
     @page { size: ${format} ${orientation}; margin: 10mm; }
     *{box-sizing:border-box;margin:0;padding:0}
@@ -1856,7 +1856,7 @@ function exportPdf() {
     #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
   </style></head><body>
   <div class="header">
-    <h1>Arquitetura Epistemológica da Pesquisa</h1>
+    <h1>Arquitetura da Pesquisa</h1>
     <div class="sub">15 Classificações Profissionais · PPGET</div>
   </div>
   <div id="map">
@@ -1868,7 +1868,7 @@ function exportPdf() {
 }
 
 function exportWord() {
-  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura Epistemológica</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura Epistemológica</h1><hr>`;
+  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura da Pesquisa</h1><hr>`;
   
   const allColors = Object.assign({macro:'#0f2744',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}, LINK_COLORS);
   [...N].sort((a,b) => (a.cls > b.cls ? 1 : -1)).forEach(n => {
@@ -1892,7 +1892,7 @@ function exportSvg() {
     let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (allColors[B.cls] || '#64748b'));
     linksSvg += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${(p1.y+p2.y)/2}, ${p2.x} ${(p1.y+p2.y)/2}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
-  const svgContent = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.12"/></filter><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs><rect width="1600" height="1000" fill="#f8fafc"/><text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura Epistemológica</text>${linksSvg}${nodesSvg}</svg>`;
+  const svgContent = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.12"/></filter><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs><rect width="1600" height="1000" fill="#f8fafc"/><text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura da Pesquisa</text>${linksSvg}${nodesSvg}</svg>`;
   const blob = new Blob([svgContent], {type:'image/svg+xml;charset=utf-8'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Mapa.svg`; a.click(); toast('SVG exportado!');
 }
@@ -2278,7 +2278,7 @@ function updateDynamicLegend() {
 // 5. Injetar a leitura das Categorias Customizadas no Export PDF e Word
 const _oldExpWord = window.exportWord;
 window.exportWord = function() {
-    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura Epistemológica</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura Epistemológica</h1><hr>`;
+    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura da Pesquisa</h1><hr>`;
     [...N].sort((a,b) => (a.cls > b.cls ? 1 : -1)).forEach(n => {
         html += `<h2>${esc(n.title)}</h2><div class="tag">${esc(n.tag||'')}</div><span class="cat" style="background:${allColorsMap[n.cls]||'#64748b'}">${userCatNames[n.cls] || n.cls}</span><p>${esc(n.desc||'')}</p>${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
     });
