@@ -356,7 +356,7 @@
 <header>
   <div class="brand">
     <b>Arquitetura da Pesquisa</b>
-    <small>Editor · PPGET · Jean Cesar</small>
+    <small>Editor · PPGET · </small>
   </div>
   <button class="btn" onclick="addNode()">＋ Conceito</button>
   <button class="btn" id="btn-connect" onclick="toggleConnectMode()">↗ Conectar</button>
@@ -378,7 +378,11 @@
   <span class="status" id="status">Pronto</span>
 </header>
 
-<button id="btn-exit-presentation" onclick="exitPresentation()"> </button>
+<div id="presentation-title">Arquitetura da Pesquisa <span style="font-size: 14px; font-weight: normal; color: var(--muted); display: block; margin-top: 4px;">PPGET · </span></div>
+<div id="presentation-footer">Arquitetura da Pesquisa · PPGET</div>
+<div id="presentation-legend"></div>
+
+<button id="btn-exit-presentation" onclick="exitPresentation()">✕</button>
 
 <main>
   <div id="wrap">
@@ -533,9 +537,9 @@
   <div class="leg-group">
       <div class="leg-group-title">Grupo 3: Resultados</div>
       <div class="leg-item"><div class="leg-color" style="background:#f97316"></div>Hipótese Confirmada</div>
-      <div class="leg-item"><div class="leg-color" style="background:#ef4444"></div>Novo Paradigma</div>
+      <div class="leg-item"><div class="leg-color" style="background:#ef4444"></div>Novo Paradigma</div>19:13 08/08/2026
       <div class="leg-item"><div class="leg-color" style="background:#6366f1"></div>Artigo / Publicação</div>
-      <div class="leg-item"><div class="leg-color" style="background:#14b8a6"></div>Protótipo / Solução</div>
+      <div class="leg-item"><div class="leg-color" style="background:#14b8a6"></div>Protótipo / Poc</div>
       <div class="leg-item"><div class="leg-color" style="background:#f43f5e"></div>Impacto Social</div>
   </div>
 </div>
@@ -547,16 +551,16 @@
   <div class="ctx-item" onclick="changeLineColor('#3b82f6')">🔵 Azul</div>
   <div class="ctx-item" onclick="changeLineColor('#eab308')">🟡 Amarelo</div>
   <div class="ctx-separator"></div>
-  <div class="ctx-item" onclick="changeLineColor(null)">⚪ Cor Padrão</div>
+  <div class="ctx-item" onclick="changeLineColor(null)">⚪ Cor Padrão</div>20:19
   <div class="ctx-separator"></div>
   <div class="ctx-item danger" onclick="deleteSelectedLine()">🗑 Excluir Linha</div>
 </div>
 
 
 <script>
-// ====================== DADOS ======================
+  // ====================== DADOS ======================
 let N = [
-  ['macro', 560, 50, 320, 115, 'macro', 'NÚCLEO MACROESTRUTURAL', 'Educação Tecnológica e Formação Ética', 'É o eixo organizador da pesquisa. A tecnologia é tomada como fenômeno histórico, social e valorativo, exigindo formação crítica.', 'Funciona como lente geral da investigação.'],
+  ['macro', 560, 50, 320, 115, 'macro', 'NÚCLEO MACROESTRUTURAL', 'Educação Tecnológica e Formação Ética', 'É o eixo organizador da pesquisa. A tecnologia é tomada como fenômeno histórico, social e valorativo, exigindo formação crítica.', 'Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.'],
   ['filo', 130, 270, 210, 95, 'core', 'FUNDAMENTO FILOSÓFICO', 'Filosofia da Tecnologia', 'Compreender a técnica para além da ideia de instrumento neutro.', 'Vieira Pinto e Feenberg sustentam a leitura crítica.'],
   ['socio', 580, 270, 210, 95, 'core', 'ESTRUTURA SOCIOTÉCNICA', 'Capitalismo de Vigilância', 'Lógica econômica e operacional das plataformas e extração de dados.', 'Zuboff ocupa posição central.'],
   ['mis', 1030, 270, 210, 95, 'object', 'FENÔMENO / OBJETO', 'Misoginia Digital', 'Sistema de policiamento e punição das relações de gênero em ambientes digitais.', 'Kate Manne oferece o núcleo conceitual.'],
@@ -702,14 +706,51 @@ function cleanTemporary() {
   toast(`${toRemove.length} nó(s) removido(s)`);
 }
 
-// ====================== APRESENTAÇÃO ======================
+// ====================== APRESENTAÇÃO E LEGENDA DINÂMICA ======================
 function enterPresentation() {
   document.body.classList.add('presentation');
+  updatePresentationLegend();
   toast('Modo Apresentação · ESC para sair');
 }
 function exitPresentation() {
   document.body.classList.remove('presentation');
+  const leg = document.getElementById('presentation-legend');
+  if (leg) leg.style.display = 'none';
   setStatus('Pronto');
+}
+
+function updatePresentationLegend() {
+  const leg = document.getElementById('presentation-legend');
+  if (!leg) return;
+  
+  // Caça apenas os cartões que estão em uso no mapa atual
+  const usedClasses = [...new Set(N.map(n => n.cls))];
+  if (usedClasses.length === 0) { leg.style.display = 'none'; return; }
+
+  // Puxa as cores de todos os cartões possíveis
+  const allColorsMap = Object.assign({
+    macro:'#0f2744', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
+    m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
+    r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
+  }, LINK_COLORS);
+  
+  const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
+  usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
+
+  // Cria um "container flex" que enfileira tudo na horizontal com espaçamento (gap)
+  let html = `<div style="display: flex; align-items: center; gap: 20px; justify-content: center;">`;
+
+  usedClasses.forEach(cls => {
+     const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
+     html += `<div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); font-weight: 600;">
+                <div style="background:${allColorsMap[cls]}; width:12px; height:12px; border-radius:3px;"></div>
+                <span>${catName}</span>
+              </div>`;
+  });
+  
+  html += `</div>`;
+  leg.innerHTML = html;
+  leg.style.display = 'block';
 }
 
 // ====================== GEOMETRIA ======================
@@ -1163,7 +1204,7 @@ function exportSvg() {
   </defs>
   <rect width="1600" height="1000" fill="#f8fafc"/>
   <text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura da Pesquisa</text>
-  <text x="40" y="56" font-family="Segoe UI,Arial" font-size="12" fill="#64748b">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · Jean Cesar</text>
+  <text x="40" y="56" font-family="Segoe UI,Arial" font-size="12" fill="#64748b">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </text>
   ${linksSvg}${nodesSvg}${legend}
 </svg>`;
   const blob = new Blob([svgContent], {type:'image/svg+xml;charset=utf-8'});
@@ -1249,7 +1290,7 @@ function exportPdf() {
   </style></head><body>
   <div class="header">
     <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · Jean Cesar</div>
+    <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </div>
   </div>
   <div id="map">
     <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" xmlns="http://www.w3.org/2000/svg">
@@ -1276,7 +1317,7 @@ function exportWord() {
   .action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}
   .cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body>
   <h1>Arquitetura da Pesquisa</h1>
-  <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · Jean Cesar</p><hr>`;
+  <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · </p><hr>`;
   const order = ['macro','core','object','complement','output'];
   const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
   const catNames = {macro:'Núcleo Macroestrutural',core:'Fundamento / Autor',object:'Fenômeno / Objeto',complement:'Complemento',output:'Desdobramento'};
@@ -1570,7 +1611,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="r1">Hipótese Confirmada</option>
             <option value="r2">Novo Paradigma</option>
             <option value="r3">Artigo / Publicação</option>
-            <option value="r4">Protótipo / Solução</option>
+            <option value="r4">Protótipo / Poc</option>
             <option value="r5">Impacto Social</option>
         </optgroup>
         `;
@@ -1970,6 +2011,39 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
     .c-item-edit { opacity: 0.3; font-size: 14px; padding: 2px; border-radius: 4px; transition: 0.2s; }
     .c-item-edit:hover { opacity: 1; background: var(--border); transform: scale(1.1); }
     .color-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  /* ===== TÍTULO + LEGENDA (MODO APRESENTAÇÃO) ===== */
+  #presentation-title {
+    display: none; position: fixed; top: 24px; left: 30px;
+    font-family: Georgia, serif; font-size: 20px; font-weight: bold;
+    color: var(--navy); z-index: 3000; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  body.dark #presentation-title { color: #e2e8f0; }
+  body.presentation #presentation-title { display: block; }
+
+  #presentation-footer {
+    display: none; position: fixed; bottom: 24px; right: 30px;
+    font-size: 14px; font-weight: 600; color: var(--muted); z-index: 3000;
+  }
+  body.presentation #presentation-footer { display: block; }
+
+  #presentation-legend {
+    display: none; 
+    position: fixed; 
+    bottom: 40px; 
+    left: 50%;                  /* Centraliza a caixa na tela */
+    transform: translateX(-50%);  /* Complemento da centralização */
+    background: rgba(255, 255, 255, 0.90); 
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); 
+    border-radius: 30px;        /* Bordas bem arredondadas, estilo pílula */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
+    padding: 12px 24px;         /* Deixa a barra mais esticadinha */
+    z-index: 3000;
+    white-space: nowrap;        /* Impede que os itens quebrem linha */
+  }
+  body.dark #presentation-legend { background: rgba(30, 41, 59, 0.90); border-color: rgba(255,255,255,0.1); }
+  body.presentation #presentation-legend { display: block !important; }
 </style>
 
 <script>
@@ -2146,7 +2220,7 @@ window.execStyles = function(mode) {
 const defaultCatNames = {
     macro: 'Núcleo Macroestrutural', core: 'Fundamento / Autor', object: 'Fenômeno / Objeto', complement: 'Complemento', output: 'Desdobramento / PoC',
     m1: 'Pesquisa Bibliográfica', m2: 'Análise Documental', m3: 'Entrevista / Campo', m4: 'Coleta de Dados', m5: 'Tratamento Analítico',
-    r1: 'Hipótese Confirmada', r2: 'Novo Paradigma', r3: 'Artigo / Publicação', r4: 'Protótipo / Solução', r5: 'Impacto Social'
+    r1: 'Hipótese Confirmada', r2: 'Novo Paradigma', r3: 'Artigo / Publicação', r4: 'Protótipo / PoC', r5: 'Impacto Social'
 };
 const allColorsMap = Object.assign({
     macro:'#0f2744', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
@@ -2276,15 +2350,194 @@ function updateDynamicLegend() {
 }
 
 // 5. Injetar a leitura das Categorias Customizadas no Export PDF e Word
-const _oldExpWord = window.exportWord;
+// ====================== EXPORT WORD – VERSÃO DETALHADA, A4 E INTELIGENTE ======================
 window.exportWord = function() {
-    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura da Pesquisa</h1><hr>`;
-    [...N].sort((a,b) => (a.cls > b.cls ? 1 : -1)).forEach(n => {
-        html += `<h2>${esc(n.title)}</h2><div class="tag">${esc(n.tag||'')}</div><span class="cat" style="background:${allColorsMap[n.cls]||'#64748b'}">${userCatNames[n.cls] || n.cls}</span><p>${esc(n.desc||'')}</p>${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
-    });
-    html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor · PPGET</p></body></html>`;
-    const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Documento.doc`; a.click(); toast('Word gerado!');
+  // 1. Monta mapa de conexões
+  const connections = {};
+  L.forEach(([a, b]) => {
+    if (!connections[a]) connections[a] = [];
+    if (!connections[b]) connections[b] = [];
+    connections[a].push(b);
+    connections[b].push(a);
+  });
+
+  // 2. Ordena por hierarquia de grupos
+  const levelOrder = { macro: 0, core: 1, object: 2, complement: 3, output: 4,
+                       m1: 5, m2: 6, m3: 7, m4: 8, m5: 9,
+                       r1: 10, r2: 11, r3: 12, r4: 13, r5: 14 };
+  const sorted = [...N].sort((a, b) => {
+    const la = levelOrder[a.cls] ?? 99;
+    const lb = levelOrder[b.cls] ?? 99;
+    if (la !== lb) return la - lb;
+    return (a.title || '').localeCompare(b.title || '');
+  });
+
+  // 3. Espinha dorsal em formato de trilha
+  const spineList = [...spineNodes]
+    .map(id => N.find(n => n.id === id))
+    .filter(Boolean)
+    .map(n => n.title)
+    .join(' ➔ ');
+
+  // Estrutura HTML Otimizada com namespaces do MS Word (A4, Print View, Margens)
+  let html = `
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>Arquitetura da Pesquisa – PPGET</title>
+<!--[if gte mso 9]>
+<xml>
+  <w:WordDocument>
+    <w:View>Print</w:View>
+    <w:Zoom>100</w:Zoom>
+    <w:DoNotOptimizeForBrowser/>
+  </w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page WordSection1 {
+      size: 21.0cm 29.7cm; /* A4 Nativo */
+      margin: 2.5cm 2.0cm 2.0cm 2.0cm; /* Margens padrão A4 */
+      mso-header-margin: 1.25cm;
+      mso-footer-margin: 1.25cm;
+      mso-paper-source: 0;
+  }
+  div.WordSection1 { page: WordSection1; }
+  
+  body { 
+      font-family: Calibri, Arial, sans-serif; 
+      font-size: 11pt; 
+      line-height: 1.45; 
+      color: #1a2332; 
+      text-align: left; 
+  }
+  h1 { font-family: Georgia, serif; color: #0f2744; font-size: 22pt; margin-bottom: 4pt; text-align: left; }
+  h2 { font-family: Georgia, serif; color: #0f2744; font-size: 15pt; margin-top: 24pt; border-bottom: 1px solid #cbd5e1; padding-bottom: 4pt; }
+  h3 { font-family: Georgia, serif; color: #0f2744; font-size: 13pt; margin-top: 16pt; margin-bottom: 4pt; }
+  p { text-align: justify; margin-top: 0; margin-bottom: 8pt; }
+  
+  .meta { color: #64748b; font-size: 10pt; margin-bottom: 24pt; }
+  .tag { font-size: 9pt; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+  
+  .action {
+    background-color: #f0f9ff; 
+    border-left: 4px solid #2563eb;
+    padding: 8pt 10pt; 
+    margin: 10pt 0; 
+    font-size: 10.5pt;
+  }
+  .connections {
+    font-size: 10pt; color: #475569; margin: 8pt 0 16pt 0;
+    padding-left: 10pt; border-left: 2px solid #e2e8f0;
+  }
+  .spine-box {
+    background-color: #fefce8; border: 1px solid #fde047;
+    padding: 10pt 14pt; margin: 16pt 0 24pt 0; font-size: 11pt;
+  }
+  .legend { margin-top: 18pt; font-size: 10pt; }
+  .legend-item { margin-bottom: 6pt; }
+  hr { border: 0; border-bottom: 1px solid #cbd5e1; margin: 24pt 0; }
+  .footer { color: #94a3b8; font-size: 9pt; margin-top: 40pt; text-align: center; }
+</style>
+</head>
+<body>
+<div class="WordSection1">
+
+<h1>Arquitetura da Pesquisa</h1>
+<div class="meta">
+  Educação Tecnológica · Formação Ética · Letramento Crítico<br>
+  PPGET · <br>
+  Documento gerado a partir do mapa conceitual interativo
+</div>
+
+<div class="spine-box">
+  <b>🦴 Espinha Dorsal da Arquitetura:</b><br>
+  ${spineList || 'Nenhum nó marcado como espinha dorsal no momento.'}
+</div>
+
+<h2>1. Visão Geral da Estrutura</h2>
+<p>Este documento descreve a arquitetura da pesquisa de forma linear, como construída no editor visual. Cada bloco abaixo corresponde a um cartão do mapa, descrevendo suas propriedades teóricas e metodológicas, além das conexões ativas do elemento.</p>
+`;
+
+  // 4. Injetar cada nó
+  sorted.forEach((n, idx) => {
+    const catName = userCatNames[n.cls] || n.cls;
+    const color = allColorsMap[n.cls] || '#64748b';
+    const related = (connections[n.id] || [])
+      .map(id => {
+        const other = N.find(x => x.id === id);
+        return other ? other.title : null;
+      })
+      .filter(Boolean);
+
+    html += `
+<br>
+<h3>${idx + 1}. ${esc(n.title)}</h3>
+<div class="tag">${esc(n.tag || '')}</div>
+<div style="margin-top:2pt; margin-bottom:8pt;">
+  <span style="background:${color}; color:white; font-size:9pt; font-weight:bold; padding:2pt 6pt;">&nbsp;${esc(catName)}&nbsp;</span>
+  ${spineNodes.has(n.id) ? '<span style="font-size:9pt; color:#b45309; margin-left:8pt;"><b>[🦴 Pertence à Espinha Dorsal]</b></span>' : ''}
+</div>
+
+<p>${esc(n.desc || '').replace(/\n/g, '<br>')}</p>
+
+${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action).replace(/\n/g, '<br>')}</div>` : ''}
+
+${related.length ? `
+<div class="connections">
+  <b>Conexões diretas no mapa:</b><br>
+  ${related.map(t => `• ${esc(t)}`).join('<br>')}
+</div>` : '<div class="connections"><i>Sem conexões registradas no mapa.</i></div>'}
+`;
+  });
+
+  // 5. Legenda Inteligente (Só renderiza o que existe e usa retângulos robustos para MS Word)
+  html += `
+<hr>
+<h2>2. Legenda de Categorias Mapeadas</h2>
+<div class="legend">
+`;
+
+  const groups = [
+    { title: 'Grupo 1 – Fundamentos', keys: ['macro','core','object','complement','output'] },
+    { title: 'Grupo 2 – Metodologia', keys: ['m1','m2','m3','m4','m5'] },
+    { title: 'Grupo 3 – Resultados', keys: ['r1','r2','r3','r4','r5'] }
+  ];
+
+  groups.forEach(g => {
+    const hasKeys = g.keys.some(k => N.some(n => n.cls === k));
+    if (hasKeys) {
+      html += `<p style="margin-top:14pt; margin-bottom:6pt; font-weight:bold; font-size:11pt; color: #0f2744;">${g.title}</p>`;
+      g.keys.forEach(k => {
+        if (N.some(n => n.cls === k)) {
+          // Usa um span com &nbsp; largos para simular um retângulo de cor perfeito no Word
+          html += `<div class="legend-item">
+            <span style="background-color:${allColorsMap[k]}; border: 1px solid #1a2332; font-size:10pt; line-height: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+            &nbsp; ${esc(userCatNames[k] || k)}
+          </div>`;
+        }
+      });
+    }
+  });
+
+  html += `
+</div>
+
+<div class="footer">
+  Data: ${new Date().toLocaleDateString('pt-BR')} · Total de cartões: ${N.length} · Conexões ativas: ${L.length}
+</div>
+
+</div>
+</body>
+</html>`;
+
+  // Codificação universal para Word
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Arquitetura_Pesquisa_${new Date().toISOString().slice(0,10)}.doc`;
+  a.click();
+  toast('Word (A4) gerado!');
 };
 
 </script>
