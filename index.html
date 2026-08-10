@@ -651,7 +651,7 @@ function toggleTheme() {
   drawLinks();
 }
 (function() {
-  if (localStorage.getItem('temaArquitetura') === 'dark') {
+  if (localStorage.getItem('temaArquitetura') !== 'light') {
     document.body.classList.add('dark');
     document.getElementById('btn-theme').textContent = '☀️ Claro';
   }
