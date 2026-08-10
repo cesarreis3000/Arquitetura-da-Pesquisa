@@ -587,36 +587,40 @@
 
 
 <script>
-// ====================== DADOS CARREGADOS DIRETAMENTE (PROJETO FINAL) ======================
+  // ====================== DADOS ======================
 let N = [
-  { "id": "n_macro", "x": 636, "y": 10, "w": 340, "h": 212, "cls": "macro", "tag": "NÚCLEO MACROESTRUTURAL", "title": "Educação Tecnológica e Formação Ética", "desc": "O campo formativo amplo que ultrapassa a dimensão instrumental. Visa desenvolver a capacidade de compreender criticamente, avaliar eticamente e intervir de forma responsável nas relações sociotécnicas.", "action": "Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.", "z": 10 },
-  { "id": "n_bazzo", "x": 318, "y": 86, "w": 220, "h": 127, "cls": "core", "tag": "AUTOR CENTRAL", "title": "Walter Bazzo", "desc": "Defende a Educação Tecnológica como vetor indispensável de desenvolvimento social, exigindo uma mudança cultural.", "action": "Assegura a aderência institucional da pesquisa à vocação do PPGET.", "z": 10 },
-  { "id": "n_bauman", "x": 1072, "y": 90, "w": 220, "h": 111, "cls": "core", "tag": "AUTOR DE DIÁLOGO", "title": "Zygmunt Bauman", "desc": "A fragilidade dos laços e a profunda crise ética que caracteriza a modernidade líquida.", "action": "Justifica a urgência contemporânea na formação de uma postura cidadã.", "z": 10 },
-  { "id": "n_filo", "x": 172, "y": 262, "w": 298, "h": 137, "cls": "core", "tag": "FUNDAMENTO", "title": "Filosofia da Tecnologia", "desc": "A técnica não é neutra. Ela materializa interesses econômicos, carrega historicidade e instaura projetos hegemônicos de sociedade.", "action": "Desconstruir a falácia da isenção algorítmica para a banca.", "z": 10 },
-  { "id": "n_socio", "x": 654, "y": 264, "w": 302, "h": 149, "cls": "core", "tag": "ESTRUTURA SOCIOTÉCNICA", "title": "Capitalismo de Vigilância", "desc": "A mercantilização da experiência humana. A extração do 'superávit comportamental' para predição e modulação sob um manto de invisibilidade.", "action": "Explicar o motor econômico invisível que se beneficia do engajamento extremista.", "z": 10 },
-  { "id": "n_mis", "x": 1150, "y": 262, "w": 316, "h": 149, "cls": "object", "tag": "FENÔMENO EMPÍRICO", "title": "Misoginia Digital", "desc": "Não se resume a um ódio psicológico individual, mas opera como um sistema de policiamento e punição social para manutenção das hierarquias de gênero.", "action": "Foco do mapeamento netnográfico e da análise comportamental.", "z": 10 },
-  { "id": "n_pinto", "x": 44, "y": 450, "w": 236, "h": 115, "cls": "core", "tag": "AUTOR BASE", "title": "Álvaro Vieira Pinto", "desc": "A tecnologia como produção histórica e social, inseparável das condições materiais da existência humana.", "action": "Fornece a ontologia existencial e política da técnica.", "z": 10 },
-  { "id": "n_feenberg", "x": 300, "y": 448, "w": 230, "h": 119, "cls": "core", "tag": "TEORIA CRÍTICA", "title": "Andrew Feenberg", "desc": "As tecnologias incorporam escolhas sociais e, portanto, podem ser objeto de crítica, participação e reconstrução democrática.", "action": "Abre espaço para propor o simulador educacional como intervenção.", "z": 10 },
-  { "id": "n_flusser", "x": 180, "y": 620, "w": 220, "h": 127, "cls": "core", "tag": "AUTOR COMPLEMENTAR", "title": "Vilém Flusser", "desc": "O conceito de 'caixa-preta' evidencia a opacidade dos aparelhos que programam e limitam a ação do funcionário (usuário).", "action": "Sustenta a necessidade de desalienação algorítmica.", "z": 10 },
-  { "id": "n_zuboff", "x": 560, "y": 448, "w": 220, "h": 117, "cls": "core", "tag": "AUTORA CENTRAL", "title": "Shoshana Zuboff", "desc": "A noção de 'Poder Instrumentário' atualiza o conceito de controle para além da vigilância clássica das prisões.", "action": "Categoria analítica principal do novo panoptismo digital.", "z": 10 },
-  { "id": "n_vandijck", "x": 820, "y": 446, "w": 220, "h": 119, "cls": "core", "tag": "AUTORAS / ALGORITMOS", "title": "Van Dijck & Noble", "desc": "A arquitetura das plataformas e a opressão algorítmica (vieses raciais e de gênero) como parte do design para maximizar engajamento.", "action": "Conecta o modelo de negócio das Big Techs à modulação social.", "z": 10 },
-  { "id": "n_manne", "x": 1060, "y": 448, "w": 220, "h": 119, "cls": "object", "tag": "AUTORA CENTRAL", "title": "Kate Manne", "desc": "Misoginia como mecanismo punitivo focado nas mulheres que desafiam as normas patriarcais na esfera pública.", "action": "Lente principal para analisar o discurso das tecnoculturas tóxicas.", "z": 10 },
-  { "id": "n_hooks", "x": 1300, "y": 450, "w": 244, "h": 123, "cls": "object", "tag": "ÉTICA FEMINISTA", "title": "bell hooks & Sueli Carneiro", "desc": "Aprofundamento interseccional sobre violência, discriminação estrutural e a construção do 'outro' como não-ser.", "action": "Garante a densidade ética e estrutural na análise do fenômeno.", "z": 10 },
-  { "id": "n_jur", "x": 894, "y": 634, "w": 240, "h": 125, "cls": "complement", "tag": "APOIO DOCUMENTAL", "title": "Aparato Jurídico Brasileiro", "desc": "Leis Carolina Dieckmann, Lola, Stalking e ECA Digital. Se aplicado apenas de modo punitivo, é insuficiente ('apagar fogo com oxigênio').", "action": "Serve como repositório de preceitos que serão traduzidos pedagogicamente.", "z": 10 },
-  { "id": "n_met_net", "x": 1254, "y": 632, "w": 256, "h": 130, "cls": "m3", "tag": "CAMPO / METODOLOGIA", "title": "Netnografia (Robert V. Kozinets)", "desc": "Imersão em fóruns do Reddit, YouTube (conteúdo de amplo alcance e machosfera) e no X (Twitter). Apenas Big Techs.", "action": "Capturar as dinâmicas de policiamento descritas por Manne in loco.", "z": 10 },
-  { "id": "n_met_ana", "x": 1262, "y": 812, "w": 248, "h": 111, "cls": "m5", "tag": "TRATAMENTO DE DADOS", "title": "Análise de Conteúdo", "desc": "Método de Laurence Bardin. Categorização a priori (vigilância, modulação, policiamento) e a posteriori.", "action": "Garante rigor na interpretação do volume textual coletado nas redes.", "z": 10 },
-  { "id": "n_poc", "x": 672, "y": 812, "w": 260, "h": 140, "cls": "r4", "tag": "DESDOBRAMENTO (OUTPUT)", "title": "Simulador Sociotécnico (PoC)", "desc": "Ferramenta de Letramento Jurídico-Digital. Traduz a punição jurídica em pedagogia crítica, revelando ao usuário o panoptismo das plataformas.", "action": "Produto educacional que consolida os resultados da pesquisa básica.", "z": 10 }
-];
+  ['macro', 560, 50, 320, 115, 'macro', 'NÚCLEO MACROESTRUTURAL', 'Educação Tecnológica e Formação Ética', 'É o eixo organizador da pesquisa. A tecnologia é tomada como fenômeno histórico, social e valorativo, exigindo formação crítica.', 'Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.'],
+  ['filo', 130, 270, 210, 95, 'core', 'FUNDAMENTO FILOSÓFICO', 'Filosofia da Tecnologia', 'Compreender a técnica para além da ideia de instrumento neutro.', 'Vieira Pinto e Feenberg sustentam a leitura crítica.'],
+  ['socio', 580, 270, 210, 95, 'core', 'ESTRUTURA SOCIOTÉCNICA', 'Capitalismo de Vigilância', 'Lógica econômica e operacional das plataformas e extração de dados.', 'Zuboff ocupa posição central.'],
+  ['mis', 1030, 270, 210, 95, 'object', 'FENÔMENO / OBJETO', 'Misoginia Digital', 'Sistema de policiamento e punição das relações de gênero em ambientes digitais.', 'Kate Manne oferece o núcleo conceitual.'],
+  ['jur', 270, 510, 220, 95, 'complement', 'COMPLEMENTO DOCUMENTAL', 'Aparato Jurídico', 'Material documental de apoio à formação ética.', 'Mapear os instrumentos jurídicos pertinentes.'],
+  ['emp', 890, 510, 220, 95, 'object', 'ANÁLISE DIGITAL', 'Comunidades Virtuais Públicas', 'Espaços digitais onde a misoginia se manifesta.', 'Delimitar a netnografia.'],
+  ['out', 560, 730, 260, 105, 'output', 'DESDOBRAMENTO PEDAGÓGICO', 'PoC · Simulador Interativo', 'Prova de Conceito voltada ao letramento crítico e cidadania digital.', 'Tradução pedagógica dos resultados.'],
+  ['bazzo', 20, 60, 190, 85, 'core', 'AUTOR CENTRAL', 'Walter Bazzo', 'Educação Tecnológica e formação crítica.', 'Fortalecer presença no eixo principal.'],
+  ['vp', 20, 400, 190, 85, 'core', 'AUTOR CENTRAL', 'Álvaro Vieira Pinto', 'Compreensão histórica e crítica da tecnologia.', 'Sustentar a discussão conceitual.'],
+  ['feen', 150, 410, 190, 85, 'core', 'AUTOR CENTRAL', 'Andrew Feenberg', 'Dimensão social e política da tecnologia.', 'Articular tecnologia e valores.'],
+  ['zub', 590, 160, 190, 85, 'core', 'AUTORA CENTRAL', 'Shoshana Zuboff', 'Capitalismo de vigilância.', 'Protagonismo da lógica das plataformas.'],
+  ['bauman', 1190, 60, 190, 85, 'core', 'AUTOR DE DIÁLOGO', 'Zygmunt Bauman', 'Modernidade líquida.', 'Usar seletivamente.'],
+  ['manne', 1190, 410, 190, 85, 'object', 'AUTORA CENTRAL', 'Kate Manne', 'Misoginia como policiamento de gênero.', 'Referência principal do fenômeno.'],
+  ['flusser', 360, 180, 190, 85, 'core', 'AUTOR COMPLEMENTAR', 'Vilém Flusser', 'Caixa-preta e opacidade.', 'Contribuir para o letramento crítico.'],
+  ['bardin', 1110, 690, 190, 85, 'core', 'METODOLOGIA', 'Laurence Bardin', 'Análise de Conteúdo.', 'Organizar categorias de análise.']
+].map(a => ({
+  id: a[0], x: a[1], y: a[2], w: a[3], h: a[4],
+  cls: a[5], tag: a[6], title: a[7], desc: a[8], action: a[9], z: 10
+}));
 
 let L = [
-  ["n_bazzo","n_macro"], ["n_bauman","n_macro"], ["n_macro","n_filo"], ["n_macro","n_socio"], ["n_macro","n_mis"],
-  ["n_filo","n_pinto"], ["n_filo","n_feenberg"], ["n_filo","n_flusser"], ["n_socio","n_zuboff"], ["n_socio","n_vandijck"],
-  ["n_mis","n_manne"], ["n_mis","n_hooks"], ["n_socio","n_mis"], ["n_mis","n_met_net"], ["n_mis","n_jur"],
-  ["n_met_net","n_met_ana"], ["n_met_ana","n_poc"], ["n_jur","n_poc"], ["n_macro","n_poc"]
+  ['macro','filo'],['macro','socio'],['macro','mis'],
+  ['filo','jur'],['socio','emp'],['mis','emp'],
+  ['jur','out'],['emp','out'],
+  ['bazzo','macro'],['vp','filo'],['feen','filo'],
+  ['zub','socio'],['bauman','macro'],['manne','mis'],
+  ['flusser','filo'],['bardin','emp'],
+  ['socio','mis'],['filo','socio']
 ];
 
 // Espinha dorsal agora é baseada em NÓS (mais fácil de gerenciar)
-let spineNodes = new Set(["n_macro","n_socio","n_mis","n_jur","n_poc"]);
+let spineNodes = new Set(['macro','filo','socio','mis','jur','out']);
 
 let sel = null;
 let connFrom = null;
@@ -651,7 +655,7 @@ function toggleTheme() {
   drawLinks();
 }
 (function() {
-  if (localStorage.getItem('temaArquitetura') !== 'light') {
+  if (localStorage.getItem('temaArquitetura') === 'dark') {
     document.body.classList.add('dark');
     document.getElementById('btn-theme').textContent = '☀️ Claro';
   }
@@ -863,49 +867,25 @@ function drawLinks() {
     const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a, b);
-    const linkKey = a + '-' + b;
 
+    // Cor da linha: se for espinha → dourado, senão cor da categoria do destino
     let strokeColor;
-    if (customLinkColors[linkKey]) strokeColor = customLinkColors[linkKey];
-    else if (spine) strokeColor = '#eab308';
-    else strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
+    if (spine) {
+      strokeColor = '#eab308';
+    } else {
+      strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
+    }
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
-    path.setAttribute('d', `M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}`);
+    path.setAttribute('class', 'connection');
+    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', strokeColor);
-    
-    // Controle de espessura da linha (se selecionada fica mais grossa)
-    let sWidth = spine ? '3.4' : '2.2';
-    if (selectedLink === linkKey) sWidth = spine ? '5.0' : '4.0';
-    path.setAttribute('stroke-width', sWidth);
-    
+    path.setAttribute('stroke-width', spine ? '3.4' : '2.2');
     path.setAttribute('stroke-linecap', 'round');
     path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
-    
-    // Permitir clique na linha
-    path.style.pointerEvents = 'stroke';
-    path.style.cursor = 'pointer';
-
-    path.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks(); // recarrega a parte visual
-        toast('Linha selecionada. Aperte Delete para excluí-la.');
-    });
-
-    path.addEventListener('contextmenu', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks();
-        
-        const m = document.getElementById('line-context-menu');
-        m.style.left = e.clientX + 'px';
-        m.style.top = e.clientY + 'px';
-        m.classList.add('show');
-    });
-
+    path.dataset.from = a;
+    path.dataset.to = b;
     svg.appendChild(path);
   });
 }
@@ -1152,30 +1132,23 @@ function deleteNode(id = sel) {
   toast('Excluído');
 }
 
-// ====================== ZOOM / SAVE / SELEÇÃO E CORES DE LINHAS ======================
-let customLinkColors = {
-  "n_bauman-n_macro": "#3b82f6",
-  "n_bazzo-n_macro": "#3b82f6"
-};
-let selectedLink = null;
-
+// ====================== ZOOM / SAVE ======================
 function zoomBy(d) {
   scale = Math.min(1.6, Math.max(0.4, scale + d));
   stage.style.transform = `scale(${scale})`;
-  if (typeof updateMinimap === 'function') updateMinimap();
+  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
 }
 function resetZoom() {
   scale = 1;
   stage.style.transform = 'scale(1)';
-  if (typeof updateMinimap === 'function') updateMinimap();
+  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
 }
 function autoSave() {
   try {
     localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({
       nodes: N,
       links: L,
-      spineNodes: [...spineNodes],
-      customLinkColors
+      spineNodes: [...spineNodes]
     }));
   } catch(e){}
 }
@@ -1183,8 +1156,7 @@ function saveProject() {
   const blob = new Blob([JSON.stringify({
     nodes: N,
     links: L,
-    spineNodes: [...spineNodes],
-    customLinkColors
+    spineNodes: [...spineNodes]
   }, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1200,17 +1172,13 @@ document.getElementById('file').onchange = async e => {
     const data = JSON.parse(await f.text());
     N = data.nodes;
     L = data.links;
-    spineNodes = new Set(data.spineNodes || ["n_macro","n_socio","n_mis","n_jur","n_poc"]);
-    customLinkColors = data.customLinkColors || {};
+    spineNodes = new Set(data.spineNodes || ['macro','filo','socio','mis','jur','out']);
     sel = null;
-    selectedLink = null;
     render();
     toast('Projeto carregado');
   } catch(err) { alert('Arquivo inválido'); }
   e.target.value = '';
 };
-
-// ====================== RESTAURAÇÃO LOCAL ======================
 (function(){
   try {
     const raw = localStorage.getItem('arquiteturaEpistemologica');
@@ -1220,7 +1188,6 @@ document.getElementById('file').onchange = async e => {
         N = d.nodes;
         L = d.links;
         if (d.spineNodes) spineNodes = new Set(d.spineNodes);
-        if (d.customLinkColors) customLinkColors = d.customLinkColors;
       }
     }
   } catch(e){}
@@ -1246,9 +1213,8 @@ function exportSvg() {
     const p2 = getBorderPoint(B, A.x+A.w/2, A.y+A.h/2);
     const midY = (p1.y + p2.y)/2;
     const spine = isSpineEdge(a,b);
-    const linkKey = a + '-' + b;
-    const color = customLinkColors[linkKey] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || '#64748b'));
-    linksSvg += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || '#64748b');
+    linksSvg += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
   const legend = `
@@ -1286,11 +1252,6 @@ function exportPdf() {
   const printWin = window.open('', '_blank');
   if (!printWin) { alert('Permita pop-ups'); return; }
 
-  const formatEl = document.getElementById('pdf-format');
-  const orientEl = document.getElementById('pdf-orientation');
-  const format = formatEl ? formatEl.value : 'A3';
-  const orientation = orientEl ? orientEl.value : 'landscape';
-
   const bgPage = isDark ? '#0f172a' : '#ffffff';
   const bgMap = isDark ? '#0f172a' : '#ffffff';
   const textMain = isDark ? '#e2e8f0' : '#0f2744';
@@ -1320,7 +1281,7 @@ function exportPdf() {
   const nodesHtml = N.map(n => {
     const c = colors[n.cls] || colors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
       <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2">${esc(n.title||'')}</div>
       <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3">${esc((n.desc||'').slice(0,95))}</div>
@@ -1338,7 +1299,7 @@ function exportPdf() {
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
     const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b'));
-    paths += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
   const legendHtml = `
@@ -1358,7 +1319,7 @@ function exportPdf() {
     .header{text-align:center;margin-bottom:5mm}
     h1{font-family:Georgia,serif;font-size:20px;margin-bottom:3px}
     .sub{font-size:11px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid${cardBorder};border-radius:8px;overflow:hidden}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
   </style></head><body>
   <div class="header">
     <h1>Arquitetura da Pesquisa</h1>
@@ -1369,7 +1330,8 @@ function exportPdf() {
       <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>
       ${paths}
     </svg>
-    ${nodesHtml}${legendHtml}
+    ${nodesHtml}
+    ${legendHtml}
   </div>
   <script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script>
   </body></html>`);
@@ -1396,8 +1358,9 @@ function exportWord() {
   sorted.forEach(n => {
     html += `<h2>${esc(n.title)}</h2>
     <div class="tag">${esc(n.tag||'')}</div>
-    <span class="cat" style="background:${catColors[n.cls]\vert{}\vert{}'#64748b'}">${catNames[n.cls]||n.cls}</span>
-    <p>${esc(n.desc\vert{}\vert{}'')}</p>${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
+    <span class="cat" style="background:${catColors[n.cls]||'#64748b'}">${catNames[n.cls]||n.cls}</span>
+    <p>${esc(n.desc||'')}</p>
+    ${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
   });
   html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura da Pesquisa · PPGET</p></body></html>`;
   const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
@@ -1845,7 +1808,7 @@ function drawLinks() {
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
-    path.setAttribute('d', `M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}`);
+    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', strokeColor);
     
@@ -1909,7 +1872,7 @@ document.addEventListener('click', e => {
 });
 
 
-// SOBRESCRITA DO EXPORT PDF PARA MAPAS EXPANDIDOS SEM CORTES
+// ====================== PDF ======================
 function exportPdf() {
   const isDark = document.body.classList.contains('dark');
   const printWin = window.open('', '_blank');
@@ -1927,33 +1890,39 @@ function exportPdf() {
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const cardBorder = isDark ? '#334155' : '#d1d9e0';
   
+  // Cores atualizadas e constantes
   const allColors = Object.assign({
     macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
     object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
   }, LINK_COLORS);
 
+  // 1. Escaneia onde começa e termina o mapa real (para nunca cortar as bordas)
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
     minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
     maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
   });
   
+  // 2. Cria margens de respiro perfeitas (padding de 60px)
   const padding = 60;
   const mapW = (maxX - minX) + (padding * 2);
-  const mapH = (maxY - minY) + (padding * 2) + 50; 
+  const mapH = (maxY - minY) + (padding * 2) + 50; // +50 para caber a legenda nova
+  
   const offsetX = padding - minX;
   const offsetY = padding - minY;
 
+  // 3. Monta os cartões
   const nodesHtml = N.map(n => {
     const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
       <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
       <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
     </div>`;
   }).join('');
 
+  // 4. Monta as Linhas
   let paths = '';
   L.forEach(([a,b]) => {
     const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
@@ -1963,9 +1932,10 @@ function exportPdf() {
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
     let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
-    paths += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
+  // 5. LEGENDA DINÂMICA
   const usedClasses = [...new Set(N.map(n => n.cls))];
   const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
   usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
@@ -1974,23 +1944,24 @@ function exportPdf() {
   usedClasses.forEach(cls => {
     const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
     const color = allColors[cls] || '#64748b';
-    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50\%"></div>${esc(catName)}</div>`;
+    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
   });
 
+  // Adicionado 'white-space: nowrap' e removido os limites de quebra de linha
   const legendHtml = usedClasses.length > 0 ? `
-    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
       ${legendItemsHtml}
     </div>` : '';
 
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
-    @page { size: ${format}${orientation}; margin: 8mm; }
+    @page { size: ${format} ${orientation}; margin: 8mm; }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
     .header{text-align:center;margin-bottom:8mm}
     h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
     .sub{font-size:12px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid${cardBorder};border-radius:12px;overflow:visible;}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
     svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
   </style></head><body>
   <div class="header">
@@ -1999,7 +1970,8 @@ function exportPdf() {
   </div>
   <div id="map">
     <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
-    ${nodesHtml}${legendHtml}
+    ${nodesHtml}
+    ${legendHtml}
   </div>
   <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
   printWin.document.close();
@@ -2045,6 +2017,7 @@ function openAuthorsModal() {
         // 2. Cria um array para guardar as fotos encontradas naquele cartão específico
         let fotosEncontradas = [];
         for (let key in autoresFotos) {
+            // Se o título ou a descrição contiver o nome, adicionamos a foto na lista
             if ((a.title || '').toLowerCase().includes(key.toLowerCase()) || 
                 (a.desc || '').toLowerCase().includes(key.toLowerCase()) ||
                 (a.tag || '').toLowerCase().includes(key.toLowerCase())) {
@@ -2052,17 +2025,20 @@ function openAuthorsModal() {
             }
         }
         
+        // Remove duplicatas de fotos (ex: se bater Netnografia e Kozinets no mesmo card)
         fotosEncontradas = [...new Set(fotosEncontradas)];
 
         const init = getInitials(a.title || 'Autor');
         let imgHtml = '';
 
+        // 3. Monta o visual de 0, 1 ou 2 fotos dinamicamente
         if (fotosEncontradas.length === 0) {
             imgHtml = `<div class="author-initials" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
         } else if (fotosEncontradas.length === 1) {
             imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                        <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
         } else {
+            // O grande truque para 2 autoras: Divide a bolinha ao meio!
             imgHtml = `
                 <div style="display:flex; width:100%; height:100%;">
                     <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
@@ -2736,5 +2712,18 @@ ${related.length ? `
 </div>
 
 </div>
+</body>
+</html>`;
+
+  // Codificação universal para Word
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Arquitetura_Pesquisa_${new Date().toISOString().slice(0,10)}.doc`;
+  a.click();
+  toast('Word (A4) gerado!');
+};
+
+</script>
 </body>
 </html>
