@@ -872,7 +872,7 @@ function drawLinks() {
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
-    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
+    path.setAttribute('d', `M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', strokeColor);
     
@@ -1248,7 +1248,7 @@ function exportSvg() {
     const spine = isSpineEdge(a,b);
     const linkKey = a + '-' + b;
     const color = customLinkColors[linkKey] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || '#64748b'));
-    linksSvg += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    linksSvg += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
   const legend = `
@@ -1280,6 +1280,134 @@ function exportSvg() {
   toast('SVG exportado!');
 }
 
+// ====================== PDF ======================
+function exportPdf() {
+  const isDark = document.body.classList.contains('dark');
+  const printWin = window.open('', '_blank');
+  if (!printWin) { alert('Permita pop-ups'); return; }
+
+  const formatEl = document.getElementById('pdf-format');
+  const orientEl = document.getElementById('pdf-orientation');
+  const format = formatEl ? formatEl.value : 'A3';
+  const orientation = orientEl ? orientEl.value : 'landscape';
+
+  const bgPage = isDark ? '#0f172a' : '#ffffff';
+  const bgMap = isDark ? '#0f172a' : '#ffffff';
+  const textMain = isDark ? '#e2e8f0' : '#0f2744';
+  const textMuted = isDark ? '#94a3b8' : '#64748b';
+  const cardBg = isDark ? '#1e293b' : '#ffffff';
+  const cardBorder = isDark ? '#334155' : '#d1d9e0';
+  
+  // Condições do Dark Mode removidas para as cores que precisam ser estáticas
+  const colors = {
+    macro: '#000000',
+    core: isDark ? '#38bdf8' : '#2563eb',
+    object: isDark ? '#f472b6' : '#be185d',
+    complement: '#b45309',
+    output: isDark ? '#2dd4bf' : '#0f766e'
+  };
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  N.forEach(n => {
+    minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+    maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
+  });
+  const contentW = maxX - minX, contentH = maxY - minY;
+  const mapW = 1500, mapH = 900;
+  const offsetX = (mapW - contentW) / 2 - minX;
+  const offsetY = (mapH - contentH) / 2 - minY + 40;
+
+  const nodesHtml = N.map(n => {
+    const c = colors[n.cls] || colors.core;
+    const x = n.x + offsetX, y = n.y + offsetY;
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
+      <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2">${esc(n.title||'')}</div>
+      <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3">${esc((n.desc||'').slice(0,95))}</div>
+    </div>`;
+  }).join('');
+
+  let paths = '';
+  L.forEach(([a,b]) => {
+    const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
+    if (!A || !B) return;
+    const Ax = A.x + offsetX, Ay = A.y + offsetY;
+    const Bx = B.x + offsetX, By = B.y + offsetY;
+    const p1 = getBorderPoint({x:Ax,y:Ay,w:A.w,h:A.h}, Bx + B.w/2, By + B.h/2);
+    const p2 = getBorderPoint({x:Bx,y:By,w:B.w,h:B.h}, Ax + A.w/2, Ay + A.h/2);
+    const midY = (p1.y + p2.y) / 2;
+    const spine = isSpineEdge(a,b);
+    const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b'));
+    paths += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+  });
+
+  const legendHtml = `
+    <div style="position:absolute;bottom:12px;left:20px;display:flex;gap:14px;font-size:11px;color:${textMuted}">
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.macro};border-radius:2px"></div>Núcleo</div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.core};border-radius:2px"></div>Fundamento</div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.object};border-radius:2px"></div>Fenômeno</div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.complement};border-radius:2px"></div>Complemento</div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.output};border-radius:2px"></div>Desdobramento</div>
+    </div>`;
+
+  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
+  <style>
+    @page{size:A3 landscape;margin:10mm}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:5mm}
+    .header{text-align:center;margin-bottom:5mm}
+    h1{font-family:Georgia,serif;font-size:20px;margin-bottom:3px}
+    .sub{font-size:11px;color:${textMuted}}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid${cardBorder};border-radius:8px;overflow:hidden}
+  </style></head><body>
+  <div class="header">
+    <h1>Arquitetura da Pesquisa</h1>
+    <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </div>
+  </div>
+  <div id="map">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>
+      ${paths}
+    </svg>
+    ${nodesHtml}${legendHtml}
+  </div>
+  <script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script>
+  </body></html>`);
+  printWin.document.close();
+  toast('PDF gerado!');
+}
+
+// ====================== WORD ======================
+function exportWord() {
+  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+  <head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
+  <style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}
+  h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}
+  h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}
+  .tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}
+  .action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}
+  .cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body>
+  <h1>Arquitetura da Pesquisa</h1>
+  <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · </p><hr>`;
+  const order = ['macro','core','object','complement','output'];
+  const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
+  const catNames = {macro:'Núcleo Macroestrutural',core:'Fundamento / Autor',object:'Fenômeno / Objeto',complement:'Complemento',output:'Desdobramento'};
+  const catColors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}; // Preto absoluto aqui também
+  sorted.forEach(n => {
+    html += `<h2>${esc(n.title)}</h2>
+    <div class="tag">${esc(n.tag||'')}</div>
+    <span class="cat" style="background:${catColors[n.cls]\vert{}\vert{}'#64748b'}">${catNames[n.cls]||n.cls}</span>
+    <p>${esc(n.desc\vert{}\vert{}'')}</p>${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
+  });
+  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura da Pesquisa · PPGET</p></body></html>`;
+  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Arquitetura_Epistemologica_${new Date().toISOString().slice(0,10)}.doc`;
+  a.click();
+  toast('Word gerado!');
+}
+
 // ====================== UTIL ======================
 function setStatus(m) { statusEl.textContent = m; }
 function toast(m) {
@@ -1292,7 +1420,7 @@ function toast(m) {
 stage.addEventListener('click', () => {
   if (!drag && !resize) {
     sel = null;
-    selectedLink = null;
+    selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR NO FUNDO
     cancelConnect();
     render();
   }
@@ -1339,17 +1467,6 @@ window.addEventListener('keydown', e => {
 
   // Atalhos Originais
   if ((e.key === 'Delete' || e.key === 'Backspace') && sel) deleteNode();
-  
-  // Delete de Linhas Selecionadas
-  if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLink) {
-      const [a, b] = selectedLink.split('-');
-      L = L.filter(x => !(x[0] === a && x[1] === b));
-      delete customLinkColors[selectedLink];
-      selectedLink = null;
-      render();
-      toast('Linha excluída com sucesso');
-  }
-
   if (e.ctrlKey && e.key === 'd') { e.preventDefault(); if (sel) duplicateNode(); }
   if (e.key === 'Escape') {
     const authorsModal = document.getElementById('authors-modal-overlay');
@@ -1357,7 +1474,7 @@ window.addEventListener('keydown', e => {
     if (document.body.classList.contains('presentation')) {
       exitPresentation();
     } else if (authorsModal && authorsModal.classList.contains('show')) {
-      closeAuthorsModal();
+      closeAuthorsModal(); // <-- FECHA A GALERIA SE ELA ESTIVER ABERTA
     } else { 
       cancelConnect(); 
       hideContextMenu(); 
@@ -1374,6 +1491,7 @@ window.addEventListener('keyup', e => {
 });
 
 canvasCont.addEventListener('mousedown', e => {
+  // Ativa pan se Espaço + Clique ou Clique do Meio
   if (isSpaceDown || e.button === 1) {
     panState = { 
       isPanning: true, 
@@ -1433,6 +1551,7 @@ canvasCont.addEventListener('scroll', updateMinimap);
 /* CAMADA ADICIONAL 2: SCRIPTS DAS NOVAS EXIGÊNCIAS (Injeções)               */
 /* ========================================================================= */
 
+// INJEÇÃO DA INTERFACE DE IMPRESSÃO PDF NO ASIDE
 document.addEventListener("DOMContentLoaded", () => {
   const asideElement = document.querySelector('aside');
   if (asideElement) {
@@ -1453,11 +1572,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// SOBRESCRITA MAGNÉTICA DO AUTO LAYOUT PARA EXIBIR O MENU
 function autoLayout() {
   const menu = document.getElementById('layout-menu');
   menu.classList.toggle('show');
 }
 
+// Lógica de fechamento ao clicar fora do menu de layout
 document.addEventListener('click', e => {
   if (!e.target.closest('#layout-menu') && !e.target.closest('button[onclick="autoLayout()"]')) {
     const m = document.getElementById('layout-menu');
@@ -1465,6 +1586,7 @@ document.addEventListener('click', e => {
   }
 });
 
+// ALGORITMOS DE LAYOUT AVANÇADOS
 function execLayout(type) {
   if(!confirm('Isso irá reposicionar todos os cartões. Deseja continuar?')) return;
   document.getElementById('layout-menu').classList.remove('show');
@@ -1537,13 +1659,17 @@ function execLayout(type) {
 /* CAMADA ADICIONAL 3: REFINAMENTOS PROFISSIONAIS (Linhas, Botões, Cores)    */
 /* ========================================================================= */
 
+// INJEÇÃO DA LEGENDA E BOTÃO "ORGANIZAR CARDS" NO DOM
 document.addEventListener("DOMContentLoaded", () => {
+    // Legenda no canto (junto do zoom)
     const zoomCtrl = document.querySelector('.zoom-controls');
     if(zoomCtrl) zoomCtrl.insertAdjacentHTML('afterbegin', `<button class="btn" onclick="toggleSmartLegend()" style="margin-right: 5px;">📜 Legenda</button>`);
     
+    // Organizar cards (junto do Auto Layout no header)
     const autoLayoutBtn = document.querySelector('button[onclick="autoLayout()"]');
     if(autoLayoutBtn) autoLayoutBtn.insertAdjacentHTML('afterend', ` <button class="btn" onclick="toggleStylesMenu()">🧩 Organizar Cards</button>`);
     
+    // Atualiza o <select> com as 15 novas classificações agrupadas
     const clsSelect = document.getElementById('cls');
     if(clsSelect) {
         clsSelect.innerHTML = `
@@ -1572,11 +1698,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Adicionando as novas cores ao mapa global do SVG
 Object.assign(LINK_COLORS, {
     m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
     r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
 });
 
+// Lógica de Toggle do Botão Organizar (Estilos)
 function toggleStylesMenu() { document.getElementById('styles-menu').classList.toggle('show'); }
 
 document.addEventListener('click', e => {
@@ -1649,7 +1777,111 @@ function execStyles(mode) {
     toast('Estilo aplicado com sucesso!');
 }
 
+// Controle da Legenda Inteligente
 function toggleSmartLegend() { document.getElementById('smart-legend-panel').classList.toggle('show'); }
+
+
+// ====================== SELEÇÃO E CORES DE LINHAS (Sobrescrita de drawLinks) ======================
+let customLinkColors = {};
+let selectedLink = null;
+
+// Tenta restaurar do LocalStorage se houver
+try { 
+    const rawData = localStorage.getItem('arquiteturaEpistemologica');
+    if (rawData) {
+        const p = JSON.parse(rawData);
+        if (p.customLinkColors) customLinkColors = p.customLinkColors;
+    }
+} catch(e) {}
+
+// Sobrescrevendo o AutoSave e Save nativos para registrar as cores das linhas
+function autoSave() {
+  try {
+    localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }));
+  } catch(e){}
+}
+function saveProject() {
+  const blob = new Blob([JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `arquitetura_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('JSON salvo com estilos das linhas');
+}
+
+// Novo Listener para DELETAR a linha selecionada
+window.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLink) {
+        const [a, b] = selectedLink.split('-');
+        L = L.filter(x => !(x[0] === a && x[1] === b));
+        delete customLinkColors[selectedLink];
+        selectedLink = null;
+        render();
+        toast('Linha excluída com sucesso');
+    }
+});
+
+// A Magia da injeção: Redesenhando drawLinks para permitir Interações nas Linhas!
+function drawLinks() {
+  Array.from(svg.querySelectorAll('path.connection')).forEach(p => p.remove());
+  const isDark = document.body.classList.contains('dark');
+
+  L.forEach(([a, b]) => {
+    const A = N.find(n => n.id === a);
+    const B = N.find(n => n.id === b);
+    if (!A || !B) return;
+
+    const p1 = getBorderPoint(A, B.x + B.w/2, B.y + B.h/2);
+    const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
+    const midY = (p1.y + p2.y) / 2;
+    const spine = isSpineEdge(a, b);
+    const linkKey = a + '-' + b;
+
+    let strokeColor;
+    if (customLinkColors[linkKey]) strokeColor = customLinkColors[linkKey];
+    else if (spine) strokeColor = '#eab308';
+    else strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
+    path.setAttribute('d', `M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', strokeColor);
+    
+    // Controle de espessura da linha (se selecionada fica mais grossa)
+    let sWidth = spine ? '3.4' : '2.2';
+    if (selectedLink === linkKey) sWidth = spine ? '5.0' : '4.0';
+    path.setAttribute('stroke-width', sWidth);
+    
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
+    
+    // Permitir clique na linha
+    path.style.pointerEvents = 'stroke';
+    path.style.cursor = 'pointer';
+
+    path.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks(); // recarrega a parte visual
+        toast('Linha selecionada. Aperte Delete para excluí-la.');
+    });
+
+    path.addEventListener('contextmenu', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks();
+        
+        const m = document.getElementById('line-context-menu');
+        m.style.left = e.clientX + 'px';
+        m.style.top = e.clientY + 'px';
+        m.classList.add('show');
+    });
+
+    svg.appendChild(path);
+  });
+}
 
 function changeLineColor(colorCode) {
     if (selectedLink) {
@@ -1715,7 +1947,7 @@ function exportPdf() {
   const nodesHtml = N.map(n => {
     const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
       <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
       <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
@@ -1731,7 +1963,7 @@ function exportPdf() {
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
     let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
-    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    paths += `<path d="M ${p1.x}${p1.y} C ${p1.x}${midY}, ${p2.x}${midY}, ${p2.x}${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
   const usedClasses = [...new Set(N.map(n => n.cls))];
@@ -1742,23 +1974,23 @@ function exportPdf() {
   usedClasses.forEach(cls => {
     const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
     const color = allColors[cls] || '#64748b';
-    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
+    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50\%"></div>${esc(catName)}</div>`;
   });
 
   const legendHtml = usedClasses.length > 0 ? `
-    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
       ${legendItemsHtml}
     </div>` : '';
 
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
-    @page { size: ${format} ${orientation}; margin: 8mm; }
+    @page { size: ${format}${orientation}; margin: 8mm; }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
     .header{text-align:center;margin-bottom:8mm}
     h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
     .sub{font-size:12px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid${cardBorder};border-radius:12px;overflow:visible;}
     svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
   </style></head><body>
   <div class="header">
@@ -1767,8 +1999,7 @@ function exportPdf() {
   </div>
   <div id="map">
     <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
-    ${nodesHtml}
-    ${legendHtml}
+    ${nodesHtml}${legendHtml}
   </div>
   <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
   printWin.document.close();
@@ -2505,18 +2736,5 @@ ${related.length ? `
 </div>
 
 </div>
-</body>
-</html>`;
-
-  // Codificação universal para Word
-  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `Arquitetura_Pesquisa_${new Date().toISOString().slice(0,10)}.doc`;
-  a.click();
-  toast('Word (A4) gerado!');
-};
-
-</script>
 </body>
 </html>
