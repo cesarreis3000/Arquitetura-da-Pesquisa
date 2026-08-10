@@ -20,6 +20,7 @@
     --radius: 14px;
     --node-bg: #ffffff;
     --stage-bg: #ffffff;
+    --grid-color: rgba(15, 39, 68, 0.05);
   }
   body.dark {
     --bg: #0f172a;
@@ -29,12 +30,13 @@
     --navy: #38bdf8;
     --blue: #38bdf8;
     --rose: #f472b6;
-    --gold: #b45309; /* Mantido fixo no Modo Escuro */
+    --gold: #b45309; 
     --teal: #2dd4bf;
     --border: #334155;
     --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
     --node-bg: #1e293b;
     --stage-bg: #0f172a;
+    --grid-color: rgba(226, 232, 240, 0.05);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -55,6 +57,12 @@
     gap: 5px;
     z-index: 100;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  body.dark header {
+    background: rgba(30, 41, 59, 0.85);
   }
   .brand { min-width: 200px; margin-right: 4px; }
   .brand b { font: 700 13px Georgia, serif; color: var(--navy); display: block; }
@@ -91,6 +99,8 @@
     background: var(--stage-bg);
     transform-origin: 0 0;
     box-shadow: inset 0 0 0 1px var(--border);
+    background-image: radial-gradient(var(--grid-color) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
   }
   #links {
     position: absolute; inset: 0; width: 100%; height: 100%;
@@ -106,24 +116,52 @@
     cursor: grab;
     z-index: 10;
     user-select: none;
-    transition: box-shadow 0.15s, outline 0.15s;
+    transition: box-shadow 0.2s, outline 0.2s, transform 0.1s;
+    container-type: inline-size;
   }
   .node:hover { box-shadow: 0 14px 36px -6px rgba(0,0,0,0.15); }
-  .node.selected { outline: 2px solid var(--blue); border-color: var(--blue); z-index: 20; }
+  .node:active { transform: scale(0.98); }
+  .node.selected { 
+    outline: 3px solid #94a3b8 !important; 
+    border-color: #94a3b8 !important; 
+    box-shadow: 0 0 25px 5px rgba(148, 163, 184, 0.4) !important; 
+    z-index: 20; 
+  }
+  body.dark .node.selected {
+    outline: 3px solid #cbd5e1 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 0 25px 5px rgba(203, 213, 225, 0.3) !important;
+  }
   .node.connecting { outline: 3px solid rgba(37,99,235,0.5); box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
   .node.dragging { cursor: grabbing; z-index: 30; }
   .node.spine { box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.55); }
-  .node .tag { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: var(--muted); margin-bottom: 5px; }
-  .node h3 { font: 700 15px Georgia, serif; color: var(--navy); margin: 0; line-height: 1.2; }
-  .node p { font-size: 11px; line-height: 1.35; color: var(--muted); margin: 7px 0 0; }
+  .node .tag { font-size: max(9px, 4cqi) !important; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: var(--muted); margin-bottom: 5px; }
+  .node h3 { 
+    font: 700 15px Georgia, serif; 
+    color: var(--navy); margin: 0; line-height: 1.2;
+    font-size: max(13px, 6.5cqi) !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    -webkit-line-clamp: 2 !important;
+  }
+  .node p { 
+    font-size: max(11px, 5cqi) !important; 
+    line-height: 1.35; 
+    color: var(--muted); margin: 7px 0 0;
+    display: block !important;
+    overflow: hidden !important;
+    margin-bottom: 0 !important;
+  }
   
-  /* --- CORES E BORDAS DOS CARTÕES (NÚCLEO PRETO + OUTRAS CORES PRESERVADAS) --- */
   .node.macro { 
     border: 2px solid #000000 !important; 
     border-top: 5px solid #000000 !important; 
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.2) !important; 
   }
-  .node.macro h3 { font-size: 17px !important; }
+  .node.macro h3 { font-size: max(15px, 7.5cqi) !important; }
   body.dark .node.macro {
     border: 2px solid #000000 !important;
     border-top: 5px solid #000000 !important;
@@ -132,15 +170,29 @@
   
   .node.core { border-top: 4px solid var(--blue); }
   .node.object { border-top: 4px solid var(--rose); }
-  .node.complement { border-top: 4px solid #b45309; } /* Complemento sempre padronizado */
+  .node.complement { border-top: 4px solid #b45309; } 
   .node.output { border-top: 4px solid var(--teal); }
+
+  .node.m1 { border-top-color: #8b5cf6; } 
+  .node.m2 { border-top-color: #d946ef; } 
+  .node.m3 { border-top-color: #0ea5e9; } 
+  .node.m4 { border-top-color: #84cc16; } 
+  .node.m5 { border-top-color: #10b981; } 
+
+  .node.r1 { border-top-color: #f97316; } 
+  .node.r2 { border-top-color: #ef4444; } 
+  .node.r3 { border-top-color: #6366f1; } 
+  .node.r4 { border-top-color: #14b8a6; } 
+  .node.r5 { border-top-color: #f43f5e; } 
 
   .resize-handle {
     position: absolute; width: 10px; height: 10px;
     background: var(--surface); border: 2px solid var(--blue);
     border-radius: 2px; z-index: 40; display: none;
   }
-  .node.selected .resize-handle { display: block; }
+  .node.selected .resize-handle { display: block; border-color: #94a3b8 !important; }
+  body.dark .node.selected .resize-handle { border-color: #cbd5e1 !important; }
+  
   .handle-nw { top: -5px; left: -5px; cursor: nw-resize; }
   .handle-n  { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
   .handle-ne { top: -5px; right: -5px; cursor: ne-resize; }
@@ -149,10 +201,15 @@
   .handle-s  { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
   .handle-sw { bottom: -5px; left: -5px; cursor: sw-resize; }
   .handle-w  { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
+  
   aside {
-    width: 320px; background: var(--surface); border-left: 1px solid var(--border);
+    width: 320px; background: rgba(255, 255, 255, 0.85); border-left: 1px solid var(--border);
     padding: 18px; overflow-y: auto;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
+  body.dark aside { background: rgba(30, 41, 59, 0.85); }
+  
   aside h2 { font: 700 16px Georgia, serif; color: var(--navy); margin-bottom: 14px; }
   label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--muted); margin: 11px 0 4px; }
   input, textarea, select {
@@ -171,29 +228,37 @@
   #conns { font-size: 12.5px; color: var(--muted); }
   .conn-item { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid var(--border); }
   .conn-item button { background: none; border: none; color: #e11d48; cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 4px; }
-  #context-menu {
+  
+  #context-menu, #line-context-menu {
     position: fixed; z-index: 1000; background: var(--surface);
     border: 1px solid var(--border); border-radius: 11px;
     box-shadow: var(--shadow); min-width: 230px; padding: 5px; display: none; font-size: 13px;
   }
-  #context-menu.show { display: block; }
+  #context-menu.show, #line-context-menu.show { display: block; }
+  #line-context-menu { min-width: 160px; z-index: 1001; }
+  
   .ctx-item { padding: 8px 12px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--ink); }
   .ctx-item:hover { background: var(--bg); }
   .ctx-item.danger { color: #e11d48; }
   .ctx-separator { height: 1px; background: var(--border); margin: 4px 8px; }
+  
   #toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px);
     background: var(--navy); color: white; padding: 10px 20px; border-radius: 9px;
     font-size: 13px; opacity: 0; transition: all 0.25s; z-index: 2000; pointer-events: none;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  
   .zoom-controls { position: absolute; bottom: 18px; right: 18px; display: flex; gap: 5px; z-index: 50; }
   .zoom-controls .btn { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 17px; background: var(--surface); box-shadow: var(--shadow); }
+  
   body.presentation header,
   body.presentation aside,
   body.presentation .zoom-controls,
+  body.presentation #minimap,
   body.presentation .status { display: none !important; }
   body.presentation main { height: 100vh; }
+  
   #btn-exit-presentation {
     display: none;
     position: fixed;
@@ -204,43 +269,15 @@
   }
   body.presentation #btn-exit-presentation { display: block; }
 
-  /* --- ADIÇÕES PROFISSIONAIS DE CSS (Sem excluir o original) --- */
-  :root {
-    --grid-color: rgba(15, 39, 68, 0.05);
-  }
-  body.dark {
-    --grid-color: rgba(226, 232, 240, 0.05);
-  }
-  #stage {
-    /* Fundo de Grid (Miro/FigJam style) */
-    background-image: radial-gradient(var(--grid-color) 1.5px, transparent 1.5px);
-    background-size: 20px 20px;
-  }
-  header, aside {
-    /* Glassmorphism para os painéis */
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  body.dark header, body.dark aside {
-    background: rgba(30, 41, 59, 0.85);
-  }
-  .node {
-    /* Microinteração física ao clicar */
-    transition: box-shadow 0.2s, outline 0.2s, transform 0.1s;
-  }
-  .node:active {
-    transform: scale(0.98);
-  }
-  path.connection {
-    transition: stroke 0.3s, stroke-width 0.3s;
-  }
-  /* Estilos do Minimapa (Bird's Eye View) */
+  path.connection { transition: stroke 0.3s, stroke-width 0.3s; }
+  path.connection:hover { opacity: 0.7; stroke-width: 4 !important; }
+  path.connection.selected-link { filter: drop-shadow(0 0 6px #38bdf8); }
+
   #minimap {
     position: absolute; bottom: 20px; left: 20px; width: 160px; height: 100px;
     background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
     box-shadow: var(--shadow); z-index: 90; overflow: hidden; opacity: 0.7; transition: opacity 0.2s;
-    pointer-events: none; /* Apenas visual para manter a performance */
+    pointer-events: none; 
   }
   #wrap:hover #minimap { opacity: 1; }
   #minimap-content { width: 100%; height: 100%; position: relative; transform-origin: 0 0; }
@@ -250,30 +287,6 @@
     box-shadow: 0 0 0 9999px rgba(0,0,0,0.05); border-radius: 4px;
   }
 
-  /* ========================================================================= */
-  /* CAMADA ADICIONAL 2: NOVOS REQUISITOS (Tipografia Dinâmica e Elementos UI) */
-  /* ========================================================================= */
-  
-  /* 1. TIPOGRAFIA FLUIDA E PROPORCIONAL COM CONTAINER QUERIES (Zero JS necessário) */
-  .node {
-    container-type: inline-size; /* Transforma o card em um container de referência */
-  }
-  .node h3 {
-    /* Ajusta a fonte com base na largura do card (cqi), com limites mínimos originais */
-    font-size: max(13px, 6.5cqi) !important;
-  }
-  .node.macro h3 {
-    font-size: max(15px, 7.5cqi) !important;
-  }
-  .node p {
-    font-size: max(11px, 5cqi) !important;
-    line-height: 1.35;
-  }
-  .node .tag {
-    font-size: max(9px, 4cqi) !important;
-  }
-
-  /* 2. ESTILO DO MENU AUTO LAYOUT DROPDOWN */
   #layout-menu {
     position: absolute; top: 60px; right: 290px; z-index: 2000;
     background: var(--surface); border: 1px solid var(--border);
@@ -283,65 +296,31 @@
   #layout-menu.show { display: block; }
   .layout-icon { font-size: 16px; width: 24px; text-align: center; }
 
-  /* 3. ESTILO DA LEGENDA FIXA (MODO PRODUÇÃO) */
-  #fixed-legend {
-    position: absolute; top: 80px; left: 20px;
-    background: var(--surface); padding: 14px; border-radius: 11px;
-    border: 1px solid var(--border); box-shadow: var(--shadow);
-    z-index: 90; opacity: 0.9; backdrop-filter: blur(10px);
-    pointer-events: none; /* Para não atrapalhar o clique e pan do usuário no fundo */
-    transition: opacity 0.3s;
-  }
-  body.presentation #fixed-legend { display: none; }
-  #fixed-legend h4 { font-family: Georgia, serif; font-size: 13px; margin-bottom: 10px; color: var(--navy); }
-  .leg-item { display: flex; align-items: center; gap: 8px; font-size: 11.5px; margin-bottom: 6px; color: var(--muted); font-weight: 600; }
-  .leg-color { width: 12px; height: 12px; border-radius: 3px; }
-  .leg-line { width: 16px; height: 3.5px; border-radius: 2px; }
+  #fixed-legend { display: none !important; }
 
-  /* ========================================================================= */
-  /* CAMADA ADICIONAL 3: REFINAMENTOS PROFISSIONAIS (Line clamp, cores, popups)*/
-  /* ========================================================================= */
-  
-  /* Garantindo que o texto não vaze se o card ficar minúsculo */
-  .node h3, .node p {
-      display: -webkit-box !important;
-      -webkit-box-orient: vertical !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      white-space: normal !important;
-  }
-  .node h3 { -webkit-line-clamp: 2 !important; }
-
-  /* Interação e seleção visual nas linhas (SVG Paths) */
-  path.connection:hover { opacity: 0.7; stroke-width: 4 !important; }
-  path.connection.selected-link { filter: drop-shadow(0 0 6px #38bdf8); }
-
-  /* Menu de Contexto exclusivo para Linhas */
-  #line-context-menu {
-      position: fixed; z-index: 1001; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 11px;
-      box-shadow: var(--shadow); min-width: 160px; padding: 5px; display: none; font-size: 13px;
-  }
-  #line-context-menu.show { display: block; }
-
-  /* Painel Suspenso da Legenda Inteligente (Canto inferior Direito) */
   #smart-legend-panel {
-      position: absolute; bottom: 70px; right: 20px; width: 300px;
-      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--border); border-radius: 12px;
-      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
-      padding: 16px; z-index: 1000; opacity: 0; pointer-events: none;
-      transform: translateY(10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      max-height: 75vh; overflow-y: auto; color: var(--ink);
+    position: absolute; bottom: 70px; right: 20px; width: 300px;
+    background: rgba(255, 255, 255, 0.45) !important; 
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.4) !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1) !important;
+    padding: 16px; z-index: 1000; opacity: 0; pointer-events: none;
+    transform: translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 75vh; overflow-y: auto; color: var(--ink);
   }
-  body.dark #smart-legend-panel { background: rgba(30, 41, 59, 0.95); }
+  body.dark #smart-legend-panel { 
+    background: rgba(30, 41, 59, 0.45) !important; 
+    border: 1px solid rgba(255,255,255,0.1) !important; 
+  }
   #smart-legend-panel.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
   #smart-legend-panel h3 { font-family: Georgia, serif; color: var(--navy); margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px;}
   .leg-group { margin-bottom: 12px; }
   .leg-group-title { font-size: 10px; text-transform: uppercase; font-weight: 800; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .leg-item { display: flex; align-items: center; gap: 8px; font-size: 11.5px; margin-bottom: 6px; color: var(--muted); font-weight: 600; }
+  .leg-color { width: 12px; height: 12px; border-radius: 3px; }
 
-  /* Menu de Estilos / Organizar Cards */
   #styles-menu {
     position: absolute; top: 60px; right: 140px; z-index: 2000;
     background: var(--surface); border: 1px solid var(--border);
@@ -350,18 +329,146 @@
   }
   #styles-menu.show { display: block; }
 
-  /* Cores para os novos Grupos 2 (Metodologia) e 3 (Resultados) */
-  .node.m1 { border-top-color: #8b5cf6; } /* Purple */
-  .node.m2 { border-top-color: #d946ef; } /* Fuchsia */
-  .node.m3 { border-top-color: #0ea5e9; } /* Sky */
-  .node.m4 { border-top-color: #84cc16; } /* Lime */
-  .node.m5 { border-top-color: #10b981; } /* Emerald */
+  .custom-select-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
+  .custom-select-header {
+    width: 100%; border: 1px solid var(--border); border-radius: 7px;
+    padding: 7px 9px; font-size: 13px; background: var(--bg); color: var(--ink);
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  }
+  .custom-select-header::after { content: "▼"; font-size: 10px; opacity: 0.6; }
+  .custom-select-list {
+    position: absolute; top: 100%; left: 0; width: 100%; z-index: 2000;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 7px;
+    box-shadow: var(--shadow); display: none; max-height: 280px; overflow-y: auto;
+    margin-top: 4px;
+  }
+  .custom-select-list.show { display: block; }
+  .c-group-label { font-size: 9px; font-weight: 800; color: var(--muted); padding: 8px 9px 4px; text-transform: uppercase; background: var(--bg); }
+  .c-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; cursor: pointer; font-size: 12px; color: var(--ink); border-bottom: 1px solid var(--border); }
+  .c-item:last-child { border-bottom: none; }
+  .c-item:hover { background: var(--bg); }
+  .c-item-text { flex: 1; display:flex; align-items: center; gap: 6px; }
+  .c-item-edit { opacity: 0.3; font-size: 14px; padding: 2px; border-radius: 4px; transition: 0.2s; }
+  .c-item-edit:hover { opacity: 1; background: var(--border); transform: scale(1.1); }
+  .color-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 
-  .node.r1 { border-top-color: #f97316; } /* Orange */
-  .node.r2 { border-top-color: #ef4444; } /* Red */
-  .node.r3 { border-top-color: #6366f1; } /* Indigo */
-  .node.r4 { border-top-color: #14b8a6; } /* Teal */
-  .node.r5 { border-top-color: #f43f5e; } /* Rose */
+  #presentation-title {
+    display: none; position: fixed; top: 24px; left: 30px;
+    font-family: Georgia, serif; font-size: 20px; font-weight: bold;
+    color: var(--navy); z-index: 3000; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  body.dark #presentation-title { color: #e2e8f0; }
+  body.presentation #presentation-title { display: block; }
+
+  #presentation-footer {
+    display: none; position: fixed; bottom: 24px; right: 30px;
+    font-size: 14px; font-weight: 600; color: var(--muted); z-index: 3000;
+  }
+  body.presentation #presentation-footer { display: block; }
+
+  #presentation-legend {
+    display: none; 
+    position: fixed; 
+    bottom: 40px; 
+    left: 50%;                 
+    transform: translateX(-50%); 
+    background: rgba(255, 255, 255, 0.90); 
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); 
+    border-radius: 30px;        
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
+    padding: 12px 24px;         
+    z-index: 3000;
+    white-space: nowrap;        
+  }
+  body.dark #presentation-legend { background: rgba(30, 41, 59, 0.90); border-color: rgba(255,255,255,0.1); }
+  body.presentation #presentation-legend { display: block !important; }
+
+  #authors-modal-overlay {
+      display: none; position: fixed; inset: 0; background: var(--bg);
+      z-index: 4000; flex-direction: column;
+      opacity: 0; transition: opacity 0.3s ease;
+  }
+  #authors-modal-overlay.show { display: flex; opacity: 1; }
+  
+  .authors-header {
+      padding: 20px 40px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; background: var(--surface);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03); z-index: 10;
+  }
+  .authors-close { 
+      background: #e11d48; border: none; font-size: 13px; font-weight: bold; color: white; 
+      cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: background 0.2s; 
+  }
+  .authors-close:hover { background: #be123c; }
+  
+  .authors-grid {
+      padding: 40px; overflow-y: auto; display: grid; flex: 1;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
+      align-content: start;
+  }
+  .author-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow);
+  }
+  .author-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px -5px rgba(15, 39, 68, 0.15); border-color: var(--blue); }
+  
+  .author-photo-container {
+      width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px;
+      position: relative; box-shadow: 0 4px 14px rgba(0,0,0,0.12); border: 4px solid var(--bg);
+      background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .author-photo { width: 100%; height: 100%; object-fit: cover; }
+  .author-initials { font-family: Georgia, serif; font-size: 40px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  
+  .author-name { font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: var(--navy); margin-bottom: 8px; }
+  .author-concept { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--rose); font-weight: bold; margin-bottom: 16px; background: #fdf2f8; padding: 4px 10px; border-radius: 20px;}
+  .author-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
+  .author-action {
+      background: var(--bg); border-left: 3px solid var(--blue); padding: 14px;
+      font-size: 12px; color: var(--ink); border-radius: 0 8px 8px 0;
+      width: 100%; text-align: left; margin-top: auto; line-height: 1.4;
+  }
+  body.dark .author-concept { background: rgba(190, 24, 93, 0.2); }
+
+  /* =======================================================================
+     MÍDIA DE IMPRESSÃO (CTRL+P nativo para PDFs perfeitos pelo navegador) 
+     Garante 100% de respeito ao tema (Dark/Light) durante a impressão 
+     ======================================================================= */
+  @media print {
+      body {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          background-color: var(--bg) !important;
+      }
+      body.dark {
+          background-color: #0f172a !important;
+          color: #e2e8f0 !important;
+      }
+      header, aside, .zoom-controls, #minimap, #btn-exit-presentation, #layout-menu, #styles-menu, #smart-legend-panel, #fixed-legend, #toast {
+          display: none !important;
+      }
+      main, #wrap, #canvas-container {
+          height: auto !important;
+          overflow: visible !important;
+          display: block !important;
+          background: transparent !important;
+      }
+      #stage {
+          box-shadow: none !important;
+          border: none !important;
+          background: transparent !important;
+          overflow: visible !important;
+      }
+      .node {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+      }
+      #presentation-title, #presentation-footer, #presentation-legend {
+          display: none !important; 
+      }
+  }
 </style>
 </head>
 <body>
@@ -377,11 +484,10 @@
   <button class="btn" onclick="exportSvg()">🖼 SVG</button>
   <button class="btn" onclick="exportPdf()">📄 PDF</button>
   <button class="btn" onclick="exportWord()">📝 Word</button>
-  <button class="btn" id="btn-theme" onclick="toggleTheme()">🌙 Escuro</button>
+  <button class="btn" id="btn-theme" onclick="toggleTheme()">☀️ Claro</button>
   <button class="btn" id="btn-spine" onclick="toggleSpine()">🦴 Espinha</button>
   <button class="btn" onclick="openAuthorsModal()" style="color: #be185d; border-color: #fbcfe8; background: #fdf2f8;">👤 Teóricos</button>
   
-  <!-- --- ADIÇÕES HTML NO HEADER --- -->
   <button class="btn" id="btn-snap" onclick="toggleSnap()">📏 Snap</button>
   <button class="btn" onclick="autoLayout()">🪄 Auto Layout</button>
   
@@ -419,12 +525,10 @@
       <button class="btn" onclick="resetZoom()">⟲</button>
     </div>
     
-    <!-- --- ADIÇÃO HTML MINIMAPA --- -->
     <div id="minimap">
       <div id="minimap-content"></div>
       <div id="minimap-viewport"></div>
     </div>
-
   </div>
 
   <aside>
@@ -438,11 +542,27 @@
     <div id="form" style="display:none">
       <label>Categoria</label>
       <select id="cls">
-        <option value="macro">Núcleo (Macro)</option>
-        <option value="core">Fundamento / Autor</option>
-        <option value="object">Fenômeno / Objeto</option>
-        <option value="complement">Complemento</option>
-        <option value="output">Desdobramento / PoC</option>
+        <optgroup label="Grupo 1: Fundamentos">
+            <option value="macro">Núcleo Macroestrutural</option>
+            <option value="core">Fundamento / Autor</option>
+            <option value="object">Fenômeno / Objeto</option>
+            <option value="complement">Complemento</option>
+            <option value="output">Desdobramento / PoC</option>
+        </optgroup>
+        <optgroup label="Grupo 2: Metodologia">
+            <option value="m1">Pesquisa Bibliográfica</option>
+            <option value="m2">Análise Documental</option>
+            <option value="m3">Entrevista / Campo</option>
+            <option value="m4">Coleta de Dados</option>
+            <option value="m5">Tratamento Analítico</option>
+        </optgroup>
+        <optgroup label="Grupo 3: Resultados">
+            <option value="r1">Hipótese Confirmada</option>
+            <option value="r2">Novo Paradigma</option>
+            <option value="r3">Artigo / Publicação</option>
+            <option value="r4">Protótipo / Poc</option>
+            <option value="r5">Impacto Social</option>
+        </optgroup>
       </select>
       <label>Etiqueta</label>
       <input id="tag">
@@ -479,7 +599,6 @@
   </aside>
 </main>
 
-<!-- GALERIA DE AUTORES (TELA CHEIA) -->
 <div id="authors-modal-overlay">
   <div class="authors-header">
     <div style="display:flex; align-items:center; gap: 10px;">
@@ -488,9 +607,7 @@
     </div>
     <button class="authors-close" onclick="closeAuthorsModal()">✕ Sair da Galeria</button>
   </div>
-  <div class="authors-grid" id="authors-grid-content">
-    <!-- Os cartões serão injetados aqui via JS -->
-  </div>
+  <div class="authors-grid" id="authors-grid-content"></div>
 </div>
 
 <div id="context-menu">
@@ -516,7 +633,6 @@
 <div id="toast"></div>
 <input id="file" type="file" accept=".json" hidden>
 
-<!-- ESTRUTURAS HTML INJETADAS (Menus Adicionais e Legenda Fixa) -->
 <div id="layout-menu">
   <div class="ctx-item" onclick="execLayout('horizontal')"><span class="layout-icon">➡️</span> Hierárquico Horizontal (Padrão)</div>
   <div class="ctx-item" onclick="execLayout('vertical')"><span class="layout-icon">⬇️</span> Hierárquico Vertical</div>
@@ -533,47 +649,9 @@
   <div class="ctx-item" onclick="execStyles('waterfall')"><span class="layout-icon">🌊</span> Cascata Diagonal</div>
 </div>
 
-<div id="fixed-legend">
-  <h4>Legenda Fixa</h4>
-  <!-- Ajustado para Preto Puro -->
-  <div class="leg-item"><div class="leg-color" style="background:#000000"></div>Núcleo Macroestrutural</div>
-  <div class="leg-item"><div class="leg-color" style="background:#2563eb"></div>Fundamento / Autor</div>
-  <div class="leg-item"><div class="leg-color" style="background:#be185d"></div>Fenômeno / Objeto</div>
-  <div class="leg-item"><div class="leg-color" style="background:#b45309"></div>Complemento</div>
-  <div class="leg-item"><div class="leg-color" style="background:#0f766e"></div>Desdobramento</div>
-</div>
+<div id="fixed-legend"></div>
+<div id="smart-legend-panel"></div>
 
-<!-- Legenda Inteligente (Popup Canto Inferior Direito) -->
-<div id="smart-legend-panel">
-  <h3>Classificações Profissionais</h3>
-  <div class="leg-group">
-      <div class="leg-group-title">Grupo 1: Fundamentos</div>
-      <!-- Ajustado para Preto Puro -->
-      <div class="leg-item"><div class="leg-color" style="background:#000000"></div>Núcleo Macroestrutural</div>
-      <div class="leg-item"><div class="leg-color" style="background:#2563eb"></div>Fundamento / Autor</div>
-      <div class="leg-item"><div class="leg-color" style="background:#be185d"></div>Fenômeno / Objeto</div>
-      <div class="leg-item"><div class="leg-color" style="background:#b45309"></div>Complemento</div>
-      <div class="leg-item"><div class="leg-color" style="background:#0f766e"></div>Desdobramento</div>
-  </div>
-  <div class="leg-group">
-      <div class="leg-group-title">Grupo 2: Metodologia</div>
-      <div class="leg-item"><div class="leg-color" style="background:#8b5cf6"></div>Pesquisa Bibliográfica</div>
-      <div class="leg-item"><div class="leg-color" style="background:#d946ef"></div>Análise Documental</div>
-      <div class="leg-item"><div class="leg-color" style="background:#0ea5e9"></div>Entrevista / Campo</div>
-      <div class="leg-item"><div class="leg-color" style="background:#84cc16"></div>Coleta de Dados</div>
-      <div class="leg-item"><div class="leg-color" style="background:#10b981"></div>Tratamento Analítico</div>
-  </div>
-  <div class="leg-group">
-      <div class="leg-group-title">Grupo 3: Resultados</div>
-      <div class="leg-item"><div class="leg-color" style="background:#f97316"></div>Hipótese Confirmada</div>
-      <div class="leg-item"><div class="leg-color" style="background:#ef4444"></div>Novo Paradigma</div>
-      <div class="leg-item"><div class="leg-color" style="background:#6366f1"></div>Artigo / Publicação</div>
-      <div class="leg-item"><div class="leg-color" style="background:#14b8a6"></div>Protótipo / Poc</div>
-      <div class="leg-item"><div class="leg-color" style="background:#f43f5e"></div>Impacto Social</div>
-  </div>
-</div>
-
-<!-- Menu de Contexto Exclusivo para Linhas -->
 <div id="line-context-menu">
   <div class="ctx-item" onclick="changeLineColor('#ef4444')">🔴 Vermelho</div>
   <div class="ctx-item" onclick="changeLineColor('#22c55e')">🟢 Verde</div>
@@ -585,42 +663,54 @@
   <div class="ctx-item danger" onclick="deleteSelectedLine()">🗑 Excluir Linha</div>
 </div>
 
-
 <script>
-  // ====================== DADOS ======================
-let N = [
-  ['macro', 560, 50, 320, 115, 'macro', 'NÚCLEO MACROESTRUTURAL', 'Educação Tecnológica e Formação Ética', 'É o eixo organizador da pesquisa. A tecnologia é tomada como fenômeno histórico, social e valorativo, exigindo formação crítica.', 'Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.'],
-  ['filo', 130, 270, 210, 95, 'core', 'FUNDAMENTO FILOSÓFICO', 'Filosofia da Tecnologia', 'Compreender a técnica para além da ideia de instrumento neutro.', 'Vieira Pinto e Feenberg sustentam a leitura crítica.'],
-  ['socio', 580, 270, 210, 95, 'core', 'ESTRUTURA SOCIOTÉCNICA', 'Capitalismo de Vigilância', 'Lógica econômica e operacional das plataformas e extração de dados.', 'Zuboff ocupa posição central.'],
-  ['mis', 1030, 270, 210, 95, 'object', 'FENÔMENO / OBJETO', 'Misoginia Digital', 'Sistema de policiamento e punição das relações de gênero em ambientes digitais.', 'Kate Manne oferece o núcleo conceitual.'],
-  ['jur', 270, 510, 220, 95, 'complement', 'COMPLEMENTO DOCUMENTAL', 'Aparato Jurídico', 'Material documental de apoio à formação ética.', 'Mapear os instrumentos jurídicos pertinentes.'],
-  ['emp', 890, 510, 220, 95, 'object', 'ANÁLISE DIGITAL', 'Comunidades Virtuais Públicas', 'Espaços digitais onde a misoginia se manifesta.', 'Delimitar a netnografia.'],
-  ['out', 560, 730, 260, 105, 'output', 'DESDOBRAMENTO PEDAGÓGICO', 'PoC · Simulador Interativo', 'Prova de Conceito voltada ao letramento crítico e cidadania digital.', 'Tradução pedagógica dos resultados.'],
-  ['bazzo', 20, 60, 190, 85, 'core', 'AUTOR CENTRAL', 'Walter Bazzo', 'Educação Tecnológica e formação crítica.', 'Fortalecer presença no eixo principal.'],
-  ['vp', 20, 400, 190, 85, 'core', 'AUTOR CENTRAL', 'Álvaro Vieira Pinto', 'Compreensão histórica e crítica da tecnologia.', 'Sustentar a discussão conceitual.'],
-  ['feen', 150, 410, 190, 85, 'core', 'AUTOR CENTRAL', 'Andrew Feenberg', 'Dimensão social e política da tecnologia.', 'Articular tecnologia e valores.'],
-  ['zub', 590, 160, 190, 85, 'core', 'AUTORA CENTRAL', 'Shoshana Zuboff', 'Capitalismo de vigilância.', 'Protagonismo da lógica das plataformas.'],
-  ['bauman', 1190, 60, 190, 85, 'core', 'AUTOR DE DIÁLOGO', 'Zygmunt Bauman', 'Modernidade líquida.', 'Usar seletivamente.'],
-  ['manne', 1190, 410, 190, 85, 'object', 'AUTORA CENTRAL', 'Kate Manne', 'Misoginia como policiamento de gênero.', 'Referência principal do fenômeno.'],
-  ['flusser', 360, 180, 190, 85, 'core', 'AUTOR COMPLEMENTAR', 'Vilém Flusser', 'Caixa-preta e opacidade.', 'Contribuir para o letramento crítico.'],
-  ['bardin', 1110, 690, 190, 85, 'core', 'METODOLOGIA', 'Laurence Bardin', 'Análise de Conteúdo.', 'Organizar categorias de análise.']
-].map(a => ({
-  id: a[0], x: a[1], y: a[2], w: a[3], h: a[4],
-  cls: a[5], tag: a[6], title: a[7], desc: a[8], action: a[9], z: 10
-}));
+// ====================== MODO DARK INICIAL ======================
+(function() {
+  const theme = localStorage.getItem('temaArquitetura');
+  if (theme !== 'light') {
+    document.body.classList.add('dark');
+    const btn = document.getElementById('btn-theme');
+    if(btn) btn.textContent = '☀️ Claro';
+    localStorage.setItem('temaArquitetura', 'dark');
+  } else {
+    document.body.classList.remove('dark');
+    const btn = document.getElementById('btn-theme');
+    if(btn) btn.textContent = '🌙 Escuro';
+  }
+})();
 
-let L = [
-  ['macro','filo'],['macro','socio'],['macro','mis'],
-  ['filo','jur'],['socio','emp'],['mis','emp'],
-  ['jur','out'],['emp','out'],
-  ['bazzo','macro'],['vp','filo'],['feen','filo'],
-  ['zub','socio'],['bauman','macro'],['manne','mis'],
-  ['flusser','filo'],['bardin','emp'],
-  ['socio','mis'],['filo','socio']
+// ====================== DADOS JSON INICIAL EXIGIDOS ======================
+let N = [
+  { "id": "n_macro", "x": 636, "y": 10, "w": 340, "h": 212, "cls": "macro", "tag": "NÚCLEO MACROESTRUTURAL", "title": "Educação Tecnológica e Formação Ética", "desc": "O campo formativo amplo que ultrapassa a dimensão instrumental. Visa desenvolver a capacidade de compreender criticamente, avaliar eticamente e intervir de forma responsável nas relações sociotécnicas.", "action": "Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.", "z": 10 },
+  { "id": "n_bazzo", "x": 318, "y": 86, "w": 220, "h": 127, "cls": "core", "tag": "AUTOR CENTRAL", "title": "Walter Bazzo", "desc": "Defende a Educação Tecnológica como vetor indispensável de desenvolvimento social, exigindo uma mudança cultural.", "action": "Assegura a aderência institucional da pesquisa à vocação do PPGET.", "z": 10 },
+  { "id": "n_bauman", "x": 1072, "y": 90, "w": 220, "h": 111, "cls": "core", "tag": "AUTOR DE DIÁLOGO", "title": "Zygmunt Bauman", "desc": "A fragilidade dos laços e a profunda crise ética que caracteriza a modernidade líquida.", "action": "Justifica a urgência contemporânea na formação de uma postura cidadã.", "z": 10 },
+  { "id": "n_filo", "x": 172, "y": 262, "w": 298, "h": 137, "cls": "core", "tag": "FUNDAMENTO", "title": "Filosofia da Tecnologia", "desc": "A técnica não é neutra. Ela materializa interesses econômicos, carrega historicidade e instaura projetos hegemônicos de sociedade.", "action": "Desconstruir a falácia da isenção algorítmica para a banca.", "z": 10 },
+  { "id": "n_socio", "x": 654, "y": 264, "w": 302, "h": 149, "cls": "core", "tag": "ESTRUTURA SOCIOTÉCNICA", "title": "Capitalismo de Vigilância", "desc": "A mercantilização da experiência humana. A extração do 'superávit comportamental' para predição e modulação sob um manto de invisibilidade.", "action": "Explicar o motor econômico invisível que se beneficia do engajamento extremista.", "z": 10 },
+  { "id": "n_mis", "x": 1150, "y": 262, "w": 316, "h": 149, "cls": "object", "tag": "FENÔMENO EMPÍRICO", "title": "Misoginia Digital", "desc": "Não se resume a um ódio psicológico individual, mas opera como um sistema de policiamento e punição social para manutenção das hierarquias de gênero.", "action": "Foco do mapeamento netnográfico e da análise comportamental.", "z": 10 },
+  { "id": "n_pinto", "x": 44, "y": 450, "w": 236, "h": 115, "cls": "core", "tag": "AUTOR BASE", "title": "Álvaro Vieira Pinto", "desc": "A tecnologia como produção histórica e social, inseparável das condições materiais da existência humana.", "action": "Fornece a ontologia existencial e política da técnica.", "z": 10 },
+  { "id": "n_feenberg", "x": 300, "y": 448, "w": 230, "h": 119, "cls": "core", "tag": "TEORIA CRÍTICA", "title": "Andrew Feenberg", "desc": "As tecnologias incorporam escolhas sociais e, portanto, podem ser objeto de crítica, participação e reconstrução democrática.", "action": "Abre espaço para propor o simulador educacional como intervenção.", "z": 10 },
+  { "id": "n_flusser", "x": 180, "y": 620, "w": 220, "h": 127, "cls": "core", "tag": "AUTOR COMPLEMENTAR", "title": "Vilém Flusser", "desc": "O conceito de 'caixa-preta' evidencia a opacidade dos aparelhos que programam e limitam a ação do funcionário (usuário).", "action": "Sustenta a necessidade de desalienação algorítmica.", "z": 10 },
+  { "id": "n_zuboff", "x": 560, "y": 448, "w": 220, "h": 117, "cls": "core", "tag": "AUTORA CENTRAL", "title": "Shoshana Zuboff", "desc": "A noção de 'Poder Instrumentário' atualiza o conceito de controle para além da vigilância clássica das prisões.", "action": "Categoria analítica principal do novo panoptismo digital.", "z": 10 },
+  { "id": "n_vandijck", "x": 820, "y": 446, "w": 220, "h": 119, "cls": "core", "tag": "AUTORAS / ALGORITMOS", "title": "Van Dijck & Noble", "desc": "A arquitetura das plataformas e a opressão algorítmica (vieses raciais e de gênero) como parte do design para maximizar engajamento.", "action": "Conecta o modelo de negócio das Big Techs à modulação social.", "z": 10 },
+  { "id": "n_manne", "x": 1060, "y": 448, "w": 220, "h": 119, "cls": "object", "tag": "AUTORA CENTRAL", "title": "Kate Manne", "desc": "Misoginia como mecanismo punitivo focado nas mulheres que desafiam as normas patriarcais na esfera pública.", "action": "Lente principal para analisar o discurso das tecnoculturas tóxicas.", "z": 10 },
+  { "id": "n_hooks", "x": 1300, "y": 450, "w": 244, "h": 123, "cls": "object", "tag": "ÉTICA FEMINISTA", "title": "bell hooks & Sueli Carneiro", "desc": "Aprofundamento interseccional sobre violência, discriminação estrutural e a construção do 'outro' como não-ser.", "action": "Garante a densidade ética e estrutural na análise do fenômeno.", "z": 10 },
+  { "id": "n_jur", "x": 894, "y": 634, "w": 240, "h": 125, "cls": "complement", "tag": "APOIO DOCUMENTAL", "title": "Aparato Jurídico Brasileiro", "desc": "Leis Carolina Dieckmann, Lola, Stalking e ECA Digital. Se aplicado apenas de modo punitivo, é insuficiente ('apagar fogo com oxigênio').", "action": "Serve como repositório de preceitos que serão traduzidos pedagogicamente.", "z": 10 },
+  { "id": "n_met_net", "x": 1254, "y": 632, "w": 256, "h": 130, "cls": "m3", "tag": "CAMPO / METODOLOGIA", "title": "Netnografia (Robert V. Kozinets)", "desc": "Imersão em fóruns do Reddit, YouTube (conteúdo de amplo alcance e machosfera) e no X (Twitter). Apenas Big Techs.", "action": "Capturar as dinâmicas de policiamento descritas por Manne in loco.", "z": 10 },
+  { "id": "n_met_ana", "x": 1262, "y": 812, "w": 248, "h": 111, "cls": "m5", "tag": "TRATAMENTO DE DADOS", "title": "Análise de Conteúdo", "desc": "Método de Laurence Bardin. Categorização a priori (vigilância, modulação, policiamento) e a posteriori.", "action": "Garante rigor na interpretação do volume textual coletado nas redes.", "z": 10 },
+  { "id": "n_poc", "x": 672, "y": 812, "w": 260, "h": 140, "cls": "r4", "tag": "DESDOBRAMENTO (OUTPUT)", "title": "Simulador Sociotécnico (PoC)", "desc": "Ferramenta de Letramento Jurídico-Digital. Traduz a punição jurídica em pedagogia crítica, revelando ao usuário o panoptismo das plataformas.", "action": "Produto educacional que consolida os resultados da pesquisa básica.", "z": 10 }
 ];
 
-// Espinha dorsal agora é baseada em NÓS (mais fácil de gerenciar)
-let spineNodes = new Set(['macro','filo','socio','mis','jur','out']);
+let L = [
+  [ "n_bazzo", "n_macro" ], [ "n_bauman", "n_macro" ], [ "n_macro", "n_filo" ], [ "n_macro", "n_socio" ],
+  [ "n_macro", "n_mis" ], [ "n_filo", "n_pinto" ], [ "n_filo", "n_feenberg" ], [ "n_filo", "n_flusser" ],
+  [ "n_socio", "n_zuboff" ], [ "n_socio", "n_vandijck" ], [ "n_mis", "n_manne" ], [ "n_mis", "n_hooks" ],
+  [ "n_socio", "n_mis" ], [ "n_mis", "n_met_net" ], [ "n_mis", "n_jur" ], [ "n_met_net", "n_met_ana" ],
+  [ "n_met_ana", "n_poc" ], [ "n_jur", "n_poc" ], [ "n_macro", "n_poc" ]
+];
+
+let spineNodes = new Set([
+  "n_macro", "n_socio", "n_mis", "n_jur", "n_poc"
+]);
 
 let sel = null;
 let connFrom = null;
@@ -635,16 +725,14 @@ const svg = document.getElementById('links');
 const ctxMenu = document.getElementById('context-menu');
 const statusEl = document.getElementById('status');
 
-// Cores das linhas por categoria do destino
 const LINK_COLORS = {
-  macro:      '#000000', // Modificado para o Preto Absoluto
+  macro:      '#000000', 
   core:       '#2563eb',
   object:     '#be185d',
-  complement: '#b45309', // Mantido padronizado
+  complement: '#b45309', 
   output:     '#0f766e'
 };
 
-// ====================== TEMA ======================
 function toggleTheme() {
   document.body.classList.toggle('dark');
   const isDark = document.body.classList.contains('dark');
@@ -654,14 +742,7 @@ function toggleTheme() {
   if (arrow) arrow.setAttribute('fill', isDark ? '#94a3b8' : '#64748b');
   drawLinks();
 }
-(function() {
-  if (localStorage.getItem('temaArquitetura') === 'dark') {
-    document.body.classList.add('dark');
-    document.getElementById('btn-theme').textContent = '☀️ Claro';
-  }
-})();
 
-// ====================== ESPINHA DORSAL ======================
 function toggleSpine() {
   spineActive = !spineActive;
   document.getElementById('btn-spine').classList.toggle('active', spineActive);
@@ -682,7 +763,6 @@ function toggleNodeSpine(id = sel) {
     spineNodes.add(id);
     toast('Incluído na Espinha Dorsal');
   }
-  // Atualiza o texto do botão na lateral
   updateSpineButton();
   render();
 }
@@ -699,7 +779,6 @@ function updateSpineButton() {
   }
 }
 
-// ====================== DESCONECTAR ======================
 function disconnectAll(id = sel) {
   if (!id) return;
   const before = L.length;
@@ -713,7 +792,6 @@ function disconnectAll(id = sel) {
   toast(`${removed} conexão(ões) removida(s)`);
 }
 
-// ====================== LIMPAR TEMPORÁRIOS ======================
 function cleanTemporary() {
   const toRemove = N.filter(n =>
     /novo conceito/i.test(n.title) ||
@@ -735,7 +813,6 @@ function cleanTemporary() {
   toast(`${toRemove.length} nó(s) removido(s)`);
 }
 
-// ====================== APRESENTAÇÃO E LEGENDA DINÂMICA ======================
 function enterPresentation() {
   document.body.classList.add('presentation');
   updatePresentationLegend();
@@ -752,11 +829,9 @@ function updatePresentationLegend() {
   const leg = document.getElementById('presentation-legend');
   if (!leg) return;
   
-  // Caça apenas os cartões que estão em uso no mapa atual
   const usedClasses = [...new Set(N.map(n => n.cls))];
   if (usedClasses.length === 0) { leg.style.display = 'none'; return; }
 
-  // Puxa as cores de todos os cartões possíveis (macro agora é #000000)
   const allColorsMap = Object.assign({
     macro:'#000000', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
     m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
@@ -766,9 +841,7 @@ function updatePresentationLegend() {
   const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
   usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
 
-  // Cria um "container flex" que enfileira tudo na horizontal com espaçamento (gap)
   let html = `<div style="display: flex; align-items: center; gap: 20px; justify-content: center;">`;
-
   usedClasses.forEach(cls => {
      const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
      html += `<div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); font-weight: 600;">
@@ -776,13 +849,11 @@ function updatePresentationLegend() {
                 <span>${catName}</span>
               </div>`;
   });
-  
   html += `</div>`;
   leg.innerHTML = html;
   leg.style.display = 'block';
 }
 
-// ====================== GEOMETRIA ======================
 function getBorderPoint(node, tx, ty) {
   const cx = node.x + node.w / 2;
   const cy = node.y + node.h / 2;
@@ -795,7 +866,6 @@ function getBorderPoint(node, tx, ty) {
   return { x: cx + dx * s, y: cy + dy * s };
 }
 
-// ====================== RENDER ======================
 function render() {
   document.querySelectorAll('.node').forEach(el => el.remove());
   const sorted = [...N].sort((a, b) => (a.z || 10) - (b.z || 10));
@@ -810,7 +880,6 @@ function render() {
     el.id = 'node-' + n.id;
     el.style.cssText = `left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px;z-index:${n.z||10}`;
 
-    // AQUI ESTÁ A CORREÇÃO (Retirada da trava de 130 caracteres)
     el.innerHTML = `
       <div class="tag">${esc(n.tag)}</div>
       <h3>${esc(n.title)}</h3>
@@ -845,8 +914,6 @@ function render() {
   drawLinks();
   inspect();
   autoSave();
-  
-  // --- ADIÇÃO: Atualizar Minimapa na renderização ---
   if (typeof updateMinimap === 'function') updateMinimap();
 }
 
@@ -867,37 +934,56 @@ function drawLinks() {
     const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a, b);
+    const linkKey = a + '-' + b;
 
-    // Cor da linha: se for espinha → dourado, senão cor da categoria do destino
     let strokeColor;
-    if (spine) {
-      strokeColor = '#eab308';
-    } else {
-      strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
-    }
+    if (customLinkColors[linkKey]) strokeColor = customLinkColors[linkKey];
+    else if (spine) strokeColor = '#eab308';
+    else strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'connection');
+    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
     path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', strokeColor);
-    path.setAttribute('stroke-width', spine ? '3.4' : '2.2');
+    
+    let sWidth = spine ? '3.4' : '2.2';
+    if (selectedLink === linkKey) sWidth = spine ? '5.0' : '4.0';
+    path.setAttribute('stroke-width', sWidth);
     path.setAttribute('stroke-linecap', 'round');
     path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
-    path.dataset.from = a;
-    path.dataset.to = b;
+    
+    path.style.pointerEvents = 'stroke';
+    path.style.cursor = 'pointer';
+
+    path.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks();
+        toast('Linha selecionada. Aperte Delete para excluí-la.');
+    });
+
+    path.addEventListener('contextmenu', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks();
+        const m = document.getElementById('line-context-menu');
+        m.style.left = e.clientX + 'px';
+        m.style.top = e.clientY + 'px';
+        m.classList.add('show');
+    });
+
     svg.appendChild(path);
   });
 }
 
-// ====================== SELEÇÃO ======================
 function select(id) {
   if (connFrom && connFrom !== id) {
     finishConnection(id);
     return;
   }
   sel = id;
-  selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR EM UM CARTÃO
+  selectedLink = null; 
   connFrom = null;
   document.getElementById('btn-connect').classList.remove('active');
   render();
@@ -952,7 +1038,6 @@ function removeConnection(a, b) {
   });
 });
 
-// ====================== REDIMENSIONAR / DRAG / CONEXÃO ======================
 function startResize(e, n, dir) {
   e.stopPropagation(); e.preventDefault(); sel = n.id;
   resize = { n, dir, startX: e.clientX, startY: e.clientY, origX: n.x, origY: n.y, origW: n.w, origH: n.h };
@@ -971,7 +1056,6 @@ function onResizeMove(e) {
   if (dir.includes('n')) { newH = Math.max(50, origH - dy); newY = origY + (origH - newH); }
   n.x = Math.max(0, newX); n.y = Math.max(0, newY); n.w = newW; n.h = newH;
   
-  // --- ADIÇÃO: Snap to grid no resize ---
   if (typeof snapToGrid !== 'undefined' && snapToGrid) {
     n.x = Math.round(n.x / 20) * 20;
     n.y = Math.round(n.y / 20) * 20;
@@ -1023,7 +1107,7 @@ function cancelConnect() {
   setStatus('Pronto');
 }
 function onNodeDown(e, n) {
-  if (e.button !== 0) return; // Permite o Pan no Middle Click sem selecionar
+  if (e.button !== 0) return; 
   if (connFrom) { finishConnection(n.id); return; }
   sel = n.id;
   drag = { n, startX: e.clientX, startY: e.clientY, origX: n.x, origY: n.y };
@@ -1038,7 +1122,6 @@ function onDragMove(e) {
   drag.n.x = Math.max(0, drag.origX + dx);
   drag.n.y = Math.max(0, drag.origY + dy);
   
-  // --- ADIÇÃO: Snap to grid ---
   if (typeof snapToGrid !== 'undefined' && snapToGrid) {
     drag.n.x = Math.round(drag.n.x / 20) * 20;
     drag.n.y = Math.round(drag.n.y / 20) * 20;
@@ -1064,7 +1147,6 @@ function onDragUp() {
   if (typeof updateMinimap === 'function') updateMinimap();
 }
 
-// ====================== MENU DE CONTEXTO ======================
 function showContextMenu(e, n) {
   contextTarget = n;
   sel = n.id;
@@ -1101,7 +1183,6 @@ ctxMenu.addEventListener('click', e => {
   hideContextMenu();
 });
 
-// ====================== AÇÕES ======================
 function addNode() {
   const id = 'n' + Date.now();
   N.push({
@@ -1132,38 +1213,45 @@ function deleteNode(id = sel) {
   toast('Excluído');
 }
 
-// ====================== ZOOM / SAVE ======================
 function zoomBy(d) {
   scale = Math.min(1.6, Math.max(0.4, scale + d));
   stage.style.transform = `scale(${scale})`;
-  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
+  if (typeof updateMinimap === 'function') updateMinimap(); 
 }
 function resetZoom() {
   scale = 1;
   stage.style.transform = 'scale(1)';
-  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
+  if (typeof updateMinimap === 'function') updateMinimap(); 
 }
+
+let customLinkColors = {
+  "n_bauman-n_macro": "#3b82f6",
+  "n_bazzo-n_macro": "#3b82f6"
+};
+let selectedLink = null;
+
+try { 
+    const rawData = localStorage.getItem('arquiteturaEpistemologica');
+    if (rawData) {
+        const p = JSON.parse(rawData);
+        if (p.customLinkColors) customLinkColors = p.customLinkColors;
+    }
+} catch(e) {}
+
 function autoSave() {
   try {
-    localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({
-      nodes: N,
-      links: L,
-      spineNodes: [...spineNodes]
-    }));
+    localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }));
   } catch(e){}
 }
 function saveProject() {
-  const blob = new Blob([JSON.stringify({
-    nodes: N,
-    links: L,
-    spineNodes: [...spineNodes]
-  }, null, 2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `arquitetura_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-  toast('JSON salvo');
+  toast('JSON salvo com estilos das linhas');
 }
+
 function openProject() { document.getElementById('file').click(); }
 document.getElementById('file').onchange = async e => {
   const f = e.target.files[0];
@@ -1172,85 +1260,98 @@ document.getElementById('file').onchange = async e => {
     const data = JSON.parse(await f.text());
     N = data.nodes;
     L = data.links;
-    spineNodes = new Set(data.spineNodes || ['macro','filo','socio','mis','jur','out']);
+    spineNodes = new Set(data.spineNodes || ['n_macro', 'n_socio', 'n_mis', 'n_jur', 'n_poc']);
+    if (data.customLinkColors) customLinkColors = data.customLinkColors;
     sel = null;
     render();
     toast('Projeto carregado');
   } catch(err) { alert('Arquivo inválido'); }
   e.target.value = '';
 };
-(function(){
-  try {
-    const raw = localStorage.getItem('arquiteturaEpistemologica');
-    if (raw) {
-      const d = JSON.parse(raw);
-      if (d.nodes && d.links) {
-        N = d.nodes;
-        L = d.links;
-        if (d.spineNodes) spineNodes = new Set(d.spineNodes);
-      }
-    }
-  } catch(e){}
-})();
 
-// ====================== SVG ======================
+// ====================== EXPORTAÇÃO SVG TOTALMENTE REESCRITA COM FOREIGNOBJECT ======================
+// Garante 100% de respeito ao tema, fontes idênticas e sem "desconfiguração" de texto
 function exportSvg() {
-  let nodesSvg = '';
+  const isDark = document.body.classList.contains('dark');
+  const allColors = Object.assign({
+    macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
+    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e',
+    m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
+    r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
+  }, LINK_COLORS);
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
-    // Cores ajustadas para o Preto Absoluto no Macro e o Ouro Padrão
-    const colors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'};
-    const stroke = colors[n.cls] || '#2563eb';
-    const sw = n.cls === 'macro' ? 2.5 : 1.5;
-    nodesSvg += `<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="12" ry="12" fill="#ffffff" stroke="${stroke}" stroke-width="${sw}" filter="url(#shadow)"/>`;
-    nodesSvg += `<text x="${n.x+14}" y="${n.y+22}" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#64748b">${esc(n.tag||'')}</text>`;
-    nodesSvg += `<text x="${n.x+14}" y="${n.y+44}" font-family="Georgia,serif" font-size="${n.cls==='macro'?16:13}" font-weight="700" fill="#0f2744">${esc((n.title||'').substring(0,42))}</text>`;
+    minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
+    maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
   });
-  let linksSvg = '';
+  
+  const padding = 80;
+  const mapW = Math.max(1600, (maxX - minX) + padding * 2);
+  const mapH = Math.max(1000, (maxY - minY) + padding * 2);
+  const offsetX = padding - minX;
+  const offsetY = padding - minY;
+
+  const bgPage = isDark ? '#0f172a' : '#f0f4f8';
+  const textMain = isDark ? '#e2e8f0' : '#1a2332';
+  const textMuted = isDark ? '#94a3b8' : '#64748b';
+  const cardBg = isDark ? '#1e293b' : '#ffffff';
+  const cardBorder = isDark ? '#334155' : '#e2e8f0';
+
+  const nodesHtml = N.map(n => {
+    const c = allColors[n.cls] || allColors.core;
+    const x = n.x + offsetX;
+    const y = n.y + offsetY;
+    return `<foreignObject x="${x}" y="${y}" width="${n.w}" height="${n.h}">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:14px;padding:14px 16px;box-sizing:border-box;font-family:'Segoe UI', system-ui, sans-serif;color:${textMain};box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;color:${textMuted};margin-bottom:5px;">${esc(n.tag||'')}</div>
+        <div style="font-size:${n.cls==='macro'?17:15}px;font-weight:700;line-height:1.2;font-family:Georgia,serif;margin-bottom:7px;color:${n.cls==='macro'?textMain:(isDark?'#38bdf8':'#0f2744')}; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; text-overflow:ellipsis;">${esc(n.title||'')}</div>
+        <div style="font-size:11px;color:${textMuted};line-height:1.35;flex:1;overflow:hidden;text-overflow:ellipsis;">${esc(n.desc||'')}</div>
+      </div>
+    </foreignObject>`;
+  }).join('');
+
+  let paths = '';
   L.forEach(([a,b]) => {
-    const A = N.find(n=>n.id===a), B = N.find(n=>n.id===b);
+    const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
     if (!A || !B) return;
-    const p1 = getBorderPoint(A, B.x+B.w/2, B.y+B.h/2);
-    const p2 = getBorderPoint(B, A.x+A.w/2, A.y+A.h/2);
-    const midY = (p1.y + p2.y)/2;
+    const p1 = getBorderPoint({x:A.x+offsetX, y:A.y+offsetY, w:A.w, h:A.h}, B.x+offsetX + B.w/2, B.y+offsetY + B.h/2);
+    const p2 = getBorderPoint({x:B.x+offsetX, y:B.y+offsetY, w:B.w, h:B.h}, A.x+offsetX + A.w/2, A.y+offsetY + A.h/2);
+    const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
-    const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || '#64748b');
-    linksSvg += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
+    let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (allColors[B.cls] || textMuted));
+    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.4:2.2}" stroke-linecap="round" marker-end="url(#arrow${spine?'-spine':''})"/>`;
   });
 
-  const legend = `
-    <g transform="translate(40,940)">
-      <text x="0" y="0" font-family="Segoe UI,Arial" font-size="12" font-weight="700" fill="#0f2744">Legenda:</text>
-      <rect x="0" y="10" width="12" height="12" fill="#000000"/><text x="18" y="20" font-size="11" fill="#334155">Núcleo</text>
-      <rect x="80" y="10" width="12" height="12" fill="#2563eb"/><text x="98" y="20" font-size="11" fill="#334155">Fundamento</text>
-      <rect x="190" y="10" width="12" height="12" fill="#be185d"/><text x="208" y="20" font-size="11" fill="#334155">Fenômeno</text>
-      <rect x="290" y="10" width="12" height="12" fill="#b45309"/><text x="308" y="20" font-size="11" fill="#334155">Complemento</text>
-      <rect x="410" y="10" width="12" height="12" fill="#0f766e"/><text x="428" y="20" font-size="11" fill="#334155">Desdobramento</text>
-    </g>`;
-
-  const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  const svgStr = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${mapW} ${mapH}" width="${mapW}" height="${mapH}">
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.12"/></filter>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="${textMuted}"/></marker>
+    <marker id="arrow-spine" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,7 L8,3.5 z" fill="#eab308"/></marker>
   </defs>
-  <rect width="1600" height="1000" fill="#f8fafc"/>
-  <text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura da Pesquisa</text>
-  <text x="40" y="56" font-family="Segoe UI,Arial" font-size="12" fill="#64748b">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </text>
-  ${linksSvg}${nodesSvg}${legend}
+  <rect width="100%" height="100%" fill="${bgPage}"/>
+  ${paths}
+  ${nodesHtml}
 </svg>`;
-  const blob = new Blob([svgContent], {type:'image/svg+xml;charset=utf-8'});
+
+  const blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `Arquitetura_Epistemologica_${new Date().toISOString().slice(0,10)}.svg`;
+  a.download = `Arquitetura_Pesquisa_${new Date().toISOString().slice(0,10)}.svg`;
   a.click();
-  toast('SVG exportado!');
+  toast('SVG perfeito exportado!');
 }
 
-// ====================== PDF ======================
+// O exportPdf antigo e o novo foram unificados neste que é dinâmico, preservando todas as regras (modo de cor da tela exato)
 function exportPdf() {
   const isDark = document.body.classList.contains('dark');
   const printWin = window.open('', '_blank');
   if (!printWin) { alert('Permita pop-ups'); return; }
+
+  const formatEl = document.getElementById('pdf-format');
+  const orientEl = document.getElementById('pdf-orientation');
+  const format = formatEl ? formatEl.value : 'A3';
+  const orientation = orientEl ? orientEl.value : 'landscape';
 
   const bgPage = isDark ? '#0f172a' : '#ffffff';
   const bgMap = isDark ? '#0f172a' : '#ffffff';
@@ -1259,32 +1360,31 @@ function exportPdf() {
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const cardBorder = isDark ? '#334155' : '#d1d9e0';
   
-  // Condições do Dark Mode removidas para as cores que precisam ser estáticas
-  const colors = {
-    macro: '#000000',
-    core: isDark ? '#38bdf8' : '#2563eb',
-    object: isDark ? '#f472b6' : '#be185d',
-    complement: '#b45309',
-    output: isDark ? '#2dd4bf' : '#0f766e'
-  };
+  const allColors = Object.assign({
+    macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
+    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
+  }, LINK_COLORS);
 
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
     minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
     maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
   });
-  const contentW = maxX - minX, contentH = maxY - minY;
-  const mapW = 1500, mapH = 900;
-  const offsetX = (mapW - contentW) / 2 - minX;
-  const offsetY = (mapH - contentH) / 2 - minY + 40;
+  
+  const padding = 60;
+  const mapW = (maxX - minX) + (padding * 2);
+  const mapH = (maxY - minY) + (padding * 2) + 50; 
+  
+  const offsetX = padding - minX;
+  const offsetY = padding - minY;
 
   const nodesHtml = N.map(n => {
-    const c = colors[n.cls] || colors.core;
+    const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
-      <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2">${esc(n.title||'')}</div>
-      <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3">${esc((n.desc||'').slice(0,95))}</div>
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
+      <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
+      <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
     </div>`;
   }).join('');
 
@@ -1292,86 +1392,59 @@ function exportPdf() {
   L.forEach(([a,b]) => {
     const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
     if (!A || !B) return;
-    const Ax = A.x + offsetX, Ay = A.y + offsetY;
-    const Bx = B.x + offsetX, By = B.y + offsetY;
-    const p1 = getBorderPoint({x:Ax,y:Ay,w:A.w,h:A.h}, Bx + B.w/2, By + B.h/2);
-    const p2 = getBorderPoint({x:Bx,y:By,w:B.w,h:B.h}, Ax + A.w/2, Ay + A.h/2);
+    const p1 = getBorderPoint({x:A.x+offsetX, y:A.y+offsetY, w:A.w, h:A.h}, B.x+offsetX + B.w/2, B.y+offsetY + B.h/2);
+    const p2 = getBorderPoint({x:B.x+offsetX, y:B.y+offsetY, w:B.w, h:B.h}, A.x+offsetX + A.w/2, A.y+offsetY + A.h/2);
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
-    const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b'));
+    let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
     paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
-  const legendHtml = `
-    <div style="position:absolute;bottom:12px;left:20px;display:flex;gap:14px;font-size:11px;color:${textMuted}">
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.macro};border-radius:2px"></div>Núcleo</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.core};border-radius:2px"></div>Fundamento</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.object};border-radius:2px"></div>Fenômeno</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.complement};border-radius:2px"></div>Complemento</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.output};border-radius:2px"></div>Desdobramento</div>
-    </div>`;
+  const usedClasses = [...new Set(N.map(n => n.cls))];
+  const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
+  usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
 
+  let legendItemsHtml = '';
+  usedClasses.forEach(cls => {
+    const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
+    const color = allColors[cls] || '#64748b';
+    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
+  });
+
+  const legendHtml = usedClasses.length > 0 ? `
+    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      ${legendItemsHtml}
+    </div>` : '';
+
+  // Diretriz rigorosa de impressão (garante que dark fique dark)
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
-    @page{size:A3 landscape;margin:10mm}
+    @media print { 
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } 
+    }
+    @page { size: ${format} ${orientation}; margin: 8mm; }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:5mm}
-    .header{text-align:center;margin-bottom:5mm}
-    h1{font-family:Georgia,serif;font-size:20px;margin-bottom:3px}
-    .sub{font-size:11px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
+    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
+    .header{text-align:center;margin-bottom:8mm}
+    h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
+    .sub{font-size:12px;color:${textMuted}}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
+    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
   </style></head><body>
   <div class="header">
     <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </div>
+    <div class="sub">Mapas e Estruturas · PPGET</div>
   </div>
   <div id="map">
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>
-      ${paths}
-    </svg>
+    <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
     ${nodesHtml}
     ${legendHtml}
   </div>
-  <script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script>
-  </body></html>`);
+  <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
   printWin.document.close();
-  toast('PDF gerado!');
+  toast('PDF Dinâmico gerado!');
 }
 
-// ====================== WORD ======================
-function exportWord() {
-  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-  <head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
-  <style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}
-  h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}
-  h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}
-  .tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}
-  .action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}
-  .cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body>
-  <h1>Arquitetura da Pesquisa</h1>
-  <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · </p><hr>`;
-  const order = ['macro','core','object','complement','output'];
-  const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
-  const catNames = {macro:'Núcleo Macroestrutural',core:'Fundamento / Autor',object:'Fenômeno / Objeto',complement:'Complemento',output:'Desdobramento'};
-  const catColors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}; // Preto absoluto aqui também
-  sorted.forEach(n => {
-    html += `<h2>${esc(n.title)}</h2>
-    <div class="tag">${esc(n.tag||'')}</div>
-    <span class="cat" style="background:${catColors[n.cls]||'#64748b'}">${catNames[n.cls]||n.cls}</span>
-    <p>${esc(n.desc||'')}</p>
-    ${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
-  });
-  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura da Pesquisa · PPGET</p></body></html>`;
-  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `Arquitetura_Epistemologica_${new Date().toISOString().slice(0,10)}.doc`;
-  a.click();
-  toast('Word gerado!');
-}
-
-// ====================== UTIL ======================
 function setStatus(m) { statusEl.textContent = m; }
 function toast(m) {
   const t = document.getElementById('toast');
@@ -1383,15 +1456,12 @@ function toast(m) {
 stage.addEventListener('click', () => {
   if (!drag && !resize) {
     sel = null;
-    selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR NO FUNDO
+    selectedLink = null; 
     cancelConnect();
     render();
   }
 });
 
-// ====================== ADIÇÕES PROFISSIONAIS AO SCRIPT (Injeções) ======================
-
-// 1. Grid Snap (Alinhamento Magnético)
 let snapToGrid = false;
 function toggleSnap() {
   snapToGrid = !snapToGrid;
@@ -1399,7 +1469,6 @@ function toggleSnap() {
   toast(snapToGrid ? 'Grade magnética ATIVADA' : 'Grade magnética DESATIVADA');
 }
 
-// 2. Pan Engine (Miro/FigJam Style Espaço + Arrastar)
 let isSpaceDown = false;
 let panState = { isPanning: false, startX: 0, startY: 0, scrollX: 0, scrollY: 0 };
 const canvasCont = document.getElementById('canvas-container');
@@ -1407,14 +1476,12 @@ const canvasCont = document.getElementById('canvas-container');
 window.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   
-  // Pan via Espaço
   if (e.code === 'Space') {
     isSpaceDown = true;
     canvasCont.style.cursor = 'grab';
     e.preventDefault();
   }
   
-  // Teclas Nudging (Ajuste Fino Direcional)
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && sel) {
     e.preventDefault();
     const n = N.find(x => x.id === sel);
@@ -1428,7 +1495,6 @@ window.addEventListener('keydown', e => {
     }
   }
 
-  // Atalhos Originais
   if ((e.key === 'Delete' || e.key === 'Backspace') && sel) deleteNode();
   if (e.ctrlKey && e.key === 'd') { e.preventDefault(); if (sel) duplicateNode(); }
   if (e.key === 'Escape') {
@@ -1437,7 +1503,7 @@ window.addEventListener('keydown', e => {
     if (document.body.classList.contains('presentation')) {
       exitPresentation();
     } else if (authorsModal && authorsModal.classList.contains('show')) {
-      closeAuthorsModal(); // <-- FECHA A GALERIA SE ELA ESTIVER ABERTA
+      closeAuthorsModal(); 
     } else { 
       cancelConnect(); 
       hideContextMenu(); 
@@ -1454,7 +1520,6 @@ window.addEventListener('keyup', e => {
 });
 
 canvasCont.addEventListener('mousedown', e => {
-  // Ativa pan se Espaço + Clique ou Clique do Meio
   if (isSpaceDown || e.button === 1) {
     panState = { 
       isPanning: true, 
@@ -1480,7 +1545,6 @@ window.addEventListener('mouseup', () => {
   }
 });
 
-// 3. Minimapa Dinâmico
 function updateMinimap() {
   const minimap = document.getElementById('minimap-content');
   const vp = document.getElementById('minimap-viewport');
@@ -1509,12 +1573,6 @@ function updateMinimap() {
 }
 canvasCont.addEventListener('scroll', updateMinimap);
 
-
-/* ========================================================================= */
-/* CAMADA ADICIONAL 2: SCRIPTS DAS NOVAS EXIGÊNCIAS (Injeções)               */
-/* ========================================================================= */
-
-// INJEÇÃO DA INTERFACE DE IMPRESSÃO PDF NO ASIDE
 document.addEventListener("DOMContentLoaded", () => {
   const asideElement = document.querySelector('aside');
   if (asideElement) {
@@ -1535,13 +1593,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// SOBRESCRITA MAGNÉTICA DO AUTO LAYOUT PARA EXIBIR O MENU
-function autoLayout() {
-  const menu = document.getElementById('layout-menu');
-  menu.classList.toggle('show');
-}
+window.autoLayout = function(e) {
+    const event = e || window.event;
+    const menu = document.getElementById('layout-menu');
+    if (event && event.currentTarget) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        menu.style.top = (rect.bottom + 6) + 'px';
+        menu.style.left = rect.left + 'px';
+        menu.style.right = 'auto';
+    }
+    menu.classList.toggle('show');
+};
 
-// Lógica de fechamento ao clicar fora do menu de layout
 document.addEventListener('click', e => {
   if (!e.target.closest('#layout-menu') && !e.target.closest('button[onclick="autoLayout()"]')) {
     const m = document.getElementById('layout-menu');
@@ -1549,126 +1612,127 @@ document.addEventListener('click', e => {
   }
 });
 
-// ALGORITMOS DE LAYOUT AVANÇADOS
-function execLayout(type) {
-  if(!confirm('Isso irá reposicionar todos os cartões. Deseja continuar?')) return;
-  document.getElementById('layout-menu').classList.remove('show');
-  
-  const levels = { 'macro': 0, 'core': 1, 'complement': 2, 'object': 2, 'output': 3 };
-  
-  if (type === 'horizontal') {
-    const pX = 340, pY = 160, sX = 60, sY = 60;
-    let counts = {0:0, 1:0, 2:0, 3:0};
-    N.forEach(n => {
-      let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
-      n.x = sX + (lvl * pX); n.y = sY + (counts[lvl] * pY); counts[lvl]++;
-    });
-  } 
-  else if (type === 'vertical') {
-    const pX = 260, pY = 220, sX = 60, sY = 60;
-    let counts = {0:0, 1:0, 2:0, 3:0};
-    N.forEach(n => {
-      let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
-      n.x = sX + (counts[lvl] * pX); n.y = sY + (lvl * pY); counts[lvl]++;
-    });
-  } 
-  else if (type === 'grid') {
-    const cols = Math.ceil(Math.sqrt(N.length));
-    const pX = 280, pY = 180, sX = 60, sY = 60;
-    N.forEach((n, i) => {
-      n.x = sX + (i % cols) * pX; n.y = sY + Math.floor(i / cols) * pY;
-    });
-  } 
-  else if (type === 'radial') {
-    const cx = 800, cy = 500;
-    let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
-    N.forEach(n => { totals[levels[n.cls] || 1]++; });
-    N.forEach(n => {
-      let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
-      if (lvl === 0) { n.x = cx - n.w/2; n.y = cy - n.h/2; }
-      else {
-        const radius = lvl * 300;
-        const angle = (counts[lvl] / totals[lvl]) * Math.PI * 2;
-        n.x = cx + Math.cos(angle) * radius - n.w/2;
-        n.y = cy + Math.sin(angle) * radius - n.h/2;
-        counts[lvl]++;
-      }
-    });
-  } 
-  else if (type === 'central') {
-    let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
-    N.forEach(n => { totals[levels[n.cls] || 1]++; });
-    const cx = 800, pY = 190;
-    N.forEach(n => {
-      let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
-      const tW = totals[lvl] * 280;
-      const sX = cx - tW/2;
-      n.x = sX + (counts[lvl] * 280); n.y = 80 + (lvl * pY); counts[lvl]++;
-    });
-  }
-  
-  if (snapToGrid) {
-    N.forEach(n => {
-      n.x = Math.round(n.x / 20) * 20; n.y = Math.round(n.y / 20) * 20;
-    });
-  }
-  
-  render();
-  toast(`🪄 Layout Aplicado`);
+window.execLayout = function(type) {
+    if(!confirm('Isso irá reposicionar todos os cartões. Deseja continuar?')) return;
+    document.getElementById('layout-menu').classList.remove('show');
+    
+    const levels = { 'macro': 0, 'core': 1, 'complement': 2, 'object': 2, 'output': 3 };
+    
+    if (type === 'horizontal') {
+      const pX = 340, pY = 160, sX = 60, sY = 60;
+      let counts = {0:0, 1:0, 2:0, 3:0};
+      N.forEach(n => {
+        let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
+        n.x = sX + (lvl * pX); n.y = sY + (counts[lvl] * pY); counts[lvl]++;
+      });
+    } 
+    else if (type === 'vertical') {
+      const pX = 260, pY = 220, sX = 60, sY = 60;
+      let counts = {0:0, 1:0, 2:0, 3:0};
+      N.forEach(n => {
+        let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
+        n.x = sX + (counts[lvl] * pX); n.y = sY + (lvl * pY); counts[lvl]++;
+      });
+    } 
+    else if (type === 'grid') {
+      const cols = Math.ceil(Math.sqrt(N.length));
+      const pX = 280, pY = 180, sX = 60, sY = 60;
+      N.forEach((n, i) => {
+        n.x = sX + (i % cols) * pX; n.y = sY + Math.floor(i / cols) * pY;
+      });
+    } 
+    else if (type === 'radial') {
+      const cx = 800, cy = 500;
+      let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
+      N.forEach(n => { totals[levels[n.cls] || 1]++; });
+      N.forEach(n => {
+        let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
+        if (lvl === 0) { n.x = cx - n.w/2; n.y = cy - n.h/2; }
+        else {
+          const radius = lvl * 300;
+          const angle = (counts[lvl] / totals[lvl]) * Math.PI * 2;
+          n.x = cx + Math.cos(angle) * radius - n.w/2;
+          n.y = cy + Math.sin(angle) * radius - n.h/2;
+          counts[lvl]++;
+        }
+      });
+    } 
+    else if (type === 'central') {
+      let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
+      N.forEach(n => { totals[levels[n.cls] || 1]++; });
+      const cx = 800, pY = 190;
+      N.forEach(n => {
+        let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
+        const tW = totals[lvl] * 280;
+        const sX = cx - tW/2;
+        n.x = sX + (counts[lvl] * 280); n.y = 80 + (lvl * pY); counts[lvl]++;
+      });
+    }
+    else if (type === 'network') {
+        const cx = 800, cy = 500;
+        N.forEach((n, i) => {
+            if (n.cls === 'macro') { n.x = cx - n.w/2; n.y = cy - n.h/2; }
+            else {
+                const radius = n.cls === 'core' ? 300 : 500;
+                const angle = (i / N.length) * Math.PI * 2;
+                n.x = cx + Math.cos(angle)*radius - n.w/2;
+                n.y = cy + Math.sin(angle)*radius - n.h/2;
+            }
+        });
+    } else if (type === 'spiral') {
+        const cx = 800, cy = 500;
+        N.forEach((n, i) => {
+            const angle = 0.5 * i; const radius = 50 * i;
+            n.x = cx + Math.cos(angle)*radius - n.w/2;
+            n.y = cy + Math.sin(angle)*radius - n.h/2;
+        });
+    } else if (type === 'zigzag') {
+        let startY = 80;
+        N.forEach((n, i) => {
+            n.x = (i % 2 === 0) ? 200 : 800; n.y = startY; startY += 150;
+        });
+    } else if (type === 'pyramid') {
+        const lvls = { 'macro': 3, 'core': 2, 'complement': 1, 'object': 1, 'output': 0 };
+        let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
+        N.forEach(n => { totals[lvls[n.cls] || 1]++; });
+        N.forEach(n => {
+            let lvl = lvls[n.cls] !== undefined ? lvls[n.cls] : 1;
+            const tW = totals[lvl] * 280; const sX = 800 - tW/2;
+            n.x = sX + (counts[lvl] * 280); n.y = 80 + (lvl * 190); counts[lvl]++;
+        });
+    } else if (type === 'organic') {
+        N.forEach(n => { n.x = 100 + Math.random() * 1000; n.y = 100 + Math.random() * 700; });
+    }
+    
+    if (snapToGrid) {
+      N.forEach(n => {
+        n.x = Math.round(n.x / 20) * 20; n.y = Math.round(n.y / 20) * 20;
+      });
+    }
+    
+    render();
+    toast(`🪄 Layout Aplicado`);
 }
 
-
-/* ========================================================================= */
-/* CAMADA ADICIONAL 3: REFINAMENTOS PROFISSIONAIS (Linhas, Botões, Cores)    */
-/* ========================================================================= */
-
-// INJEÇÃO DA LEGENDA E BOTÃO "ORGANIZAR CARDS" NO DOM
 document.addEventListener("DOMContentLoaded", () => {
-    // Legenda no canto (junto do zoom)
     const zoomCtrl = document.querySelector('.zoom-controls');
-    if(zoomCtrl) zoomCtrl.insertAdjacentHTML('afterbegin', `<button class="btn" onclick="toggleSmartLegend()" style="margin-right: 5px;">📜 Legenda</button>`);
+    if(zoomCtrl) zoomCtrl.insertAdjacentHTML('afterbegin', `<button class="btn" onclick="toggleSmartLegend()" style="margin-right: 5px;">📜</button>`);
     
-    // Organizar cards (junto do Auto Layout no header)
     const autoLayoutBtn = document.querySelector('button[onclick="autoLayout()"]');
     if(autoLayoutBtn) autoLayoutBtn.insertAdjacentHTML('afterend', ` <button class="btn" onclick="toggleStylesMenu()">🧩 Organizar Cards</button>`);
-    
-    // Atualiza o <select> com as 15 novas classificações agrupadas
-    const clsSelect = document.getElementById('cls');
-    if(clsSelect) {
-        clsSelect.innerHTML = `
-        <optgroup label="Grupo 1: Fundamentos">
-            <option value="macro">Núcleo Macroestrutural</option>
-            <option value="core">Fundamento / Autor</option>
-            <option value="object">Fenômeno / Objeto</option>
-            <option value="complement">Complemento</option>
-            <option value="output">Desdobramento / PoC</option>
-        </optgroup>
-        <optgroup label="Grupo 2: Metodologia">
-            <option value="m1">Pesquisa Bibliográfica</option>
-            <option value="m2">Análise Documental</option>
-            <option value="m3">Entrevista / Campo</option>
-            <option value="m4">Coleta de Dados</option>
-            <option value="m5">Tratamento Analítico</option>
-        </optgroup>
-        <optgroup label="Grupo 3: Resultados">
-            <option value="r1">Hipótese Confirmada</option>
-            <option value="r2">Novo Paradigma</option>
-            <option value="r3">Artigo / Publicação</option>
-            <option value="r4">Protótipo / Poc</option>
-            <option value="r5">Impacto Social</option>
-        </optgroup>
-        `;
+});
+
+window.toggleStylesMenu = function(e) {
+    const event = e || window.event;
+    const menu = document.getElementById('styles-menu');
+    if (event && event.currentTarget) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        menu.style.top = (rect.bottom + 6) + 'px';
+        menu.style.left = rect.left + 'px';
+        menu.style.right = 'auto';
     }
-});
-
-// Adicionando as novas cores ao mapa global do SVG
-Object.assign(LINK_COLORS, {
-    m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
-    r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
-});
-
-// Lógica de Toggle do Botão Organizar (Estilos)
-function toggleStylesMenu() { document.getElementById('styles-menu').classList.toggle('show'); }
+    menu.classList.toggle('show');
+};
 
 document.addEventListener('click', e => {
   if (!e.target.closest('#styles-menu') && !e.target.closest('button[onclick="toggleStylesMenu()"]')) {
@@ -1677,7 +1741,7 @@ document.addEventListener('click', e => {
   }
 });
 
-function execStyles(mode) {
+window.execStyles = function(mode) {
     if(!confirm('Aplicar novo arranjo visual aos cards?')) return;
     document.getElementById('styles-menu').classList.remove('show');
     
@@ -1730,629 +1794,7 @@ function execStyles(mode) {
     } else if (mode === 'waterfall') {
         let startX = 100, startY = 100;
         N.forEach((n, i) => { n.x = startX + i * 70; n.y = startY + i * 70; });
-    }
-    
-    if (snapToGrid) {
-        N.forEach(n => { n.x = Math.round(n.x/20)*20; n.y = Math.round(n.y/20)*20; });
-    }
-    
-    render();
-    toast('Estilo aplicado com sucesso!');
-}
-
-// Controle da Legenda Inteligente
-function toggleSmartLegend() { document.getElementById('smart-legend-panel').classList.toggle('show'); }
-
-
-// ====================== SELEÇÃO E CORES DE LINHAS (Sobrescrita de drawLinks) ======================
-let customLinkColors = {};
-let selectedLink = null;
-
-// Tenta restaurar do LocalStorage se houver
-try { 
-    const rawData = localStorage.getItem('arquiteturaEpistemologica');
-    if (rawData) {
-        const p = JSON.parse(rawData);
-        if (p.customLinkColors) customLinkColors = p.customLinkColors;
-    }
-} catch(e) {}
-
-// Sobrescrevendo o AutoSave e Save nativos para registrar as cores das linhas
-function autoSave() {
-  try {
-    localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }));
-  } catch(e){}
-}
-function saveProject() {
-  const blob = new Blob([JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `arquitetura_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  toast('JSON salvo com estilos das linhas');
-}
-
-// Novo Listener para DELETAR a linha selecionada
-window.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLink) {
-        const [a, b] = selectedLink.split('-');
-        L = L.filter(x => !(x[0] === a && x[1] === b));
-        delete customLinkColors[selectedLink];
-        selectedLink = null;
-        render();
-        toast('Linha excluída com sucesso');
-    }
-});
-
-// A Magia da injeção: Redesenhando drawLinks para permitir Interações nas Linhas!
-function drawLinks() {
-  Array.from(svg.querySelectorAll('path.connection')).forEach(p => p.remove());
-  const isDark = document.body.classList.contains('dark');
-
-  L.forEach(([a, b]) => {
-    const A = N.find(n => n.id === a);
-    const B = N.find(n => n.id === b);
-    if (!A || !B) return;
-
-    const p1 = getBorderPoint(A, B.x + B.w/2, B.y + B.h/2);
-    const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
-    const midY = (p1.y + p2.y) / 2;
-    const spine = isSpineEdge(a, b);
-    const linkKey = a + '-' + b;
-
-    let strokeColor;
-    if (customLinkColors[linkKey]) strokeColor = customLinkColors[linkKey];
-    else if (spine) strokeColor = '#eab308';
-    else strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
-    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', strokeColor);
-    
-    // Controle de espessura da linha (se selecionada fica mais grossa)
-    let sWidth = spine ? '3.4' : '2.2';
-    if (selectedLink === linkKey) sWidth = spine ? '5.0' : '4.0';
-    path.setAttribute('stroke-width', sWidth);
-    
-    path.setAttribute('stroke-linecap', 'round');
-    path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
-    
-    // Permitir clique na linha
-    path.style.pointerEvents = 'stroke';
-    path.style.cursor = 'pointer';
-
-    path.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks(); // recarrega a parte visual
-        toast('Linha selecionada. Aperte Delete para excluí-la.');
-    });
-
-    path.addEventListener('contextmenu', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks();
-        
-        const m = document.getElementById('line-context-menu');
-        m.style.left = e.clientX + 'px';
-        m.style.top = e.clientY + 'px';
-        m.classList.add('show');
-    });
-
-    svg.appendChild(path);
-  });
-}
-
-function changeLineColor(colorCode) {
-    if (selectedLink) {
-        if (colorCode) customLinkColors[selectedLink] = colorCode;
-        else delete customLinkColors[selectedLink];
-        drawLinks();
-        autoSave();
-    }
-}
-function deleteSelectedLine() {
-    if (selectedLink) {
-        const [a, b] = selectedLink.split('-');
-        L = L.filter(x => !(x[0] === a && x[1] === b));
-        delete customLinkColors[selectedLink];
-        selectedLink = null;
-        render();
-        toast('Linha excluída');
-    }
-}
-document.addEventListener('click', e => {
-    if (!e.target.closest('#line-context-menu')) {
-        const m = document.getElementById('line-context-menu');
-        if (m) m.classList.remove('show');
-    }
-});
-
-
-// ====================== PDF ======================
-function exportPdf() {
-  const isDark = document.body.classList.contains('dark');
-  const printWin = window.open('', '_blank');
-  if (!printWin) { alert('Permita pop-ups'); return; }
-
-  const formatEl = document.getElementById('pdf-format');
-  const orientEl = document.getElementById('pdf-orientation');
-  const format = formatEl ? formatEl.value : 'A3';
-  const orientation = orientEl ? orientEl.value : 'landscape';
-
-  const bgPage = isDark ? '#0f172a' : '#ffffff';
-  const bgMap = isDark ? '#0f172a' : '#ffffff';
-  const textMain = isDark ? '#e2e8f0' : '#0f2744';
-  const textMuted = isDark ? '#94a3b8' : '#64748b';
-  const cardBg = isDark ? '#1e293b' : '#ffffff';
-  const cardBorder = isDark ? '#334155' : '#d1d9e0';
-  
-  // Cores atualizadas e constantes
-  const allColors = Object.assign({
-    macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
-    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
-  }, LINK_COLORS);
-
-  // 1. Escaneia onde começa e termina o mapa real (para nunca cortar as bordas)
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  N.forEach(n => {
-    minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
-    maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
-  });
-  
-  // 2. Cria margens de respiro perfeitas (padding de 60px)
-  const padding = 60;
-  const mapW = (maxX - minX) + (padding * 2);
-  const mapH = (maxY - minY) + (padding * 2) + 50; // +50 para caber a legenda nova
-  
-  const offsetX = padding - minX;
-  const offsetY = padding - minY;
-
-  // 3. Monta os cartões
-  const nodesHtml = N.map(n => {
-    const c = allColors[n.cls] || allColors.core;
-    const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
-      <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
-      <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
-    </div>`;
-  }).join('');
-
-  // 4. Monta as Linhas
-  let paths = '';
-  L.forEach(([a,b]) => {
-    const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
-    if (!A || !B) return;
-    const p1 = getBorderPoint({x:A.x+offsetX, y:A.y+offsetY, w:A.w, h:A.h}, B.x+offsetX + B.w/2, B.y+offsetY + B.h/2);
-    const p2 = getBorderPoint({x:B.x+offsetX, y:B.y+offsetY, w:B.w, h:B.h}, A.x+offsetX + A.w/2, A.y+offsetY + A.h/2);
-    const midY = (p1.y + p2.y) / 2;
-    const spine = isSpineEdge(a,b);
-    let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
-    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
-  });
-
-  // 5. LEGENDA DINÂMICA
-  const usedClasses = [...new Set(N.map(n => n.cls))];
-  const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
-  usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
-
-  let legendItemsHtml = '';
-  usedClasses.forEach(cls => {
-    const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
-    const color = allColors[cls] || '#64748b';
-    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
-  });
-
-  // Adicionado 'white-space: nowrap' e removido os limites de quebra de linha
-  const legendHtml = usedClasses.length > 0 ? `
-    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-      ${legendItemsHtml}
-    </div>` : '';
-
-  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
-  <style>
-    @page { size: ${format} ${orientation}; margin: 8mm; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
-    .header{text-align:center;margin-bottom:8mm}
-    h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
-    .sub{font-size:12px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
-    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
-  </style></head><body>
-  <div class="header">
-    <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">Mapas e Estruturas · PPGET</div>
-  </div>
-  <div id="map">
-    <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
-    ${nodesHtml}
-    ${legendHtml}
-  </div>
-  <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
-  printWin.document.close();
-  toast('PDF Dinâmico gerado!');
-}
-
-// ====================== SISTEMA DE GALERIA DE AUTORES ======================
-const autoresFotos = {
-    'Bazzo': 'https://emc.ufsc.br/portal/wp-content/uploads/2017/07/65_6-768x960.jpg',
-    'Bauman': 'https://www.infoescola.com/wp-content/uploads/2009/07/Zygmunt-Bauman_279502547.jpg',
-    'Vieira Pinto': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOTEnierOgWZsJTHRxyAB_XYY69vE5f1rf0iPZ0nkRkIp-siStcDQXNa-M&s=10',
-    'Feenberg': 'https://www.sfu.ca/content/sfu/communication/news-and-community/researchnews/andrew-feenberg-retires-from-the-school-of-communication/jcr:content/main_content/image.img.2000.high.jpg/1629922624175.jpg',
-    'Flusser': 'https://www.uai.com.br/wp-content/uploads/2026/05/Design_sem_nome-2026-05-07T130009.019.jpg',
-    'Zuboff': 'https://images.ft.com/v3/image/raw/ftcms%3Ae60fb43e-32c7-4180-87b2-c86e53e758f4?source=next-article&fit=scale-down&quality=highest&width=1440&dpr=1',
-    'Van Dijck': 'https://www.nwo.nl/sites/nwo/files/styles/max_1600x1600/public/media-images/Spinozalaureaat%202021%20Jos%C3%A9%20van%20Dijck%20%28credits%20Studio%20Oostrum%29.jpg?itok=LH_BwIVh',
-    'Noble': 'https://images.squarespace-cdn.com/content/v1/5b6493dab27e396274fd7a35/cb275408-76ea-4686-9ba3-60176a844752/SafiyaNoble_2026.jpg.jpg?format=1000w',
-    'Kate Manne': 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Kate_Manne%2C_author%2C_at_the_2024_National_Book_Awards_finalist_reading_7_%28cropped%29.jpg',
-    'bell hooks': 'https://www.publishnews.com.br/estaticos/uploads/2021/12/C5qdxfQVdGyBv3v0JasDNl2aM6edhOGn7hlkIJF5TXVUaxMZR2T9KuczoNDaTvZ3FxCCDn9nX3dWdE6x.png',
-    'Sueli Carneiro': 'https://images.squarespace-cdn.com/content/v1/625e0a7f20bb3a13976a8f50/cb98149c-9bb5-46fb-a008-7cba7233acac/image.jpg?format=2500w',
-    'Netnografia': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg',
-    'Kozinets': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg'
-};
-
-function getInitials(name) {
-    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-}
-
-function openAuthorsModal() {
-    const grid = document.getElementById('authors-grid-content');
-    grid.innerHTML = '';
-    
-    // 1. Filtra cartões baseando-se em tags ou presença do nome
-    const autores = N.filter(n => 
-        (n.tag && n.tag.includes('AUTOR')) || 
-        (n.tag && n.tag.includes('METODOLOGIA')) ||
-        Object.keys(autoresFotos).some(k => (n.title || '').toLowerCase().includes(k.toLowerCase()))
-    );
-    
-    // Remove duplicadas
-    const uniqueAutores = [...new Map(autores.map(item => [item.id, item])).values()];
-
-    uniqueAutores.forEach(a => {
-        // 2. Cria um array para guardar as fotos encontradas naquele cartão específico
-        let fotosEncontradas = [];
-        for (let key in autoresFotos) {
-            // Se o título ou a descrição contiver o nome, adicionamos a foto na lista
-            if ((a.title || '').toLowerCase().includes(key.toLowerCase()) || 
-                (a.desc || '').toLowerCase().includes(key.toLowerCase()) ||
-                (a.tag || '').toLowerCase().includes(key.toLowerCase())) {
-                fotosEncontradas.push(autoresFotos[key]);
-            }
-        }
-        
-        // Remove duplicatas de fotos (ex: se bater Netnografia e Kozinets no mesmo card)
-        fotosEncontradas = [...new Set(fotosEncontradas)];
-
-        const init = getInitials(a.title || 'Autor');
-        let imgHtml = '';
-
-        // 3. Monta o visual de 0, 1 ou 2 fotos dinamicamente
-        if (fotosEncontradas.length === 0) {
-            imgHtml = `<div class="author-initials" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
-        } else if (fotosEncontradas.length === 1) {
-            imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                       <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
-        } else {
-            // O grande truque para 2 autoras: Divide a bolinha ao meio!
-            imgHtml = `
-                <div style="display:flex; width:100%; height:100%;">
-                    <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
-                    <img src="${fotosEncontradas[1]}" style="width:50%; height:100%; object-fit:cover; border-left: 1px solid var(--border);" onerror="this.style.display='none'" />
-                </div>
-            `;
-        }
-
-        const cardHtml = `
-            <div class="author-card">
-                <div class="author-photo-container">
-                    ${imgHtml}
-                </div>
-                <div class="author-name">${esc(a.title)}</div>
-                <div class="author-concept">${esc(a.tag)}</div>
-                <div class="author-desc">${esc(a.desc)}</div>
-                ${a.action ? `<div class="author-action"><b>Ponto de Aplicação:</b><br>${esc(a.action)}</div>` : ''}
-            </div>
-        `;
-        grid.insertAdjacentHTML('beforeend', cardHtml);
-    });
-    
-    document.getElementById('authors-modal-overlay').classList.add('show');
-}
-
-function closeAuthorsModal() {
-    document.getElementById('authors-modal-overlay').classList.remove('show');
-}
-
-// Fechar galeria se o usuário clicar no fundo escuro fora dela
-document.addEventListener('click', e => {
-    const overlay = document.getElementById('authors-modal-overlay');
-    if (e.target === overlay) closeAuthorsModal();
-});
-
-// Inicializa a renderização e o status original
-render();
-setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
-</script>
-
-<style id="ultra-pro-upgrades">
-    /* 1. Modificação: Desbloqueio absoluto do vazamento de texto vertical */
-    .node p {
-        display: block !important;
-        overflow: hidden !important;
-        margin-bottom: 0 !important;
-    }
-
-    /* Novo Brilho Prateado (Silver/Platinum Glow) na Seleção */
-    .node.selected {
-        outline: 3px solid #94a3b8 !important;
-        border-color: #94a3b8 !important;
-        box-shadow: 0 0 25px 5px rgba(148, 163, 184, 0.4) !important;
-    }
-    body.dark .node.selected {
-        outline: 3px solid #cbd5e1 !important;
-        border-color: #cbd5e1 !important;
-        box-shadow: 0 0 25px 5px rgba(203, 213, 225, 0.3) !important;
-    }
-    .node.selected .resize-handle {
-        border-color: #94a3b8 !important;
-    }
-    body.dark .node.selected .resize-handle {
-        border-color: #cbd5e1 !important;
-    }
-
-    /* 2. Remoção da Legenda Fixa Antiga */
-    #fixed-legend { display: none !important; }
-
-    /* 3. Estilo da Legenda Inteligente (Translúcida, canto inferior direito, dentro da UI) */
-    #smart-legend-panel {
-        background: rgba(255, 255, 255, 0.45) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255,255,255,0.4) !important;
-        bottom: 20px !important;
-        right: 20px !important;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1) !important;
-        transform: translateY(20px);
-    }
-    body.dark #smart-legend-panel {
-        background: rgba(30, 41, 59, 0.45) !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
-    }
-
-    /* 4. Componente Customizado para as Categorias Editáveis */
-    .custom-select-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
-    .custom-select-header {
-        width: 100%; border: 1px solid var(--border); border-radius: 7px;
-        padding: 7px 9px; font-size: 13px; background: var(--bg); color: var(--ink);
-        cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-    }
-    .custom-select-header::after { content: "▼"; font-size: 10px; opacity: 0.6; }
-    .custom-select-list {
-        position: absolute; top: 100%; left: 0; width: 100%; z-index: 2000;
-        background: var(--surface); border: 1px solid var(--border); border-radius: 7px;
-        box-shadow: var(--shadow); display: none; max-height: 280px; overflow-y: auto;
-        margin-top: 4px;
-    }
-    .custom-select-list.show { display: block; }
-    .c-group-label { font-size: 9px; font-weight: 800; color: var(--muted); padding: 8px 9px 4px; text-transform: uppercase; background: var(--bg); }
-    .c-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 9px; cursor: pointer; font-size: 12px; color: var(--ink); border-bottom: 1px solid var(--border); }
-    .c-item:last-child { border-bottom: none; }
-    .c-item:hover { background: var(--bg); }
-    .c-item-text { flex: 1; display:flex; align-items: center; gap: 6px; }
-    .c-item-edit { opacity: 0.3; font-size: 14px; padding: 2px; border-radius: 4px; transition: 0.2s; }
-    .c-item-edit:hover { opacity: 1; background: var(--border); transform: scale(1.1); }
-    .color-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
-
-  /* ===== TÍTULO + LEGENDA (MODO APRESENTAÇÃO) ===== */
-  #presentation-title {
-    display: none; position: fixed; top: 24px; left: 30px;
-    font-family: Georgia, serif; font-size: 20px; font-weight: bold;
-    color: var(--navy); z-index: 3000; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  body.dark #presentation-title { color: #e2e8f0; }
-  body.presentation #presentation-title { display: block; }
-
-  #presentation-footer {
-    display: none; position: fixed; bottom: 24px; right: 30px;
-    font-size: 14px; font-weight: 600; color: var(--muted); z-index: 3000;
-  }
-  body.presentation #presentation-footer { display: block; }
-
-  #presentation-legend {
-    display: none; 
-    position: fixed; 
-    bottom: 40px; 
-    left: 50%;                 /* Centraliza a caixa na tela */
-    transform: translateX(-50%); /* Complemento da centralização */
-    background: rgba(255, 255, 255, 0.90); 
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border); 
-    border-radius: 30px;        /* Bordas bem arredondadas, estilo pílula */
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
-    padding: 12px 24px;         /* Deixa a barra mais esticadinha */
-    z-index: 3000;
-    white-space: nowrap;        /* Impede que os itens quebrem linha */
-  }
-  body.dark #presentation-legend { background: rgba(30, 41, 59, 0.90); border-color: rgba(255,255,255,0.1); }
-  body.presentation #presentation-legend { display: block !important; }
-/* ===== TELA CHEIA: GALERIA DE AUTORES ===== */
-  #authors-modal-overlay {
-      display: none; position: fixed; inset: 0; background: var(--bg);
-      z-index: 4000; flex-direction: column;
-      opacity: 0; transition: opacity 0.3s ease;
-  }
-  #authors-modal-overlay.show { display: flex; opacity: 1; }
-  
-  .authors-header {
-      padding: 20px 40px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center; background: var(--surface);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03); z-index: 10;
-  }
-  .authors-close { 
-      background: #e11d48; border: none; font-size: 13px; font-weight: bold; color: white; 
-      cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: background 0.2s; 
-  }
-  .authors-close:hover { background: #be123c; }
-  
-  .authors-grid {
-      padding: 40px; overflow-y: auto; display: grid; flex: 1;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
-      align-content: start;
-  }
-  .author-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow);
-  }
-  .author-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px -5px rgba(15, 39, 68, 0.15); border-color: var(--blue); }
-  
-  .author-photo-container {
-      width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px;
-      position: relative; box-shadow: 0 4px 14px rgba(0,0,0,0.12); border: 4px solid var(--bg);
-      background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden;
-  }
-  .author-photo { width: 100%; height: 100%; object-fit: cover; }
-  .author-initials { font-family: Georgia, serif; font-size: 40px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-  
-  .author-name { font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: var(--navy); margin-bottom: 8px; }
-  .author-concept { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--rose); font-weight: bold; margin-bottom: 16px; background: #fdf2f8; padding: 4px 10px; border-radius: 20px;}
-  .author-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
-  .author-action {
-      background: var(--bg); border-left: 3px solid var(--blue); padding: 14px;
-      font-size: 12px; color: var(--ink); border-radius: 0 8px 8px 0;
-      width: 100%; text-align: left; margin-top: auto; line-height: 1.4;
-  }
-  body.dark .author-concept { background: rgba(190, 24, 93, 0.2); }
-</style>
-
-<script>
-// =========================================================================
-// CAMADA ADICIONAL 4: CORREÇÕES FINAIS E 100% DAS EXIGÊNCIAS
-// =========================================================================
-
-// 1. Substituir o botão de legenda por apenas um ícone
-document.addEventListener("DOMContentLoaded", () => {
-    const legBtn = document.querySelector('button[onclick="toggleSmartLegend()"]');
-    if (legBtn) {
-        legBtn.innerHTML = '📜';
-        legBtn.title = 'Alternar Legenda';
-        legBtn.style.padding = '5px 8px';
-    }
-});
-
-// 2. Ancorar menus extamentamente embaixo do botão (Correção de posição)
-window.autoLayout = function(e) {
-    const event = e || window.event;
-    const menu = document.getElementById('layout-menu');
-    if (event && event.currentTarget) {
-        const rect = event.currentTarget.getBoundingClientRect();
-        menu.style.top = (rect.bottom + 6) + 'px';
-        menu.style.left = rect.left + 'px';
-        menu.style.right = 'auto';
-    }
-    menu.classList.toggle('show');
-};
-
-window.toggleStylesMenu = function(e) {
-    const event = e || window.event;
-    const menu = document.getElementById('styles-menu');
-    if (event && event.currentTarget) {
-        const rect = event.currentTarget.getBoundingClientRect();
-        menu.style.top = (rect.bottom + 6) + 'px';
-        menu.style.left = rect.left + 'px';
-        menu.style.right = 'auto';
-    }
-    menu.classList.toggle('show');
-};
-
-// 3. Adicionar as 5 novas opções aos Menus
-document.addEventListener("DOMContentLoaded", () => {
-    const lMenu = document.getElementById('layout-menu');
-    if(lMenu) {
-        lMenu.innerHTML += `
-            <div class="ctx-separator"></div>
-            <div class="ctx-item" onclick="execLayout('network')"><span class="layout-icon">🕸️</span> Rede Direcionada</div>
-            <div class="ctx-item" onclick="execLayout('spiral')"><span class="layout-icon">🔄</span> Espiral Progressiva</div>
-            <div class="ctx-item" onclick="execLayout('zigzag')"><span class="layout-icon">〽️</span> Caminho Zigue-Zague</div>
-            <div class="ctx-item" onclick="execLayout('pyramid')"><span class="layout-icon">🔻</span> Pirâmide Invertida</div>
-            <div class="ctx-item" onclick="execLayout('organic')"><span class="layout-icon">🔀</span> Distribuição Orgânica</div>
-        `;
-    }
-    const sMenu = document.getElementById('styles-menu');
-    if(sMenu) {
-        sMenu.innerHTML += `
-            <div class="ctx-separator"></div>
-            <div class="ctx-item" onclick="execStyles('spiderweb')"><span class="layout-icon">🕷️</span> Teia Estrutural</div>
-            <div class="ctx-item" onclick="execStyles('honeycomb')"><span class="layout-icon">🐝</span> Matriz Favo de Mel</div>
-            <div class="ctx-item" onclick="execStyles('orbits')"><span class="layout-icon">🪐</span> Sistema Orbital</div>
-            <div class="ctx-item" onclick="execStyles('empathy')"><span class="layout-icon">🧠</span> Mapa de Empatia</div>
-            <div class="ctx-item" onclick="execStyles('venn')"><span class="layout-icon">⭕</span> Conjuntos (Venn)</div>
-        `;
-    }
-});
-
-// Sobrescrever lógicas para rodar as novas estruturas numéricas
-const oldExecLayout = window.execLayout;
-window.execLayout = function(type) {
-    if (['horizontal','vertical','grid','radial','central'].includes(type)) {
-        oldExecLayout(type); return;
-    }
-    if(!confirm('Isso irá reposicionar todos os cartões. Deseja continuar?')) return;
-    document.getElementById('layout-menu').classList.remove('show');
-    
-    if (type === 'network') {
-        const cx = 800, cy = 500;
-        N.forEach((n, i) => {
-            if (n.cls === 'macro') { n.x = cx - n.w/2; n.y = cy - n.h/2; }
-            else {
-                const radius = n.cls === 'core' ? 300 : 500;
-                const angle = (i / N.length) * Math.PI * 2;
-                n.x = cx + Math.cos(angle)*radius - n.w/2;
-                n.y = cy + Math.sin(angle)*radius - n.h/2;
-            }
-        });
-    } else if (type === 'spiral') {
-        const cx = 800, cy = 500;
-        N.forEach((n, i) => {
-            const angle = 0.5 * i; const radius = 50 * i;
-            n.x = cx + Math.cos(angle)*radius - n.w/2;
-            n.y = cy + Math.sin(angle)*radius - n.h/2;
-        });
-    } else if (type === 'zigzag') {
-        let startY = 80;
-        N.forEach((n, i) => {
-            n.x = (i % 2 === 0) ? 200 : 800; n.y = startY; startY += 150;
-        });
-    } else if (type === 'pyramid') {
-        const levels = { 'macro': 3, 'core': 2, 'complement': 1, 'object': 1, 'output': 0 };
-        let counts = {0:0, 1:0, 2:0, 3:0}, totals = {0:0, 1:0, 2:0, 3:0};
-        N.forEach(n => { totals[levels[n.cls] || 1]++; });
-        N.forEach(n => {
-            let lvl = levels[n.cls] !== undefined ? levels[n.cls] : 1;
-            const tW = totals[lvl] * 280; const sX = 800 - tW/2;
-            n.x = sX + (counts[lvl] * 280); n.y = 80 + (lvl * 190); counts[lvl]++;
-        });
-    } else if (type === 'organic') {
-        N.forEach(n => { n.x = 100 + Math.random() * 1000; n.y = 100 + Math.random() * 700; });
-    }
-    if (snapToGrid) { N.forEach(n => { n.x = Math.round(n.x/20)*20; n.y = Math.round(n.y/20)*20; }); }
-    render(); toast(`🪄 Layout Aplicado`);
-};
-
-const oldExecStyles = window.execStyles;
-window.execStyles = function(mode) {
-    if (['estrela','arvore','timeline','cluster','waterfall'].includes(mode)) {
-        oldExecStyles(mode); return;
-    }
-    if(!confirm('Aplicar novo arranjo visual aos cards?')) return;
-    document.getElementById('styles-menu').classList.remove('show');
-    
-    if (mode === 'spiderweb') {
+    } else if (mode === 'spiderweb') {
         const cx = 800, cy = 500;
         N.forEach((n, i) => {
             let lvl = n.cls === 'macro' ? 0 : n.cls === 'core' ? 1 : 2;
@@ -2395,12 +1837,141 @@ window.execStyles = function(mode) {
             n.y = c.y + (Math.random()*150 - 75) - n.h/2;
         });
     }
-    if (snapToGrid) { N.forEach(n => { n.x = Math.round(n.x/20)*20; n.y = Math.round(n.y/20)*20; }); }
-    render(); toast('Estilo aplicado com sucesso!');
+    
+    if (snapToGrid) {
+        N.forEach(n => { n.x = Math.round(n.x/20)*20; n.y = Math.round(n.y/20)*20; });
+    }
+    
+    render();
+    toast('Estilo aplicado com sucesso!');
+}
+
+function toggleSmartLegend() { document.getElementById('smart-legend-panel').classList.toggle('show'); }
+
+window.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLink) {
+        const [a, b] = selectedLink.split('-');
+        L = L.filter(x => !(x[0] === a && x[1] === b));
+        delete customLinkColors[selectedLink];
+        selectedLink = null;
+        render();
+        toast('Linha excluída com sucesso');
+    }
+});
+
+function changeLineColor(colorCode) {
+    if (selectedLink) {
+        if (colorCode) customLinkColors[selectedLink] = colorCode;
+        else delete customLinkColors[selectedLink];
+        drawLinks();
+        autoSave();
+    }
+}
+function deleteSelectedLine() {
+    if (selectedLink) {
+        const [a, b] = selectedLink.split('-');
+        L = L.filter(x => !(x[0] === a && x[1] === b));
+        delete customLinkColors[selectedLink];
+        selectedLink = null;
+        render();
+        toast('Linha excluída');
+    }
+}
+document.addEventListener('click', e => {
+    if (!e.target.closest('#line-context-menu')) {
+        const m = document.getElementById('line-context-menu');
+        if (m) m.classList.remove('show');
+    }
+});
+
+const autoresFotos = {
+    'Bazzo': 'https://emc.ufsc.br/portal/wp-content/uploads/2017/07/65_6-768x960.jpg',
+    'Bauman': 'https://www.infoescola.com/wp-content/uploads/2009/07/Zygmunt-Bauman_279502547.jpg',
+    'Vieira Pinto': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOTEnierOgWZsJTHRxyAB_XYY69vE5f1rf0iPZ0nkRkIp-siStcDQXNa-M&s=10',
+    'Feenberg': 'https://www.sfu.ca/content/sfu/communication/news-and-community/researchnews/andrew-feenberg-retires-from-the-school-of-communication/jcr:content/main_content/image.img.2000.high.jpg/1629922624175.jpg',
+    'Flusser': 'https://www.uai.com.br/wp-content/uploads/2026/05/Design_sem_nome-2026-05-07T130009.019.jpg',
+    'Zuboff': 'https://images.ft.com/v3/image/raw/ftcms%3Ae60fb43e-32c7-4180-87b2-c86e53e758f4?source=next-article&fit=scale-down&quality=highest&width=1440&dpr=1',
+    'Van Dijck': 'https://www.nwo.nl/sites/nwo/files/styles/max_1600x1600/public/media-images/Spinozalaureaat%202021%20Jos%C3%A9%20van%20Dijck%20%28credits%20Studio%20Oostrum%29.jpg?itok=LH_BwIVh',
+    'Noble': 'https://images.squarespace-cdn.com/content/v1/5b6493dab27e396274fd7a35/cb275408-76ea-4686-9ba3-60176a844752/SafiyaNoble_2026.jpg.jpg?format=1000w',
+    'Kate Manne': 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Kate_Manne%2C_author%2C_at_the_2024_National_Book_Awards_finalist_reading_7_%28cropped%29.jpg',
+    'bell hooks': 'https://www.publishnews.com.br/estaticos/uploads/2021/12/C5qdxfQVdGyBv3v0JasDNl2aM6edhOGn7hlkIJF5TXVUaxMZR2T9KuczoNDaTvZ3FxCCDn9nX3dWdE6x.png',
+    'Sueli Carneiro': 'https://images.squarespace-cdn.com/content/v1/625e0a7f20bb3a13976a8f50/cb98149c-9bb5-46fb-a008-7cba7233acac/image.jpg?format=2500w',
+    'Netnografia': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg',
+    'Kozinets': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg'
 };
 
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+}
 
-// 4. SISTEMA DE CATEGORIAS CUSTOMIZADAS (Oculta select original, cria novo com Lápis de edição)
+function openAuthorsModal() {
+    const grid = document.getElementById('authors-grid-content');
+    grid.innerHTML = '';
+    
+    const autores = N.filter(n => 
+        (n.tag && n.tag.includes('AUTOR')) || 
+        (n.tag && n.tag.includes('METODOLOGIA')) ||
+        Object.keys(autoresFotos).some(k => (n.title || '').toLowerCase().includes(k.toLowerCase()))
+    );
+    
+    const uniqueAutores = [...new Map(autores.map(item => [item.id, item])).values()];
+
+    uniqueAutores.forEach(a => {
+        let fotosEncontradas = [];
+        for (let key in autoresFotos) {
+            if ((a.title || '').toLowerCase().includes(key.toLowerCase()) || 
+                (a.desc || '').toLowerCase().includes(key.toLowerCase()) ||
+                (a.tag || '').toLowerCase().includes(key.toLowerCase())) {
+                fotosEncontradas.push(autoresFotos[key]);
+            }
+        }
+        
+        fotosEncontradas = [...new Set(fotosEncontradas)];
+
+        const init = getInitials(a.title || 'Autor');
+        let imgHtml = '';
+
+        if (fotosEncontradas.length === 0) {
+            imgHtml = `<div class="author-initials" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
+        } else if (fotosEncontradas.length === 1) {
+            imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                       <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
+        } else {
+            imgHtml = `
+                <div style="display:flex; width:100%; height:100%;">
+                    <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
+                    <img src="${fotosEncontradas[1]}" style="width:50%; height:100%; object-fit:cover; border-left: 1px solid var(--border);" onerror="this.style.display='none'" />
+                </div>
+            `;
+        }
+
+        const cardHtml = `
+            <div class="author-card">
+                <div class="author-photo-container">
+                    ${imgHtml}
+                </div>
+                <div class="author-name">${esc(a.title)}</div>
+                <div class="author-concept">${esc(a.tag)}</div>
+                <div class="author-desc">${esc(a.desc)}</div>
+                ${a.action ? `<div class="author-action"><b>Ponto de Aplicação:</b><br>${esc(a.action)}</div>` : ''}
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', cardHtml);
+    });
+    
+    document.getElementById('authors-modal-overlay').classList.add('show');
+}
+
+function closeAuthorsModal() {
+    document.getElementById('authors-modal-overlay').classList.remove('show');
+}
+
+document.addEventListener('click', e => {
+    const overlay = document.getElementById('authors-modal-overlay');
+    if (e.target === overlay) closeAuthorsModal();
+});
+
 const defaultCatNames = {
     macro: 'Núcleo Macroestrutural', core: 'Fundamento / Autor', object: 'Fenômeno / Objeto', complement: 'Complemento', output: 'Desdobramento / PoC',
     m1: 'Pesquisa Bibliográfica', m2: 'Análise Documental', m3: 'Entrevista / Campo', m4: 'Coleta de Dados', m5: 'Tratamento Analítico',
@@ -2417,7 +1988,7 @@ let userCatNames = JSON.parse(localStorage.getItem('userCatNames')) || {...defau
 document.addEventListener("DOMContentLoaded", () => {
     const origSelect = document.getElementById('cls');
     if(!origSelect) return;
-    origSelect.style.display = 'none'; // Esconde nativo
+    origSelect.style.display = 'none'; 
     
     const wrapper = document.createElement('div');
     wrapper.className = 'custom-select-wrapper';
@@ -2428,7 +1999,6 @@ document.addEventListener("DOMContentLoaded", () => {
     origSelect.parentNode.insertBefore(wrapper, origSelect.nextSibling);
     renderCustomSelectList();
     
-    // Fechar ao clicar fora
     document.addEventListener('click', e => {
         if(!e.target.closest('.custom-select-wrapper')) {
             const cl = document.getElementById('c-list');
@@ -2468,7 +2038,6 @@ function renderCustomSelectList() {
         });
     });
     
-    // Sicronizar legenda inteligente
     updateDynamicLegend();
 }
 
@@ -2487,11 +2056,10 @@ window.handleEditName = function(key, e) {
         localStorage.setItem('userCatNames', JSON.stringify(userCatNames));
         renderCustomSelectList();
         updateDynamicLegend();
-        if(sel) inspect(); // Refresh visual do header se estiver aberto
+        if(sel) inspect(); 
     }
 };
 
-// Interceptar o inspect original para atualizar nosso select customizado
 const _oldInspect = window.inspect;
 window.inspect = function() {
     _oldInspect();
@@ -2500,7 +2068,6 @@ window.inspect = function() {
     if(n && header) header.innerText = userCatNames[n.cls] || 'Selecione...';
 };
 
-// Sobrescrever a legenda inteligente para usar os nomes atualizados do userCatNames
 function updateDynamicLegend() {
     const p = document.getElementById('smart-legend-panel');
     if(!p) return;
@@ -2533,10 +2100,7 @@ function updateDynamicLegend() {
     `;
 }
 
-// 5. Injetar a leitura das Categorias Customizadas no Export PDF e Word
-// ====================== EXPORT WORD – VERSÃO DETALHADA, A4 E INTELIGENTE ======================
 window.exportWord = function() {
-  // 1. Monta mapa de conexões
   const connections = {};
   L.forEach(([a, b]) => {
     if (!connections[a]) connections[a] = [];
@@ -2545,10 +2109,7 @@ window.exportWord = function() {
     connections[b].push(a);
   });
 
-  // 2. Ordena por hierarquia de grupos
-  const levelOrder = { macro: 0, core: 1, object: 2, complement: 3, output: 4,
-                       m1: 5, m2: 6, m3: 7, m4: 8, m5: 9,
-                       r1: 10, r2: 11, r3: 12, r4: 13, r5: 14 };
+  const levelOrder = { macro: 0, core: 1, object: 2, complement: 3, output: 4, m1: 5, m2: 6, m3: 7, m4: 8, m5: 9, r1: 10, r2: 11, r3: 12, r4: 13, r5: 14 };
   const sorted = [...N].sort((a, b) => {
     const la = levelOrder[a.cls] ?? 99;
     const lb = levelOrder[b.cls] ?? 99;
@@ -2556,14 +2117,12 @@ window.exportWord = function() {
     return (a.title || '').localeCompare(b.title || '');
   });
 
-  // 3. Espinha dorsal em formato de trilha
   const spineList = [...spineNodes]
     .map(id => N.find(n => n.id === id))
     .filter(Boolean)
     .map(n => n.title)
     .join(' ➔ ');
 
-  // Estrutura HTML Otimizada com namespaces do MS Word (A4, Print View, Margens)
   let html = `
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -2579,45 +2138,18 @@ window.exportWord = function() {
 </xml>
 <![endif]-->
 <style>
-  @page WordSection1 {
-      size: 21.0cm 29.7cm; /* A4 Nativo */
-      margin: 2.5cm 2.0cm 2.0cm 2.0cm; /* Margens padrão A4 */
-      mso-header-margin: 1.25cm;
-      mso-footer-margin: 1.25cm;
-      mso-paper-source: 0;
-  }
+  @page WordSection1 { size: 21.0cm 29.7cm; margin: 2.5cm 2.0cm 2.0cm 2.0cm; mso-header-margin: 1.25cm; mso-footer-margin: 1.25cm; mso-paper-source: 0; }
   div.WordSection1 { page: WordSection1; }
-  
-  body { 
-      font-family: Calibri, Arial, sans-serif; 
-      font-size: 11pt; 
-      line-height: 1.45; 
-      color: #1a2332; 
-      text-align: left; 
-  }
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1a2332; text-align: left; }
   h1 { font-family: Georgia, serif; color: #0f2744; font-size: 22pt; margin-bottom: 4pt; text-align: left; }
   h2 { font-family: Georgia, serif; color: #0f2744; font-size: 15pt; margin-top: 24pt; border-bottom: 1px solid #cbd5e1; padding-bottom: 4pt; }
   h3 { font-family: Georgia, serif; color: #0f2744; font-size: 13pt; margin-top: 16pt; margin-bottom: 4pt; }
   p { text-align: justify; margin-top: 0; margin-bottom: 8pt; }
-  
   .meta { color: #64748b; font-size: 10pt; margin-bottom: 24pt; }
   .tag { font-size: 9pt; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-  
-  .action {
-    background-color: #f0f9ff; 
-    border-left: 4px solid #2563eb;
-    padding: 8pt 10pt; 
-    margin: 10pt 0; 
-    font-size: 10.5pt;
-  }
-  .connections {
-    font-size: 10pt; color: #475569; margin: 8pt 0 16pt 0;
-    padding-left: 10pt; border-left: 2px solid #e2e8f0;
-  }
-  .spine-box {
-    background-color: #fefce8; border: 1px solid #fde047;
-    padding: 10pt 14pt; margin: 16pt 0 24pt 0; font-size: 11pt;
-  }
+  .action { background-color: #f0f9ff; border-left: 4px solid #2563eb; padding: 8pt 10pt; margin: 10pt 0; font-size: 10.5pt; }
+  .connections { font-size: 10pt; color: #475569; margin: 8pt 0 16pt 0; padding-left: 10pt; border-left: 2px solid #e2e8f0; }
+  .spine-box { background-color: #fefce8; border: 1px solid #fde047; padding: 10pt 14pt; margin: 16pt 0 24pt 0; font-size: 11pt; }
   .legend { margin-top: 18pt; font-size: 10pt; }
   .legend-item { margin-bottom: 6pt; }
   hr { border: 0; border-bottom: 1px solid #cbd5e1; margin: 24pt 0; }
@@ -2626,24 +2158,20 @@ window.exportWord = function() {
 </head>
 <body>
 <div class="WordSection1">
-
 <h1>Arquitetura da Pesquisa</h1>
 <div class="meta">
   Educação Tecnológica · Formação Ética · Letramento Crítico<br>
   PPGET · <br>
   Documento gerado a partir do mapa conceitual interativo
 </div>
-
 <div class="spine-box">
   <b>🦴 Espinha Dorsal da Arquitetura:</b><br>
   ${spineList || 'Nenhum nó marcado como espinha dorsal no momento.'}
 </div>
-
 <h2>1. Visão Geral da Estrutura</h2>
 <p>Este documento descreve a arquitetura da pesquisa de forma linear, como construída no editor visual. Cada bloco abaixo corresponde a um cartão do mapa, descrevendo suas propriedades teóricas e metodológicas, além das conexões ativas do elemento.</p>
 `;
 
-  // 4. Injetar cada nó
   sorted.forEach((n, idx) => {
     const catName = userCatNames[n.cls] || n.cls;
     const color = allColorsMap[n.cls] || '#64748b';
@@ -2662,11 +2190,8 @@ window.exportWord = function() {
   <span style="background:${color}; color:white; font-size:9pt; font-weight:bold; padding:2pt 6pt;">&nbsp;${esc(catName)}&nbsp;</span>
   ${spineNodes.has(n.id) ? '<span style="font-size:9pt; color:#b45309; margin-left:8pt;"><b>[🦴 Pertence à Espinha Dorsal]</b></span>' : ''}
 </div>
-
 <p>${esc(n.desc || '').replace(/\n/g, '<br>')}</p>
-
 ${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action).replace(/\n/g, '<br>')}</div>` : ''}
-
 ${related.length ? `
 <div class="connections">
   <b>Conexões diretas no mapa:</b><br>
@@ -2675,7 +2200,6 @@ ${related.length ? `
 `;
   });
 
-  // 5. Legenda Inteligente (Só renderiza o que existe e usa retângulos robustos para MS Word)
   html += `
 <hr>
 <h2>2. Legenda de Categorias Mapeadas</h2>
@@ -2694,7 +2218,6 @@ ${related.length ? `
       html += `<p style="margin-top:14pt; margin-bottom:6pt; font-weight:bold; font-size:11pt; color: #0f2744;">${g.title}</p>`;
       g.keys.forEach(k => {
         if (N.some(n => n.cls === k)) {
-          // Usa um span com &nbsp; largos para simular um retângulo de cor perfeito no Word
           html += `<div class="legend-item">
             <span style="background-color:${allColorsMap[k]}; border: 1px solid #1a2332; font-size:10pt; line-height: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;</span> 
             &nbsp; ${esc(userCatNames[k] || k)}
@@ -2706,16 +2229,13 @@ ${related.length ? `
 
   html += `
 </div>
-
 <div class="footer">
   Data: ${new Date().toLocaleDateString('pt-BR')} · Total de cartões: ${N.length} · Conexões ativas: ${L.length}
 </div>
-
 </div>
 </body>
 </html>`;
 
-  // Codificação universal para Word
   const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -2724,6 +2244,8 @@ ${related.length ? `
   toast('Word (A4) gerado!');
 };
 
+render();
+setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
 </script>
 </body>
 </html>
