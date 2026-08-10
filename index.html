@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <title>Editor — Arquitetura  · PPGET</title>
 <style>
   :root {
@@ -82,8 +82,8 @@
   .spacer { flex: 1; }
   .status { font-size: 11px; color: var(--muted); min-width: 140px; text-align: right; }
   main { height: calc(100vh - 64px); display: flex; }
-  #wrap { flex: 1; overflow: hidden; position: relative; background: var(--bg); }
-  #canvas-container { width: 100%; height: 100%; overflow: auto; }
+  #wrap { flex: 1; overflow: hidden; position: relative; background: var(--bg); touch-action: none; }
+  #canvas-container { width: 100%; height: 100%; overflow: auto; touch-action: none; }
   #stage {
     position: relative;
     width: 1600px;
@@ -107,6 +107,7 @@
     z-index: 10;
     user-select: none;
     transition: box-shadow 0.15s, outline 0.15s;
+    touch-action: none; /* ESSENCIAL PARA MOBILE DRAG */
   }
   .node:hover { box-shadow: 0 14px 36px -6px rgba(0,0,0,0.15); }
   .node.selected { outline: 2px solid var(--blue); border-color: var(--blue); z-index: 20; }
@@ -136,19 +137,19 @@
   .node.output { border-top: 4px solid var(--teal); }
 
   .resize-handle {
-    position: absolute; width: 10px; height: 10px;
+    position: absolute; width: 14px; height: 14px;
     background: var(--surface); border: 2px solid var(--blue);
     border-radius: 2px; z-index: 40; display: none;
   }
   .node.selected .resize-handle { display: block; }
-  .handle-nw { top: -5px; left: -5px; cursor: nw-resize; }
-  .handle-n  { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-  .handle-ne { top: -5px; right: -5px; cursor: ne-resize; }
-  .handle-e  { top: 50%; right: -5px; transform: translateY(-50%); cursor: e-resize; }
-  .handle-se { bottom: -5px; right: -5px; cursor: se-resize; }
-  .handle-s  { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-  .handle-sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-  .handle-w  { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
+  .handle-nw { top: -7px; left: -7px; cursor: nw-resize; }
+  .handle-n  { top: -7px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+  .handle-ne { top: -7px; right: -7px; cursor: ne-resize; }
+  .handle-e  { top: 50%; right: -7px; transform: translateY(-50%); cursor: e-resize; }
+  .handle-se { bottom: -7px; right: -7px; cursor: se-resize; }
+  .handle-s  { bottom: -7px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+  .handle-sw { bottom: -7px; left: -7px; cursor: sw-resize; }
+  .handle-w  { top: 50%; left: -7px; transform: translateY(-50%); cursor: w-resize; }
   aside {
     width: 320px; background: var(--surface); border-left: 1px solid var(--border);
     padding: 18px; overflow-y: auto;
@@ -184,7 +185,7 @@
   #toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px);
     background: var(--navy); color: white; padding: 10px 20px; border-radius: 9px;
-    font-size: 13px; opacity: 0; transition: all 0.25s; z-index: 2000; pointer-events: none;
+    font-size: 13px; opacity: 0; transition: all 0.25s; z-index: 6000; pointer-events: none;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .zoom-controls { position: absolute; bottom: 18px; right: 18px; display: flex; gap: 5px; z-index: 50; }
@@ -428,13 +429,14 @@
 
   </div>
 
-  <aside>
+  <aside id="aside-panel">
+    <button class="mobile-aside-close" onclick="closeMobileAside()">⬇ Fechar Propriedades</button>
     <h2>Propriedades</h2>
     <div id="empty" class="help">
       Selecione um cartão.<br><br>
       <b>Dica:</b> Arraste as alças azuis para redimensionar.<br>
       Use <b>↗ Conectar</b> ou clique direito.<br><br>
-      <b>Navegação:</b> Segure <kbd>Espaço</kbd> e arraste para mover o canvas (Pan).
+      <b>Navegação:</b> Segure <kbd>Espaço</kbd> (ou arraste na tela de toque) para mover o canvas (Pan).
     </div>
     <div id="form" style="display:none">
       <label>Categoria</label>
@@ -524,6 +526,12 @@
   <div class="ctx-item" onclick="execLayout('grid')"><span class="layout-icon">🔠</span> Grade (Grid)</div>
   <div class="ctx-item" onclick="execLayout('radial')"><span class="layout-icon">🎯</span> Circular / Radial</div>
   <div class="ctx-item" onclick="execLayout('central')"><span class="layout-icon">🗜️</span> Centralizado Expandido</div>
+  <!-- AS 5 OPÇÕES EXTRAS RESTAURADAS -->
+  <div class="ctx-item" onclick="execLayout('network')"><span class="layout-icon">🕸️</span> Rede (Network)</div>
+  <div class="ctx-item" onclick="execLayout('spiral')"><span class="layout-icon">🌀</span> Espiral</div>
+  <div class="ctx-item" onclick="execLayout('zigzag')"><span class="layout-icon">⚡</span> Zig-Zag</div>
+  <div class="ctx-item" onclick="execLayout('pyramid')"><span class="layout-icon">🔺</span> Pirâmide</div>
+  <div class="ctx-item" onclick="execLayout('organic')"><span class="layout-icon">🍃</span> Orgânico / Caos</div>
 </div>
 
 <div id="styles-menu">
@@ -532,16 +540,12 @@
   <div class="ctx-item" onclick="execStyles('timeline')"><span class="layout-icon">⏳</span> Linha do Tempo</div>
   <div class="ctx-item" onclick="execStyles('cluster')"><span class="layout-icon">🦠</span> Clusters / Grupos</div>
   <div class="ctx-item" onclick="execStyles('waterfall')"><span class="layout-icon">🌊</span> Cascata Diagonal</div>
-</div>
-
-<div id="fixed-legend">
-  <h4>Legenda Fixa</h4>
-  <!-- Ajustado para Preto Puro -->
-  <div class="leg-item"><div class="leg-color" style="background:#000000"></div>Núcleo Macroestrutural</div>
-  <div class="leg-item"><div class="leg-color" style="background:#2563eb"></div>Fundamento / Autor</div>
-  <div class="leg-item"><div class="leg-color" style="background:#be185d"></div>Fenômeno / Objeto</div>
-  <div class="leg-item"><div class="leg-color" style="background:#b45309"></div>Complemento</div>
-  <div class="leg-item"><div class="leg-color" style="background:#0f766e"></div>Desdobramento</div>
+  <!-- AS 5 OPÇÕES EXTRAS RESTAURADAS -->
+  <div class="ctx-item" onclick="execStyles('spiderweb')"><span class="layout-icon">🕸️</span> Teia de Aranha</div>
+  <div class="ctx-item" onclick="execStyles('honeycomb')"><span class="layout-icon">🐝</span> Favo de Mel</div>
+  <div class="ctx-item" onclick="execStyles('orbits')"><span class="layout-icon">🪐</span> Órbitas (Sistema Solar)</div>
+  <div class="ctx-item" onclick="execStyles('empathy')"><span class="layout-icon">❤️</span> Mapa de Empatia</div>
+  <div class="ctx-item" onclick="execStyles('venn')"><span class="layout-icon">⭕</span> Diagrama de Venn</div>
 </div>
 
 <!-- Legenda Inteligente (Popup Canto Inferior Direito) -->
@@ -655,6 +659,12 @@ const LINK_COLORS = {
   complement: '#b45309', // Mantido padronizado
   output:     '#0f766e'
 };
+
+// ====================== FUNÇÃO FECHAR MOBILE ======================
+function closeMobileAside() {
+  const p = document.getElementById('aside-panel');
+  if(p) p.classList.remove('show-mobile');
+}
 
 // ====================== TEMA ======================
 function toggleTheme() {
@@ -830,7 +840,6 @@ function render() {
     el.id = 'node-' + n.id;
     el.style.cssText = `left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px;z-index:${n.z||10}`;
 
-    // AQUI ESTÁ A CORREÇÃO (Retirada da trava de 130 caracteres)
     el.innerHTML = `
       <div class="tag">${esc(n.tag)}</div>
       <h3>${esc(n.title)}</h3>
@@ -845,6 +854,7 @@ function render() {
       <div class="resize-handle handle-w" data-dir="w"></div>
     `;
 
+    // NATIVE MOUSE EVENTS
     el.addEventListener('mousedown', e => {
       if (e.target.classList.contains('resize-handle')) {
         startResize(e, n, e.target.dataset.dir);
@@ -852,14 +862,60 @@ function render() {
       }
       onNodeDown(e, n);
     });
+    
     el.addEventListener('click', e => {
       e.stopPropagation();
       if (!e.target.classList.contains('resize-handle')) select(n.id);
     });
+    
     el.addEventListener('contextmenu', e => {
       e.preventDefault(); e.stopPropagation();
       showContextMenu(e, n);
     });
+
+    // MOBILE TOUCH EVENTS INJECTION
+    let touchTimer;
+    el.addEventListener('touchstart', e => {
+      if(e.touches.length > 1) return;
+      const touch = e.touches[0];
+      const fauxEvent = {
+        button: 0, clientX: touch.clientX, clientY: touch.clientY,
+        target: e.target, stopPropagation: () => e.stopPropagation(), preventDefault: () => e.preventDefault()
+      };
+      
+      if (e.target.classList.contains('resize-handle')) {
+        e.preventDefault(); // Impede rolagem enquanto redimensiona
+        startResize(fauxEvent, n, e.target.dataset.dir);
+        
+        const touchMoveHandler = ev => {
+           ev.preventDefault();
+           onResizeMove({ clientX: ev.touches[0].clientX, clientY: ev.touches[0].clientY });
+        };
+        const touchEndHandler = ev => {
+           onResizeUp();
+           document.removeEventListener('touchmove', touchMoveHandler);
+           document.removeEventListener('touchend', touchEndHandler);
+        };
+        document.addEventListener('touchmove', touchMoveHandler, {passive: false});
+        document.addEventListener('touchend', touchEndHandler);
+      } else {
+        // Touch Drag & Drop logic for Mobile
+        onNodeDownTouch(e, n);
+        
+        // Simulação do Botão Direito (Long Press para menu de contexto)
+        touchTimer = setTimeout(() => {
+           showContextMenu({ clientX: touch.clientX, clientY: touch.clientY, preventDefault:()=>{}, stopPropagation:()=>{} }, n);
+        }, 600);
+      }
+    }, { passive: false });
+
+    el.addEventListener('touchmove', () => clearTimeout(touchTimer), { passive: true });
+    
+    el.addEventListener('touchend', e => {
+       clearTimeout(touchTimer);
+       if(!drag && !resize) { select(n.id); }
+    });
+
     stage.appendChild(el);
   });
   drawLinks();
@@ -922,6 +978,12 @@ function select(id) {
   document.getElementById('btn-connect').classList.remove('active');
   render();
   setStatus('Cartão selecionado');
+  
+  // NOVA LÓGICA MOBILE: Exibe o menu lateral apenas ao selecionar
+  if (id && window.innerWidth <= 768) {
+      const p = document.getElementById('aside-panel');
+      if(p) p.classList.add('show-mobile');
+  }
 }
 
 function inspect() {
@@ -1042,6 +1104,8 @@ function cancelConnect() {
   document.getElementById('btn-connect').classList.remove('active');
   setStatus('Pronto');
 }
+
+// DRAG NATIVO
 function onNodeDown(e, n) {
   if (e.button !== 0) return; // Permite o Pan no Middle Click sem selecionar
   if (connFrom) { finishConnection(n.id); return; }
@@ -1051,6 +1115,34 @@ function onNodeDown(e, n) {
   document.addEventListener('mouseup', onDragUp);
   render();
 }
+
+// TOUCH DRAG INJETADO (Celular)
+function onNodeDownTouch(e, n) {
+  if (connFrom) { finishConnection(n.id); return; }
+  sel = n.id;
+  const touch = e.touches[0];
+  drag = { n, startX: touch.clientX, startY: touch.clientY, origX: n.x, origY: n.y };
+  
+  const touchMoveHandler = ev => {
+     if(!drag) return;
+     ev.preventDefault(); // Previne scroll da pagina ao arrastar card
+     onDragMove({ clientX: ev.touches[0].clientX, clientY: ev.touches[0].clientY });
+  };
+  const touchEndHandler = ev => {
+     onDragUp();
+     document.removeEventListener('touchmove', touchMoveHandler);
+     document.removeEventListener('touchend', touchEndHandler);
+  };
+  
+  document.addEventListener('touchmove', touchMoveHandler, {passive: false});
+  document.addEventListener('touchend', touchEndHandler);
+  render();
+  if (window.innerWidth <= 768) {
+      const p = document.getElementById('aside-panel');
+      if(p) p.classList.add('show-mobile');
+  }
+}
+
 function onDragMove(e) {
   if (!drag) return;
   const dx = (e.clientX - drag.startX) / scale;
@@ -1285,131 +1377,6 @@ function exportSvg() {
   toast('SVG perfeito exportado!');
 }
 
-// ====================== PDF ======================
-function exportPdf() {
-  const isDark = document.body.classList.contains('dark');
-  const printWin = window.open('', '_blank');
-  if (!printWin) { alert('Permita pop-ups'); return; }
-
-  const bgPage = isDark ? '#0f172a' : '#ffffff';
-  const bgMap = isDark ? '#0f172a' : '#ffffff';
-  const textMain = isDark ? '#e2e8f0' : '#0f2744';
-  const textMuted = isDark ? '#94a3b8' : '#64748b';
-  const cardBg = isDark ? '#1e293b' : '#ffffff';
-  const cardBorder = isDark ? '#334155' : '#d1d9e0';
-  
-  // Condições do Dark Mode removidas para as cores que precisam ser estáticas
-  const colors = {
-    macro: '#000000',
-    core: isDark ? '#38bdf8' : '#2563eb',
-    object: isDark ? '#f472b6' : '#be185d',
-    complement: '#b45309',
-    output: isDark ? '#2dd4bf' : '#0f766e'
-  };
-
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  N.forEach(n => {
-    minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
-    maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
-  });
-  const contentW = maxX - minX, contentH = maxY - minY;
-  const mapW = 1500, mapH = 900;
-  const offsetX = (mapW - contentW) / 2 - minX;
-  const offsetY = (mapH - contentH) / 2 - minY + 40;
-
-  const nodesHtml = N.map(n => {
-    const c = colors[n.cls] || colors.core;
-    const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
-      <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2">${esc(n.title||'')}</div>
-      <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3">${esc((n.desc||'').slice(0,95))}</div>
-    </div>`;
-  }).join('');
-
-  let paths = '';
-  L.forEach(([a,b]) => {
-    const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
-    if (!A || !B) return;
-    const Ax = A.x + offsetX, Ay = A.y + offsetY;
-    const Bx = B.x + offsetX, By = B.y + offsetY;
-    const p1 = getBorderPoint({x:Ax,y:Ay,w:A.w,h:A.h}, Bx + B.w/2, By + B.h/2);
-    const p2 = getBorderPoint({x:Bx,y:By,w:B.w,h:B.h}, Ax + A.w/2, Ay + A.h/2);
-    const midY = (p1.y + p2.y) / 2;
-    const spine = isSpineEdge(a,b);
-    const color = spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b'));
-    paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
-  });
-
-  const legendHtml = `
-    <div style="position:absolute;bottom:12px;left:20px;display:flex;gap:14px;font-size:11px;color:${textMuted}">
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.macro};border-radius:2px"></div>Núcleo</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.core};border-radius:2px"></div>Fundamento</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.object};border-radius:2px"></div>Fenômeno</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.complement};border-radius:2px"></div>Complemento</div>
-      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:${colors.output};border-radius:2px"></div>Desdobramento</div>
-    </div>`;
-
-  printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
-  <style>
-    @page{size:A3 landscape;margin:10mm}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:5mm}
-    .header{text-align:center;margin-bottom:5mm}
-    h1{font-family:Georgia,serif;font-size:20px;margin-bottom:3px}
-    .sub{font-size:11px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
-  </style></head><body>
-  <div class="header">
-    <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">Educação Tecnológica · Formação Ética · Letramento Crítico · PPGET · </div>
-  </div>
-  <div id="map">
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" xmlns="http://www.w3.org/2000/svg">
-      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>
-      ${paths}
-    </svg>
-    ${nodesHtml}
-    ${legendHtml}
-  </div>
-  <script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script>
-  </body></html>`);
-  printWin.document.close();
-  toast('PDF gerado!');
-}
-
-// ====================== WORD ======================
-function exportWord() {
-  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
-  <head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
-  <style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}
-  h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}
-  h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}
-  .tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}
-  .action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}
-  .cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body>
-  <h1>Arquitetura da Pesquisa</h1>
-  <p><b>Educação Tecnológica · Formação Ética · Letramento Crítico</b><br>PPGET · </p><hr>`;
-  const order = ['macro','core','object','complement','output'];
-  const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
-  const catNames = {macro:'Núcleo Macroestrutural',core:'Fundamento / Autor',object:'Fenômeno / Objeto',complement:'Complemento',output:'Desdobramento'};
-  const catColors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}; // Preto absoluto aqui também
-  sorted.forEach(n => {
-    html += `<h2>${esc(n.title)}</h2>
-    <div class="tag">${esc(n.tag||'')}</div>
-    <span class="cat" style="background:${catColors[n.cls]||'#64748b'}">${catNames[n.cls]||n.cls}</span>
-    <p>${esc(n.desc||'')}</p>
-    ${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
-  });
-  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor de Arquitetura da Pesquisa · PPGET</p></body></html>`;
-  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `Arquitetura_Epistemologica_${new Date().toISOString().slice(0,10)}.doc`;
-  a.click();
-  toast('Word gerado!');
-}
-
 // ====================== UTIL ======================
 function setStatus(m) { statusEl.textContent = m; }
 function toast(m) {
@@ -1425,6 +1392,7 @@ stage.addEventListener('click', () => {
     selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR NO FUNDO
     cancelConnect();
     render();
+    closeMobileAside(); // <-- Mobile: Oculta a gaveta se tocar no fundo vazio
   }
 });
 
@@ -1438,7 +1406,7 @@ function toggleSnap() {
   toast(snapToGrid ? 'Grade magnética ATIVADA' : 'Grade magnética DESATIVADA');
 }
 
-// 2. Pan Engine (Miro/FigJam Style Espaço + Arrastar)
+// 2. Pan Engine (Miro/FigJam Style Espaço + Arrastar) + MOBILE TOUCH PAN
 let isSpaceDown = false;
 let panState = { isPanning: false, startX: 0, startY: 0, scrollX: 0, scrollY: 0 };
 const canvasCont = document.getElementById('canvas-container');
@@ -1476,7 +1444,7 @@ window.addEventListener('keydown', e => {
     if (document.body.classList.contains('presentation')) {
       exitPresentation();
     } else if (authorsModal && authorsModal.classList.contains('show')) {
-      closeAuthorsModal(); // <-- FECHA A GALERIA SE ELA ESTIVER ABERTA
+      closeAuthorsModal(); 
     } else { 
       cancelConnect(); 
       hideContextMenu(); 
@@ -1517,6 +1485,31 @@ window.addEventListener('mouseup', () => {
     panState.isPanning = false;
     canvasCont.style.cursor = isSpaceDown ? 'grab' : '';
   }
+});
+
+// PAN ENGINE - MOBILE TOUCH
+canvasCont.addEventListener('touchstart', e => {
+  // Se estiver tocando no fundo (grade) e não em um cartão
+  if (e.target === canvasCont || e.target === stage || e.target.closest('svg')) {
+     if (e.touches.length === 1) {
+        panState = { 
+          isPanning: true, 
+          startX: e.touches[0].clientX, startY: e.touches[0].clientY, 
+          scrollX: canvasCont.scrollLeft, scrollY: canvasCont.scrollTop 
+        };
+     }
+  }
+}, { passive: true });
+
+canvasCont.addEventListener('touchmove', e => {
+  if (panState.isPanning && e.touches.length === 1) {
+     canvasCont.scrollLeft = panState.scrollX - (e.touches[0].clientX - panState.startX);
+     canvasCont.scrollTop = panState.scrollY - (e.touches[0].clientY - panState.startY);
+  }
+}, { passive: true });
+
+canvasCont.addEventListener('touchend', e => {
+  if (panState.isPanning) panState.isPanning = false;
 });
 
 // 3. Minimapa Dinâmico
@@ -1783,14 +1776,13 @@ function execStyles(mode) {
 function toggleSmartLegend() { document.getElementById('smart-legend-panel').classList.toggle('show'); }
 
 
-// ====================== SELEÇÃO E CORES DE LINHAS (Sobrescrita de drawLinks) ======================
+// ====================== SELEÇÃO E CORES DE LINHAS ======================
 let customLinkColors = {
   "n_bauman-n_macro": "#3b82f6",
   "n_bazzo-n_macro": "#3b82f6"
 };
 let selectedLink = null;
 
-// Tenta restaurar do LocalStorage se houver
 try { 
     const rawData = localStorage.getItem('arquiteturaEpistemologica');
     if (rawData) {
@@ -1799,22 +1791,6 @@ try {
     }
 } catch(e) {}
 
-// Sobrescrevendo o AutoSave e Save nativos para registrar as cores das linhas
-function autoSave() {
-  try {
-    localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }));
-  } catch(e){}
-}
-function saveProject() {
-  const blob = new Blob([JSON.stringify({ nodes: N, links: L, spineNodes: [...spineNodes], customLinkColors }, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `arquitetura_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  toast('JSON salvo com estilos das linhas');
-}
-
-// Novo Listener para DELETAR a linha selecionada
 window.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLink) {
@@ -1826,67 +1802,6 @@ window.addEventListener('keydown', e => {
         toast('Linha excluída com sucesso');
     }
 });
-
-// A Magia da injeção: Redesenhando drawLinks para permitir Interações nas Linhas!
-function drawLinks() {
-  Array.from(svg.querySelectorAll('path.connection')).forEach(p => p.remove());
-  const isDark = document.body.classList.contains('dark');
-
-  L.forEach(([a, b]) => {
-    const A = N.find(n => n.id === a);
-    const B = N.find(n => n.id === b);
-    if (!A || !B) return;
-
-    const p1 = getBorderPoint(A, B.x + B.w/2, B.y + B.h/2);
-    const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
-    const midY = (p1.y + p2.y) / 2;
-    const spine = isSpineEdge(a, b);
-    const linkKey = a + '-' + b;
-
-    let strokeColor;
-    if (customLinkColors[linkKey]) strokeColor = customLinkColors[linkKey];
-    else if (spine) strokeColor = '#eab308';
-    else strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
-    path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', strokeColor);
-    
-    // Controle de espessura da linha (se selecionada fica mais grossa)
-    let sWidth = spine ? '3.4' : '2.2';
-    if (selectedLink === linkKey) sWidth = spine ? '5.0' : '4.0';
-    path.setAttribute('stroke-width', sWidth);
-    
-    path.setAttribute('stroke-linecap', 'round');
-    path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
-    
-    // Permitir clique na linha
-    path.style.pointerEvents = 'stroke';
-    path.style.cursor = 'pointer';
-
-    path.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks(); // recarrega a parte visual
-        toast('Linha selecionada. Aperte Delete para excluí-la.');
-    });
-
-    path.addEventListener('contextmenu', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        selectedLink = linkKey;
-        drawLinks();
-        
-        const m = document.getElementById('line-context-menu');
-        m.style.left = e.clientX + 'px';
-        m.style.top = e.clientY + 'px';
-        m.classList.add('show');
-    });
-
-    svg.appendChild(path);
-  });
-}
 
 function changeLineColor(colorCode) {
     if (selectedLink) {
@@ -1932,28 +1847,24 @@ function exportPdf() {
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const cardBorder = isDark ? '#334155' : '#d1d9e0';
   
-  // Cores atualizadas e constantes
   const allColors = Object.assign({
     macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
     object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
   }, LINK_COLORS);
 
-  // 1. Escaneia onde começa e termina o mapa real (para nunca cortar as bordas)
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
     minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
     maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
   });
   
-  // 2. Cria margens de respiro perfeitas (padding de 60px)
   const padding = 60;
   const mapW = (maxX - minX) + (padding * 2);
-  const mapH = (maxY - minY) + (padding * 2) + 50; // +50 para caber a legenda nova
+  const mapH = (maxY - minY) + (padding * 2) + 50; 
   
   const offsetX = padding - minX;
   const offsetY = padding - minY;
 
-  // 3. Monta os cartões
   const nodesHtml = N.map(n => {
     const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
@@ -1964,7 +1875,6 @@ function exportPdf() {
     </div>`;
   }).join('');
 
-  // 4. Monta as Linhas
   let paths = '';
   L.forEach(([a,b]) => {
     const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
@@ -1977,7 +1887,6 @@ function exportPdf() {
     paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
-  // 5. LEGENDA DINÂMICA
   const usedClasses = [...new Set(N.map(n => n.cls))];
   const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
   usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
@@ -1989,7 +1898,6 @@ function exportPdf() {
     legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
   });
 
-  // Adicionado 'white-space: nowrap' e removido os limites de quebra de linha
   const legendHtml = usedClasses.length > 0 ? `
     <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
       ${legendItemsHtml}
@@ -2045,21 +1953,17 @@ function openAuthorsModal() {
     const grid = document.getElementById('authors-grid-content');
     grid.innerHTML = '';
     
-    // 1. Filtra cartões baseando-se em tags ou presença do nome
     const autores = N.filter(n => 
         (n.tag && n.tag.includes('AUTOR')) || 
         (n.tag && n.tag.includes('METODOLOGIA')) ||
         Object.keys(autoresFotos).some(k => (n.title || '').toLowerCase().includes(k.toLowerCase()))
     );
     
-    // Remove duplicadas
     const uniqueAutores = [...new Map(autores.map(item => [item.id, item])).values()];
 
     uniqueAutores.forEach(a => {
-        // 2. Cria um array para guardar as fotos encontradas naquele cartão específico
         let fotosEncontradas = [];
         for (let key in autoresFotos) {
-            // Se o título ou a descrição contiver o nome, adicionamos a foto na lista
             if ((a.title || '').toLowerCase().includes(key.toLowerCase()) || 
                 (a.desc || '').toLowerCase().includes(key.toLowerCase()) ||
                 (a.tag || '').toLowerCase().includes(key.toLowerCase())) {
@@ -2067,20 +1971,17 @@ function openAuthorsModal() {
             }
         }
         
-        // Remove duplicatas de fotos (ex: se bater Netnografia e Kozinets no mesmo card)
         fotosEncontradas = [...new Set(fotosEncontradas)];
 
         const init = getInitials(a.title || 'Autor');
         let imgHtml = '';
 
-        // 3. Monta o visual de 0, 1 ou 2 fotos dinamicamente
         if (fotosEncontradas.length === 0) {
             imgHtml = `<div class="author-initials" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
         } else if (fotosEncontradas.length === 1) {
             imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                        <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
         } else {
-            // O grande truque para 2 autoras: Divide a bolinha ao meio!
             imgHtml = `
                 <div style="display:flex; width:100%; height:100%;">
                     <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
@@ -2110,13 +2011,12 @@ function closeAuthorsModal() {
     document.getElementById('authors-modal-overlay').classList.remove('show');
 }
 
-// Fechar galeria se o usuário clicar no fundo escuro fora dela
 document.addEventListener('click', e => {
     const overlay = document.getElementById('authors-modal-overlay');
     if (e.target === overlay) closeAuthorsModal();
 });
 
-// Inicializa a renderização e o status original
+// Inicializa a renderização
 render();
 setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
 </script>
@@ -2147,10 +2047,8 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
         border-color: #cbd5e1 !important;
     }
 
-    /* 2. Remoção da Legenda Fixa Antiga */
     #fixed-legend { display: none !important; }
 
-    /* 3. Estilo da Legenda Inteligente (Translúcida, canto inferior direito, dentro da UI) */
     #smart-legend-panel {
         background: rgba(255, 255, 255, 0.45) !important;
         backdrop-filter: blur(12px) !important;
@@ -2166,7 +2064,6 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
         border: 1px solid rgba(255,255,255,0.1) !important;
     }
 
-    /* 4. Componente Customizado para as Categorias Editáveis */
     .custom-select-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
     .custom-select-header {
         width: 100%; border: 1px solid var(--border); border-radius: 7px;
@@ -2209,14 +2106,14 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
     display: none; 
     position: fixed; 
     bottom: 40px; 
-    left: 50%;                 
+    left: 50%;                   
     transform: translateX(-50%); 
     background: rgba(255, 255, 255, 0.90); 
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border); 
     border-radius: 30px;        
     box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
-    padding: 12px 24px;         
+    padding: 12px 24px;           
     z-index: 3000;
     white-space: nowrap;        
   }
@@ -2273,7 +2170,6 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
 
   /* =======================================================================
      MÍDIA DE IMPRESSÃO (CTRL+P nativo para PDFs perfeitos pelo navegador) 
-     Garante 100% de respeito ao tema (Dark/Light) durante a impressão 
      ======================================================================= */
   @media print {
       body {
@@ -2308,6 +2204,49 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
           display: none !important; 
       }
   }
+
+  /* =======================================================================
+     RESPONSIVIDADE ESTRUTURAL (MOBILE FIRST INJECTION) 
+     ======================================================================= */
+  @media (max-width: 768px) {
+    header {
+      height: auto;
+      flex-wrap: wrap;
+      padding: 10px;
+      gap: 6px;
+      justify-content: space-between;
+    }
+    .brand { width: 100%; text-align: center; margin-bottom: 5px; }
+    .btn { flex: 1 1 30%; font-size: 11px; padding: 8px 4px; }
+    main { height: calc(100vh - 120px); flex-direction: column; }
+    
+    /* O painel lateral vira um Bottom Sheet inteligente */
+    aside {
+      position: fixed;
+      bottom: 0; left: 0; width: 100%; height: 50vh;
+      z-index: 5000;
+      border-left: none; border-top: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+    }
+    aside.show-mobile { transform: translateY(0); }
+    
+    .mobile-aside-close {
+      display: block !important;
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      padding: 10px; border-radius: 8px; font-weight: bold; color: var(--navy);
+      margin-bottom: 15px; cursor: pointer; text-align: center;
+    }
+    body.dark .mobile-aside-close { color: var(--ink); }
+    
+    .zoom-controls { bottom: 20px; right: 10px; flex-direction: column; }
+    #smart-legend-panel { width: 90vw; right: 5vw; bottom: 80px; }
+    #layout-menu, #styles-menu { right: 10px; top: 120px; }
+    #minimap { display: none !important; } /* Oculta minimapa no celular para poupar tela */
+  }
+  .mobile-aside-close { display: none; }
 </style>
 
 <script>
@@ -2713,8 +2652,6 @@ ${related.length ? `
   a.click();
   toast('Word (A4) gerado!');
 };
-
-// Remove a chamada duplicada de render que estava sobrando caso exista e usa só a do final.
 </script>
 </body>
 </html>
