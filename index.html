@@ -943,25 +943,65 @@ function drawLinks() {
     const p2 = getBorderPoint(B, A.x + A.w/2, A.y + A.h/2);
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a, b);
+    const linkKey = a + '-' + b;
 
-    // Cor da linha: se for espinha → dourado, senão cor da categoria do destino
+    // Nova lógica de cor: verifica primeiro se há cor customizada, depois espinha, depois categoria
     let strokeColor;
-    if (spine) {
-      strokeColor = '#eab308';
+    if (typeof customLinkColors !== 'undefined' && customLinkColors[linkKey]) {
+        strokeColor = customLinkColors[linkKey];
+    } else if (spine) {
+        strokeColor = '#eab308';
     } else {
-      strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
+        strokeColor = LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b');
     }
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'connection');
+    path.setAttribute('class', 'connection' + (selectedLink === linkKey ? ' selected-link' : ''));
     path.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`);
     path.setAttribute('fill', 'none');
     path.setAttribute('stroke', strokeColor);
-    path.setAttribute('stroke-width', spine ? '3.4' : '2.2');
+    
+    // Controle de espessura da linha (se selecionada fica mais grossa para ajudar no mobile)
+    let sWidth = spine ? '3.4' : '2.2';
+    if (selectedLink === linkKey) sWidth = spine ? '6.0' : '4.0';
+    
+    path.setAttribute('stroke-width', sWidth);
     path.setAttribute('stroke-linecap', 'round');
     path.setAttribute('marker-end', spine ? 'url(#arrow-spine)' : 'url(#arrow)');
     path.dataset.from = a;
     path.dataset.to = b;
+
+    // Tornando a hitbox da linha interagível
+    path.style.pointerEvents = 'stroke';
+    path.style.cursor = 'pointer';
+
+    // Ação de Clique (Mobile e Desktop)
+    path.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks(); // recarrega a parte visual
+        toast('Linha selecionada. Aperte Delete para excluir.');
+        
+        // Se for mobile, abre o menu de cor com o toque normal
+        if (window.innerWidth <= 768) {
+            const m = document.getElementById('line-context-menu');
+            m.style.left = e.clientX + 'px';
+            m.style.top = e.clientY + 'px';
+            m.classList.add('show');
+        }
+    });
+
+    // Ação de Botão Direito (Exclusivo Desktop)
+    path.addEventListener('contextmenu', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        selectedLink = linkKey;
+        drawLinks();
+        const m = document.getElementById('line-context-menu');
+        m.style.left = e.clientX + 'px';
+        m.style.top = e.clientY + 'px';
+        m.classList.add('show');
+    });
+
     svg.appendChild(path);
   });
 }
