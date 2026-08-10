@@ -29,7 +29,7 @@
     --navy: #38bdf8;
     --blue: #38bdf8;
     --rose: #f472b6;
-    --gold: #fbbf24;
+    --gold: #b45309; /* Mantido fixo no Modo Escuro */
     --teal: #2dd4bf;
     --border: #334155;
     --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
@@ -116,12 +116,25 @@
   .node .tag { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: var(--muted); margin-bottom: 5px; }
   .node h3 { font: 700 15px Georgia, serif; color: var(--navy); margin: 0; line-height: 1.2; }
   .node p { font-size: 11px; line-height: 1.35; color: var(--muted); margin: 7px 0 0; }
-  .node.macro { border: 2px solid var(--navy) !important; }
+  
+  /* --- CORES E BORDAS DOS CARTÕES (NÚCLEO PRETO + OUTRAS CORES PRESERVADAS) --- */
+  .node.macro { 
+    border: 2px solid #000000 !important; 
+    border-top: 5px solid #000000 !important; 
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.2) !important; 
+  }
   .node.macro h3 { font-size: 17px !important; }
+  body.dark .node.macro {
+    border: 2px solid #000000 !important;
+    border-top: 5px solid #000000 !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 255, 255, 0.15) !important;
+  }
+  
   .node.core { border-top: 4px solid var(--blue); }
   .node.object { border-top: 4px solid var(--rose); }
-  .node.complement { border-top: 4px solid var(--gold); }
+  .node.complement { border-top: 4px solid #b45309; } /* Complemento sempre padronizado */
   .node.output { border-top: 4px solid var(--teal); }
+
   .resize-handle {
     position: absolute; width: 10px; height: 10px;
     background: var(--surface); border: 2px solid var(--blue);
@@ -298,7 +311,6 @@
       white-space: normal !important;
   }
   .node h3 { -webkit-line-clamp: 2 !important; }
-  /* REMOVIDO o limite de 4 linhas (.node p { -webkit-line-clamp: 4 !important; }) */
 
   /* Interação e seleção visual nas linhas (SVG Paths) */
   path.connection:hover { opacity: 0.7; stroke-width: 4 !important; }
@@ -367,6 +379,7 @@
   <button class="btn" onclick="exportWord()">📝 Word</button>
   <button class="btn" id="btn-theme" onclick="toggleTheme()">🌙 Escuro</button>
   <button class="btn" id="btn-spine" onclick="toggleSpine()">🦴 Espinha</button>
+  <button class="btn" onclick="openAuthorsModal()" style="color: #be185d; border-color: #fbcfe8; background: #fdf2f8;">👤 Teóricos</button>
   
   <!-- --- ADIÇÕES HTML NO HEADER --- -->
   <button class="btn" id="btn-snap" onclick="toggleSnap()">📏 Snap</button>
@@ -466,6 +479,20 @@
   </aside>
 </main>
 
+<!-- GALERIA DE AUTORES (TELA CHEIA) -->
+<div id="authors-modal-overlay">
+  <div class="authors-header">
+    <div style="display:flex; align-items:center; gap: 10px;">
+      <h2 style="font-family: Georgia, serif; font-size: 24px; color: var(--navy); margin: 0;">Fundamentação Teórico-Metodológica</h2>
+      <span style="font-size: 12px; color: var(--muted); margin-top: 4px;">· Galeria de Autores</span>
+    </div>
+    <button class="authors-close" onclick="closeAuthorsModal()">✕ Sair da Galeria</button>
+  </div>
+  <div class="authors-grid" id="authors-grid-content">
+    <!-- Os cartões serão injetados aqui via JS -->
+  </div>
+</div>
+
 <div id="context-menu">
   <div class="ctx-item" data-action="edit">✏️ Editar</div>
   <div class="ctx-item" data-action="connect">↗ Conectar a partir daqui</div>
@@ -508,7 +535,8 @@
 
 <div id="fixed-legend">
   <h4>Legenda Fixa</h4>
-  <div class="leg-item"><div class="leg-color" style="background:#0f2744"></div>Núcleo Macroestrutural</div>
+  <!-- Ajustado para Preto Puro -->
+  <div class="leg-item"><div class="leg-color" style="background:#000000"></div>Núcleo Macroestrutural</div>
   <div class="leg-item"><div class="leg-color" style="background:#2563eb"></div>Fundamento / Autor</div>
   <div class="leg-item"><div class="leg-color" style="background:#be185d"></div>Fenômeno / Objeto</div>
   <div class="leg-item"><div class="leg-color" style="background:#b45309"></div>Complemento</div>
@@ -520,7 +548,8 @@
   <h3>Classificações Profissionais</h3>
   <div class="leg-group">
       <div class="leg-group-title">Grupo 1: Fundamentos</div>
-      <div class="leg-item"><div class="leg-color" style="background:#0f2744"></div>Núcleo Macroestrutural</div>
+      <!-- Ajustado para Preto Puro -->
+      <div class="leg-item"><div class="leg-color" style="background:#000000"></div>Núcleo Macroestrutural</div>
       <div class="leg-item"><div class="leg-color" style="background:#2563eb"></div>Fundamento / Autor</div>
       <div class="leg-item"><div class="leg-color" style="background:#be185d"></div>Fenômeno / Objeto</div>
       <div class="leg-item"><div class="leg-color" style="background:#b45309"></div>Complemento</div>
@@ -537,7 +566,7 @@
   <div class="leg-group">
       <div class="leg-group-title">Grupo 3: Resultados</div>
       <div class="leg-item"><div class="leg-color" style="background:#f97316"></div>Hipótese Confirmada</div>
-      <div class="leg-item"><div class="leg-color" style="background:#ef4444"></div>Novo Paradigma</div>19:13 08/08/2026
+      <div class="leg-item"><div class="leg-color" style="background:#ef4444"></div>Novo Paradigma</div>
       <div class="leg-item"><div class="leg-color" style="background:#6366f1"></div>Artigo / Publicação</div>
       <div class="leg-item"><div class="leg-color" style="background:#14b8a6"></div>Protótipo / Poc</div>
       <div class="leg-item"><div class="leg-color" style="background:#f43f5e"></div>Impacto Social</div>
@@ -551,7 +580,7 @@
   <div class="ctx-item" onclick="changeLineColor('#3b82f6')">🔵 Azul</div>
   <div class="ctx-item" onclick="changeLineColor('#eab308')">🟡 Amarelo</div>
   <div class="ctx-separator"></div>
-  <div class="ctx-item" onclick="changeLineColor(null)">⚪ Cor Padrão</div>20:19
+  <div class="ctx-item" onclick="changeLineColor(null)">⚪ Cor Padrão</div>
   <div class="ctx-separator"></div>
   <div class="ctx-item danger" onclick="deleteSelectedLine()">🗑 Excluir Linha</div>
 </div>
@@ -608,10 +637,10 @@ const statusEl = document.getElementById('status');
 
 // Cores das linhas por categoria do destino
 const LINK_COLORS = {
-  macro:      '#0f2744',
+  macro:      '#000000', // Modificado para o Preto Absoluto
   core:       '#2563eb',
   object:     '#be185d',
-  complement: '#b45309',
+  complement: '#b45309', // Mantido padronizado
   output:     '#0f766e'
 };
 
@@ -727,9 +756,9 @@ function updatePresentationLegend() {
   const usedClasses = [...new Set(N.map(n => n.cls))];
   if (usedClasses.length === 0) { leg.style.display = 'none'; return; }
 
-  // Puxa as cores de todos os cartões possíveis
+  // Puxa as cores de todos os cartões possíveis (macro agora é #000000)
   const allColorsMap = Object.assign({
-    macro:'#0f2744', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
+    macro:'#000000', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
     m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
     r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
   }, LINK_COLORS);
@@ -868,6 +897,7 @@ function select(id) {
     return;
   }
   sel = id;
+  selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR EM UM CARTÃO
   connFrom = null;
   document.getElementById('btn-connect').classList.remove('active');
   render();
@@ -1167,7 +1197,8 @@ document.getElementById('file').onchange = async e => {
 function exportSvg() {
   let nodesSvg = '';
   N.forEach(n => {
-    const colors = {macro:'#0f2744',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'};
+    // Cores ajustadas para o Preto Absoluto no Macro e o Ouro Padrão
+    const colors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'};
     const stroke = colors[n.cls] || '#2563eb';
     const sw = n.cls === 'macro' ? 2.5 : 1.5;
     nodesSvg += `<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="12" ry="12" fill="#ffffff" stroke="${stroke}" stroke-width="${sw}" filter="url(#shadow)"/>`;
@@ -1189,7 +1220,7 @@ function exportSvg() {
   const legend = `
     <g transform="translate(40,940)">
       <text x="0" y="0" font-family="Segoe UI,Arial" font-size="12" font-weight="700" fill="#0f2744">Legenda:</text>
-      <rect x="0" y="10" width="12" height="12" fill="#0f2744"/><text x="18" y="20" font-size="11" fill="#334155">Núcleo</text>
+      <rect x="0" y="10" width="12" height="12" fill="#000000"/><text x="18" y="20" font-size="11" fill="#334155">Núcleo</text>
       <rect x="80" y="10" width="12" height="12" fill="#2563eb"/><text x="98" y="20" font-size="11" fill="#334155">Fundamento</text>
       <rect x="190" y="10" width="12" height="12" fill="#be185d"/><text x="208" y="20" font-size="11" fill="#334155">Fenômeno</text>
       <rect x="290" y="10" width="12" height="12" fill="#b45309"/><text x="308" y="20" font-size="11" fill="#334155">Complemento</text>
@@ -1227,11 +1258,13 @@ function exportPdf() {
   const textMuted = isDark ? '#94a3b8' : '#64748b';
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const cardBorder = isDark ? '#334155' : '#d1d9e0';
+  
+  // Condições do Dark Mode removidas para as cores que precisam ser estáticas
   const colors = {
-    macro: isDark ? '#38bdf8' : '#0f2744',
+    macro: '#000000',
     core: isDark ? '#38bdf8' : '#2563eb',
     object: isDark ? '#f472b6' : '#be185d',
-    complement: isDark ? '#fbbf24' : '#b45309',
+    complement: '#b45309',
     output: isDark ? '#2dd4bf' : '#0f766e'
   };
 
@@ -1243,12 +1276,12 @@ function exportPdf() {
   const contentW = maxX - minX, contentH = maxY - minY;
   const mapW = 1500, mapH = 900;
   const offsetX = (mapW - contentW) / 2 - minX;
-  const offsetY = (mapH - contentH) / 2 - minY - 50;
+  const offsetY = (mapH - contentH) / 2 - minY + 40;
 
   const nodesHtml = N.map(n => {
     const c = colors[n.cls] || colors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:12px 14px;overflow:hidden;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:auto;min-height:135px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;overflow:visible;;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
       <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2">${esc(n.title||'')}</div>
       <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3">${esc((n.desc||'').slice(0,95))}</div>
@@ -1321,7 +1354,7 @@ function exportWord() {
   const order = ['macro','core','object','complement','output'];
   const sorted = [...N].sort((a,b) => order.indexOf(a.cls) - order.indexOf(b.cls));
   const catNames = {macro:'Núcleo Macroestrutural',core:'Fundamento / Autor',object:'Fenômeno / Objeto',complement:'Complemento',output:'Desdobramento'};
-  const catColors = {macro:'#0f2744',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'};
+  const catColors = {macro:'#000000',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}; // Preto absoluto aqui também
   sorted.forEach(n => {
     html += `<h2>${esc(n.title)}</h2>
     <div class="tag">${esc(n.tag||'')}</div>
@@ -1350,6 +1383,7 @@ function toast(m) {
 stage.addEventListener('click', () => {
   if (!drag && !resize) {
     sel = null;
+    selectedLink = null; // <-- ISSO DESSELECIONA A LINHA AO CLICAR NO FUNDO
     cancelConnect();
     render();
   }
@@ -1398,8 +1432,17 @@ window.addEventListener('keydown', e => {
   if ((e.key === 'Delete' || e.key === 'Backspace') && sel) deleteNode();
   if (e.ctrlKey && e.key === 'd') { e.preventDefault(); if (sel) duplicateNode(); }
   if (e.key === 'Escape') {
-    if (document.body.classList.contains('presentation')) exitPresentation();
-    else { cancelConnect(); hideContextMenu(); setStatus('Pronto'); }
+    const authorsModal = document.getElementById('authors-modal-overlay');
+    
+    if (document.body.classList.contains('presentation')) {
+      exitPresentation();
+    } else if (authorsModal && authorsModal.classList.contains('show')) {
+      closeAuthorsModal(); // <-- FECHA A GALERIA SE ELA ESTIVER ABERTA
+    } else { 
+      cancelConnect(); 
+      hideContextMenu(); 
+      setStatus('Pronto'); 
+    }
   }
 });
 
@@ -1452,7 +1495,7 @@ function updateMinimap() {
   N.forEach(n => {
     const el = document.createElement('div');
     el.className = 'minimap-node';
-    const c = n.cls === 'macro' ? '#0f2744' : n.cls === 'object' ? '#be185d' : '#2563eb';
+    const c = n.cls === 'macro' ? '#000000' : n.cls === 'object' ? '#be185d' : '#2563eb';
     el.style.cssText = `left:${n.x * scaleX}px; top:${n.y * scaleY}px; width:${n.w * scaleX}px; height:${n.h * scaleY}px; background:${c};`;
     minimap.appendChild(el);
   });
@@ -1829,7 +1872,7 @@ document.addEventListener('click', e => {
 });
 
 
-// SOBRESCRITA DO EXPORT PDF/SVG/WORD PARA RECONHECER AS NOVAS CORES E LINHAS CUSTOMIZADAS
+// ====================== PDF ======================
 function exportPdf() {
   const isDark = document.body.classList.contains('dark');
   const printWin = window.open('', '_blank');
@@ -1847,33 +1890,39 @@ function exportPdf() {
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const cardBorder = isDark ? '#334155' : '#d1d9e0';
   
+  // Cores atualizadas e constantes
   const allColors = Object.assign({
-    macro: isDark ? '#38bdf8' : '#0f2744', core: isDark ? '#38bdf8' : '#2563eb',
-    object: isDark ? '#f472b6' : '#be185d', complement: isDark ? '#fbbf24' : '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
+    macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
+    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
   }, LINK_COLORS);
 
+  // 1. Escaneia onde começa e termina o mapa real (para nunca cortar as bordas)
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
     minX = Math.min(minX, n.x); minY = Math.min(minY, n.y);
     maxX = Math.max(maxX, n.x + n.w); maxY = Math.max(maxY, n.y + n.h);
   });
-  const contentW = maxX - minX, contentH = maxY - minY;
-  let mapW = format === 'A2' ? 2200 : 1500; let mapH = format === 'A2' ? 1400 : 900;
-  if (orientation === 'portrait') { let t = mapW; mapW = mapH; mapH = t; }
+  
+  // 2. Cria margens de respiro perfeitas (padding de 60px)
+  const padding = 60;
+  const mapW = (maxX - minX) + (padding * 2);
+  const mapH = (maxY - minY) + (padding * 2) + 50; // +50 para caber a legenda nova
+  
+  const offsetX = padding - minX;
+  const offsetY = padding - minY;
 
-  const offsetX = (mapW - contentW) / 2 - minX;
-  const offsetY = (mapH - contentH) / 2 - minY - 50;
-
+  // 3. Monta os cartões
   const nodesHtml = N.map(n => {
     const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:12px 14px;overflow:hidden;font-family:Georgia,serif;box-sizing:border-box;color:${textMain}">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:${textMuted};margin-bottom:4px">${esc(n.tag||'')}</div>
-      <div style="font-size:${n.cls==='macro'?15:13}px;font-weight:700;color:${textMain};line-height:1.2; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(n.title||'')}</div>
-      <div style="font-size:11px;color:${textMuted};margin-top:6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">${esc((n.desc||'').slice(0,95))}</div>
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
+      <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
+      <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
     </div>`;
   }).join('');
 
+  // 4. Monta as Linhas
   let paths = '';
   L.forEach(([a,b]) => {
     const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
@@ -1886,57 +1935,144 @@ function exportPdf() {
     paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
+  // 5. LEGENDA DINÂMICA
+  const usedClasses = [...new Set(N.map(n => n.cls))];
+  const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
+  usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
+
+  let legendItemsHtml = '';
+  usedClasses.forEach(cls => {
+    const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
+    const color = allColors[cls] || '#64748b';
+    legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
+  });
+
+  // Adicionado 'white-space: nowrap' e removido os limites de quebra de linha
+  const legendHtml = usedClasses.length > 0 ? `
+    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      ${legendItemsHtml}
+    </div>` : '';
+
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
-    @page { size: ${format} ${orientation}; margin: 10mm; }
+    @page { size: ${format} ${orientation}; margin: 8mm; }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:5mm}
-    .header{text-align:center;margin-bottom:5mm}
-    h1{font-family:Georgia,serif;font-size:20px;margin-bottom:3px}
-    .sub{font-size:11px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:8px;overflow:hidden}
+    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
+    .header{text-align:center;margin-bottom:8mm}
+    h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
+    .sub{font-size:12px;color:${textMuted}}
+    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
+    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
   </style></head><body>
   <div class="header">
     <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">15 Classificações Profissionais · PPGET</div>
+    <div class="sub">Mapas e Estruturas · PPGET</div>
   </div>
   <div id="map">
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>${nodesHtml}
+    <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
+    ${nodesHtml}
+    ${legendHtml}
   </div>
-  <script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>`);
+  <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
   printWin.document.close();
-  toast('PDF Avançado gerado!');
+  toast('PDF Dinâmico gerado!');
 }
 
-function exportWord() {
-  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;line-height:1.45;color:#1a2332}h1{font-family:Georgia,serif;color:#0f2744;font-size:22pt}h2{font-family:Georgia,serif;color:#0f2744;font-size:14pt;margin-top:22px;border-bottom:1px solid #cbd5e1;padding-bottom:4px}.tag{font-size:9pt;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}.action{background:#f0f9ff;padding:8px 12px;border-left:3px solid #2563eb;margin:8px 0 16px}.cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9pt;color:white;margin:4px 0}</style></head><body><h1>Arquitetura da Pesquisa</h1><hr>`;
-  
-  const allColors = Object.assign({macro:'#0f2744',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}, LINK_COLORS);
-  [...N].sort((a,b) => (a.cls > b.cls ? 1 : -1)).forEach(n => {
-    html += `<h2>${esc(n.title)}</h2><div class="tag">${esc(n.tag||'')}</div><span class="cat" style="background:${allColors[n.cls]||'#64748b'}">${userCatNames[n.cls] || n.cls}</span><p>${esc(n.desc||'')}</p>${n.action ? `<div class="action"><b>Como vou trabalhar:</b><br>${esc(n.action)}</div>` : ''}`;
-  });
-  html += `<br><hr><p style="color:#64748b;font-size:10pt">Documento gerado pelo Editor · PPGET</p></body></html>`;
-  const blob = new Blob(['\ufeff', html], {type: 'application/msword'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Documento.doc`; a.click(); toast('Word gerado!');
+// ====================== SISTEMA DE GALERIA DE AUTORES ======================
+const autoresFotos = {
+    'Bazzo': 'https://emc.ufsc.br/portal/wp-content/uploads/2017/07/65_6-768x960.jpg',
+    'Bauman': 'https://www.infoescola.com/wp-content/uploads/2009/07/Zygmunt-Bauman_279502547.jpg',
+    'Vieira Pinto': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOTEnierOgWZsJTHRxyAB_XYY69vE5f1rf0iPZ0nkRkIp-siStcDQXNa-M&s=10',
+    'Feenberg': 'https://www.sfu.ca/content/sfu/communication/news-and-community/researchnews/andrew-feenberg-retires-from-the-school-of-communication/jcr:content/main_content/image.img.2000.high.jpg/1629922624175.jpg',
+    'Flusser': 'https://www.uai.com.br/wp-content/uploads/2026/05/Design_sem_nome-2026-05-07T130009.019.jpg',
+    'Zuboff': 'https://images.ft.com/v3/image/raw/ftcms%3Ae60fb43e-32c7-4180-87b2-c86e53e758f4?source=next-article&fit=scale-down&quality=highest&width=1440&dpr=1',
+    'Van Dijck': 'https://www.nwo.nl/sites/nwo/files/styles/max_1600x1600/public/media-images/Spinozalaureaat%202021%20Jos%C3%A9%20van%20Dijck%20%28credits%20Studio%20Oostrum%29.jpg?itok=LH_BwIVh',
+    'Noble': 'https://images.squarespace-cdn.com/content/v1/5b6493dab27e396274fd7a35/cb275408-76ea-4686-9ba3-60176a844752/SafiyaNoble_2026.jpg.jpg?format=1000w',
+    'Kate Manne': 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Kate_Manne%2C_author%2C_at_the_2024_National_Book_Awards_finalist_reading_7_%28cropped%29.jpg',
+    'bell hooks': 'https://www.publishnews.com.br/estaticos/uploads/2021/12/C5qdxfQVdGyBv3v0JasDNl2aM6edhOGn7hlkIJF5TXVUaxMZR2T9KuczoNDaTvZ3FxCCDn9nX3dWdE6x.png',
+    'Sueli Carneiro': 'https://images.squarespace-cdn.com/content/v1/625e0a7f20bb3a13976a8f50/cb98149c-9bb5-46fb-a008-7cba7233acac/image.jpg?format=2500w',
+    'Netnografia': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg',
+    'Kozinets': 'https://annenberg.usc.edu/sites/default/files/styles/profile_faculty_std/public/profile_photos/robert-kozinets.jpg'
+};
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
 }
 
-function exportSvg() {
-  let nodesSvg = '', linksSvg = '';
-  const allColors = Object.assign({macro:'#0f2744',core:'#2563eb',object:'#be185d',complement:'#b45309',output:'#0f766e'}, LINK_COLORS);
-  N.forEach(n => {
-    nodesSvg += `<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="12" ry="12" fill="#ffffff" stroke="${allColors[n.cls]||'#2563eb'}" stroke-width="${n.cls==='macro'?2.5:1.5}" filter="url(#shadow)"/><text x="${n.x+14}" y="${n.y+22}" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#64748b">${esc(n.tag||'')}</text><text x="${n.x+14}" y="${n.y+44}" font-family="Georgia,serif" font-size="${n.cls==='macro'?16:13}" font-weight="700" fill="#0f2744">${esc((n.title||'').substring(0,38))}</text>`;
-  });
-  L.forEach(([a,b]) => {
-    const A = N.find(n=>n.id===a), B = N.find(n=>n.id===b); if (!A || !B) return;
-    const p1 = getBorderPoint(A, B.x+B.w/2, B.y+B.h/2), p2 = getBorderPoint(B, A.x+A.w/2, A.y+A.h/2);
-    const spine = isSpineEdge(a,b);
-    let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (allColors[B.cls] || '#64748b'));
-    linksSvg += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${(p1.y+p2.y)/2}, ${p2.x} ${(p1.y+p2.y)/2}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.2}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
-  });
-  const svgContent = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.12"/></filter><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs><rect width="1600" height="1000" fill="#f8fafc"/><text x="40" y="36" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#0f2744">Mapa da Arquitetura da Pesquisa</text>${linksSvg}${nodesSvg}</svg>`;
-  const blob = new Blob([svgContent], {type:'image/svg+xml;charset=utf-8'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Mapa.svg`; a.click(); toast('SVG exportado!');
+function openAuthorsModal() {
+    const grid = document.getElementById('authors-grid-content');
+    grid.innerHTML = '';
+    
+    // 1. Filtra cartões baseando-se em tags ou presença do nome
+    const autores = N.filter(n => 
+        (n.tag && n.tag.includes('AUTOR')) || 
+        (n.tag && n.tag.includes('METODOLOGIA')) ||
+        Object.keys(autoresFotos).some(k => (n.title || '').toLowerCase().includes(k.toLowerCase()))
+    );
+    
+    // Remove duplicadas
+    const uniqueAutores = [...new Map(autores.map(item => [item.id, item])).values()];
+
+    uniqueAutores.forEach(a => {
+        // 2. Cria um array para guardar as fotos encontradas naquele cartão específico
+        let fotosEncontradas = [];
+        for (let key in autoresFotos) {
+            // Se o título ou a descrição contiver o nome, adicionamos a foto na lista
+            if ((a.title || '').toLowerCase().includes(key.toLowerCase()) || 
+                (a.desc || '').toLowerCase().includes(key.toLowerCase()) ||
+                (a.tag || '').toLowerCase().includes(key.toLowerCase())) {
+                fotosEncontradas.push(autoresFotos[key]);
+            }
+        }
+        
+        // Remove duplicatas de fotos (ex: se bater Netnografia e Kozinets no mesmo card)
+        fotosEncontradas = [...new Set(fotosEncontradas)];
+
+        const init = getInitials(a.title || 'Autor');
+        let imgHtml = '';
+
+        // 3. Monta o visual de 0, 1 ou 2 fotos dinamicamente
+        if (fotosEncontradas.length === 0) {
+            imgHtml = `<div class="author-initials" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
+        } else if (fotosEncontradas.length === 1) {
+            imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                       <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
+        } else {
+            // O grande truque para 2 autoras: Divide a bolinha ao meio!
+            imgHtml = `
+                <div style="display:flex; width:100%; height:100%;">
+                    <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
+                    <img src="${fotosEncontradas[1]}" style="width:50%; height:100%; object-fit:cover; border-left: 1px solid var(--border);" onerror="this.style.display='none'" />
+                </div>
+            `;
+        }
+
+        const cardHtml = `
+            <div class="author-card">
+                <div class="author-photo-container">
+                    ${imgHtml}
+                </div>
+                <div class="author-name">${esc(a.title)}</div>
+                <div class="author-concept">${esc(a.tag)}</div>
+                <div class="author-desc">${esc(a.desc)}</div>
+                ${a.action ? `<div class="author-action"><b>Ponto de Aplicação:</b><br>${esc(a.action)}</div>` : ''}
+            </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', cardHtml);
+    });
+    
+    document.getElementById('authors-modal-overlay').classList.add('show');
 }
+
+function closeAuthorsModal() {
+    document.getElementById('authors-modal-overlay').classList.remove('show');
+}
+
+// Fechar galeria se o usuário clicar no fundo escuro fora dela
+document.addEventListener('click', e => {
+    const overlay = document.getElementById('authors-modal-overlay');
+    if (e.target === overlay) closeAuthorsModal();
+});
 
 // Inicializa a renderização e o status original
 render();
@@ -2031,8 +2167,8 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
     display: none; 
     position: fixed; 
     bottom: 40px; 
-    left: 50%;                  /* Centraliza a caixa na tela */
-    transform: translateX(-50%);  /* Complemento da centralização */
+    left: 50%;                 /* Centraliza a caixa na tela */
+    transform: translateX(-50%); /* Complemento da centralização */
     background: rgba(255, 255, 255, 0.90); 
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border); 
@@ -2044,6 +2180,54 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
   }
   body.dark #presentation-legend { background: rgba(30, 41, 59, 0.90); border-color: rgba(255,255,255,0.1); }
   body.presentation #presentation-legend { display: block !important; }
+/* ===== TELA CHEIA: GALERIA DE AUTORES ===== */
+  #authors-modal-overlay {
+      display: none; position: fixed; inset: 0; background: var(--bg);
+      z-index: 4000; flex-direction: column;
+      opacity: 0; transition: opacity 0.3s ease;
+  }
+  #authors-modal-overlay.show { display: flex; opacity: 1; }
+  
+  .authors-header {
+      padding: 20px 40px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; background: var(--surface);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03); z-index: 10;
+  }
+  .authors-close { 
+      background: #e11d48; border: none; font-size: 13px; font-weight: bold; color: white; 
+      cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: background 0.2s; 
+  }
+  .authors-close:hover { background: #be123c; }
+  
+  .authors-grid {
+      padding: 40px; overflow-y: auto; display: grid; flex: 1;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
+      align-content: start;
+  }
+  .author-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow);
+  }
+  .author-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px -5px rgba(15, 39, 68, 0.15); border-color: var(--blue); }
+  
+  .author-photo-container {
+      width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px;
+      position: relative; box-shadow: 0 4px 14px rgba(0,0,0,0.12); border: 4px solid var(--bg);
+      background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .author-photo { width: 100%; height: 100%; object-fit: cover; }
+  .author-initials { font-family: Georgia, serif; font-size: 40px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  
+  .author-name { font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: var(--navy); margin-bottom: 8px; }
+  .author-concept { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--rose); font-weight: bold; margin-bottom: 16px; background: #fdf2f8; padding: 4px 10px; border-radius: 20px;}
+  .author-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
+  .author-action {
+      background: var(--bg); border-left: 3px solid var(--blue); padding: 14px;
+      font-size: 12px; color: var(--ink); border-radius: 0 8px 8px 0;
+      width: 100%; text-align: left; margin-top: auto; line-height: 1.4;
+  }
+  body.dark .author-concept { background: rgba(190, 24, 93, 0.2); }
 </style>
 
 <script>
@@ -2223,7 +2407,7 @@ const defaultCatNames = {
     r1: 'Hipótese Confirmada', r2: 'Novo Paradigma', r3: 'Artigo / Publicação', r4: 'Protótipo / PoC', r5: 'Impacto Social'
 };
 const allColorsMap = Object.assign({
-    macro:'#0f2744', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
+    macro:'#000000', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
     m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
     r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
 }, LINK_COLORS);
