@@ -49,7 +49,9 @@
   }
   header {
     height: 64px;
-    background: var(--surface);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -57,9 +59,6 @@
     gap: 5px;
     z-index: 100;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
   body.dark header {
     background: rgba(30, 41, 59, 0.85);
@@ -490,6 +489,8 @@
   
   <button class="btn" id="btn-snap" onclick="toggleSnap()">📏 Snap</button>
   <button class="btn" onclick="autoLayout()">🪄 Auto Layout</button>
+  <button class="btn" onclick="toggleStylesMenu()">🧩 Organizar Cards</button>
+  <button class="btn" onclick="toggleSmartLegend()" style="padding: 5px 8px;" title="Alternar Legenda">📜</button>
   
   <button class="btn" onclick="cleanTemporary()">🧹 Limpar</button>
   <button class="btn primary" onclick="enterPresentation()">📽 Apresentar</button>
@@ -588,6 +589,20 @@
         <button class="btn danger" onclick="deleteNode()">Excluir</button>
       </div>
     </div>
+    
+    <hr style="margin:18px 0;border:none;border-top:1px solid var(--border)">
+    <h2>Config. Impressão (PDF)</h2>
+    <label>Formato de Papel</label>
+    <select id="pdf-format">
+      <option value="A3">Tamanho A3</option>
+      <option value="A2">Tamanho A2 (mapas grandes)</option>
+    </select>
+    <label>Orientação</label>
+    <select id="pdf-orientation">
+      <option value="landscape">Paisagem (Deitado)</option>
+      <option value="portrait">Retrato (Em pé)</option>
+    </select>
+      
     <hr style="margin:18px 0;border:none;border-top:1px solid var(--border)">
     <p class="help">
       <b>Recursos:</b><br>
@@ -633,20 +648,34 @@
 <div id="toast"></div>
 <input id="file" type="file" accept=".json" hidden>
 
+<!-- MENU DE AUTO LAYOUT COM 10 OPÇÕES -->
 <div id="layout-menu">
   <div class="ctx-item" onclick="execLayout('horizontal')"><span class="layout-icon">➡️</span> Hierárquico Horizontal (Padrão)</div>
   <div class="ctx-item" onclick="execLayout('vertical')"><span class="layout-icon">⬇️</span> Hierárquico Vertical</div>
   <div class="ctx-item" onclick="execLayout('grid')"><span class="layout-icon">🔠</span> Grade (Grid)</div>
   <div class="ctx-item" onclick="execLayout('radial')"><span class="layout-icon">🎯</span> Circular / Radial</div>
   <div class="ctx-item" onclick="execLayout('central')"><span class="layout-icon">🗜️</span> Centralizado Expandido</div>
+  <div class="ctx-separator"></div>
+  <div class="ctx-item" onclick="execLayout('network')"><span class="layout-icon">🕸️</span> Rede Direcionada</div>
+  <div class="ctx-item" onclick="execLayout('spiral')"><span class="layout-icon">🔄</span> Espiral Progressiva</div>
+  <div class="ctx-item" onclick="execLayout('zigzag')"><span class="layout-icon">〽️</span> Caminho Zigue-Zague</div>
+  <div class="ctx-item" onclick="execLayout('pyramid')"><span class="layout-icon">🔻</span> Pirâmide Invertida</div>
+  <div class="ctx-item" onclick="execLayout('organic')"><span class="layout-icon">🔀</span> Distribuição Orgânica</div>
 </div>
 
+<!-- MENU DE ESTILOS DE CARDS COM 10 OPÇÕES -->
 <div id="styles-menu">
   <div class="ctx-item" onclick="execStyles('estrela')"><span class="layout-icon">⭐</span> Mapa Mental (Estrela)</div>
   <div class="ctx-item" onclick="execStyles('arvore')"><span class="layout-icon">🌳</span> Árvore (Top-Down)</div>
   <div class="ctx-item" onclick="execStyles('timeline')"><span class="layout-icon">⏳</span> Linha do Tempo</div>
   <div class="ctx-item" onclick="execStyles('cluster')"><span class="layout-icon">🦠</span> Clusters / Grupos</div>
   <div class="ctx-item" onclick="execStyles('waterfall')"><span class="layout-icon">🌊</span> Cascata Diagonal</div>
+  <div class="ctx-separator"></div>
+  <div class="ctx-item" onclick="execStyles('spiderweb')"><span class="layout-icon">🕷️</span> Teia Estrutural</div>
+  <div class="ctx-item" onclick="execStyles('honeycomb')"><span class="layout-icon">🐝</span> Matriz Favo de Mel</div>
+  <div class="ctx-item" onclick="execStyles('orbits')"><span class="layout-icon">🪐</span> Sistema Orbital</div>
+  <div class="ctx-item" onclick="execStyles('empathy')"><span class="layout-icon">🧠</span> Mapa de Empatia</div>
+  <div class="ctx-item" onclick="execStyles('venn')"><span class="layout-icon">⭕</span> Conjuntos (Venn)</div>
 </div>
 
 <div id="fixed-legend"></div>
@@ -1270,7 +1299,6 @@ document.getElementById('file').onchange = async e => {
 };
 
 // ====================== EXPORTAÇÃO SVG TOTALMENTE REESCRITA COM FOREIGNOBJECT ======================
-// Garante 100% de respeito ao tema, fontes idênticas e sem "desconfiguração" de texto
 function exportSvg() {
   const isDark = document.body.classList.contains('dark');
   const allColors = Object.assign({
@@ -1342,7 +1370,7 @@ function exportSvg() {
   toast('SVG perfeito exportado!');
 }
 
-// O exportPdf antigo e o novo foram unificados neste que é dinâmico, preservando todas as regras (modo de cor da tela exato)
+// ====================== PDF ======================
 function exportPdf() {
   const isDark = document.body.classList.contains('dark');
   const printWin = window.open('', '_blank');
@@ -1416,7 +1444,6 @@ function exportPdf() {
       ${legendItemsHtml}
     </div>` : '';
 
-  // Diretriz rigorosa de impressão (garante que dark fique dark)
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
     @media print { 
@@ -1573,26 +1600,6 @@ function updateMinimap() {
 }
 canvasCont.addEventListener('scroll', updateMinimap);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const asideElement = document.querySelector('aside');
-  if (asideElement) {
-    asideElement.insertAdjacentHTML('beforeend', `
-      <hr style="margin:18px 0;border:none;border-top:1px solid var(--border)">
-      <h2>Config. Impressão (PDF)</h2>
-      <label>Formato de Papel</label>
-      <select id="pdf-format">
-        <option value="A3">Tamanho A3</option>
-        <option value="A2">Tamanho A2 (mapas grandes)</option>
-      </select>
-      <label>Orientação</label>
-      <select id="pdf-orientation">
-        <option value="landscape">Paisagem (Deitado)</option>
-        <option value="portrait">Retrato (Em pé)</option>
-      </select>
-    `);
-  }
-});
-
 window.autoLayout = function(e) {
     const event = e || window.event;
     const menu = document.getElementById('layout-menu');
@@ -1713,14 +1720,6 @@ window.execLayout = function(type) {
     render();
     toast(`🪄 Layout Aplicado`);
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const zoomCtrl = document.querySelector('.zoom-controls');
-    if(zoomCtrl) zoomCtrl.insertAdjacentHTML('afterbegin', `<button class="btn" onclick="toggleSmartLegend()" style="margin-right: 5px;">📜</button>`);
-    
-    const autoLayoutBtn = document.querySelector('button[onclick="autoLayout()"]');
-    if(autoLayoutBtn) autoLayoutBtn.insertAdjacentHTML('afterend', ` <button class="btn" onclick="toggleStylesMenu()">🧩 Organizar Cards</button>`);
-});
 
 window.toggleStylesMenu = function(e) {
     const event = e || window.event;
