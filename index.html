@@ -386,6 +386,7 @@
   <button class="btn" onclick="autoLayout()">🪄 Auto Layout</button>
   
   <button class="btn" onclick="cleanTemporary()">🧹 Limpar</button>
+  <button class="btn" onclick="restoreDefault()" style="color: #e11d48; border-color: #fda4af; background: #fff1f2;">🔄 Restaurar</button>
   <button class="btn primary" onclick="enterPresentation()">📽 Apresentar</button>
   <span class="spacer"></span>
   <span class="status" id="status">Pronto</span>
@@ -738,6 +739,20 @@ function cleanTemporary() {
   sel = null;
   render();
   toast(`${toRemove.length} nó(s) removido(s)`);
+}
+
+// ====================== RESTAURAR PADRÃO ======================
+function restoreDefault() {
+  if (!confirm('ATENÇÃO: Isso apagará todas as suas alterações não salvas (cartões, textos e posições) e restaurará o modelo original da pesquisa. Deseja continuar?')) {
+    return;
+  }
+  
+  // Limpa o cache salvo no navegador
+  localStorage.removeItem('arquiteturaEpistemologica');
+  localStorage.removeItem('userCatNames');
+  
+  // Recarrega a página para puxar os dados iniciais do código limpo
+  window.location.reload();
 }
 
 // ====================== APRESENTAÇÃO E LEGENDA DINÂMICA ======================
