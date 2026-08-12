@@ -1316,34 +1316,45 @@ function saveProject() {
   a.click();
   toast('JSON salvo');
 }
-function openProject() { document.getElementById('file').click(); }
-document.getElementById('file').onchange = async e => {
-  const f = e.target.files[0];
-  if (!f) return;
+// ====================== CARREGAMENTO DO SISTEMA (GITHUB READY) ======================
+async function inicializarSistema() {
   try {
-    const data = JSON.parse(await f.text());
-    N = data.nodes;
-    L = data.links;
-    spineNodes = new Set(data.spineNodes || ['macro','filo','socio','mis','jur','out']);
-    sel = null;
-    render();
-    toast('Projeto carregado');
-  } catch(err) { alert('Arquivo inválido'); }
-  e.target.value = '';
-};
-(function(){
-  try {
-    const raw = localStorage.getItem('arquiteturaEpistemologica');
-    if (raw) {
-      const d = JSON.parse(raw);
+    // 1. Primeiro, tenta ver se o usuário já fez alguma edição local (Autosave)
+    const rawLocal = localStorage.getItem('arquiteturaEpistemologica');
+    if (rawLocal) {
+      const d = JSON.parse(rawLocal);
       if (d.nodes && d.links) {
         N = d.nodes;
         L = d.links;
         if (d.spineNodes) spineNodes = new Set(d.spineNodes);
+        if (d.customLinkColors) customLinkColors = Object.assign({}, d.customLinkColors);
+        render(); // Desenha a versão salva no cache do usuário
+        return; // Interrompe aqui, não puxa o padrão do GitHub
       }
     }
-  } catch(e){}
-})();
+
+    // 2. Se a pessoa está abrindo pela primeira vez (ou clicou em Restaurar),
+    // o sistema busca o arquivo "padrao.json" direto do seu GitHub!
+    const resposta = await fetch('./padrao.json');
+    if (resposta.ok) {
+      const d = await resposta.json();
+      if (d.nodes && d.links) {
+        N = d.nodes;
+        L = d.links;
+        if (d.spineNodes) spineNodes = new Set(d.spineNodes);
+        if (d.customLinkColors) customLinkColors = Object.assign({}, d.customLinkColors);
+      }
+    }
+  } catch(e) {
+    console.warn("Nenhum arquivo padrao.json encontrado no servidor ou erro de rede.");
+  }
+  
+  // Desenha a tela final (seja com o padrão do GitHub ou vazio)
+  render();
+}
+
+// Inicia o processo assim que o código carrega
+inicializarSistema();
 
 // ====================== SVG (Alteração 3: foreignObject Perfeito) ======================
 function exportSvg() {
