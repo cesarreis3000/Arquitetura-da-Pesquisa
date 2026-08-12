@@ -86,12 +86,11 @@
   #canvas-container { width: 100%; height: 100%; overflow: auto; touch-action: none; }
   #stage {
     position: relative;
-    width: 1600px;
-    height: 1000px;
+    width: 3000px;
+    height: 3000px;
     background: var(--stage-bg);
     transform-origin: 0 0;
-    box-shadow: inset 0 0 0 1px var(--border);
-  }
+     }
   #links {
     position: absolute; inset: 0; width: 100%; height: 100%;
     z-index: 1; pointer-events: none; overflow: visible;
@@ -1284,23 +1283,24 @@ function deleteNode(id = sel) {
   toast('Excluído');
 }
 
-// ====================== ZOOM / SAVE ======================
+// ====================== ZOOM / SAVE / OPEN ======================
 function zoomBy(d) {
   scale = Math.min(1.6, Math.max(0.4, scale + d));
   stage.style.transform = `scale(${scale})`;
-  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
+  if (typeof updateMinimap === 'function') updateMinimap();
 }
 function resetZoom() {
   scale = 1;
   stage.style.transform = 'scale(1)';
-  if (typeof updateMinimap === 'function') updateMinimap(); // ADIÇÃO
+  if (typeof updateMinimap === 'function') updateMinimap();
 }
 function autoSave() {
   try {
     localStorage.setItem('arquiteturaEpistemologica', JSON.stringify({
       nodes: N,
       links: L,
-      spineNodes: [...spineNodes]
+      spineNodes: [...spineNodes],
+      customLinkColors: typeof customLinkColors !== 'undefined' ? customLinkColors : {}
     }));
   } catch(e){}
 }
@@ -1308,7 +1308,8 @@ function saveProject() {
   const blob = new Blob([JSON.stringify({
     nodes: N,
     links: L,
-    spineNodes: [...spineNodes]
+    spineNodes: [...spineNodes],
+    customLinkColors: typeof customLinkColors !== 'undefined' ? customLinkColors : {}
   }, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1316,6 +1317,25 @@ function saveProject() {
   a.click();
   toast('JSON salvo');
 }
+
+// ---> ESTA É A PARTE QUE FAZ O BOTÃO ABRIR FUNCIONAR <---
+function openProject() { document.getElementById('file').click(); }
+document.getElementById('file').onchange = async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    const data = JSON.parse(await f.text());
+    N = data.nodes;
+    L = data.links;
+    spineNodes = new Set(data.spineNodes || []);
+    if (data.customLinkColors) customLinkColors = Object.assign({}, data.customLinkColors);
+    sel = null;
+    render();
+    toast('Projeto carregado');
+  } catch(err) { alert('Arquivo inválido'); }
+  e.target.value = '';
+};
+
 // ====================== CARREGAMENTO DO SISTEMA (GITHUB READY) ======================
 async function inicializarSistema() {
   try {
@@ -1563,35 +1583,60 @@ canvasCont.addEventListener('touchend', e => {
   if (panState.isPanning) panState.isPanning = false;
 });
 
-// 3. Minimapa Dinâmico
+// ====================== MINIMAPA DINÂMICO COMPLETO ======================
 function updateMinimap() {
   const minimap = document.getElementById('minimap-content');
   const vp = document.getElementById('minimap-viewport');
-  if (!minimap || !vp) return;
+  if (!minimap || !vp || N.length === 0) return;
 
-  const stageW = 1600; const stageH = 1000;
-  const mapW = 160; const mapH = 100;
-  const scaleX = mapW / (stageW * scale);
-  const scaleY = mapH / (stageH * scale);
+  const mapW = 160; 
+  const mapH = 100;
+
+  // 1. Descobre dinamicamente onde estão os cartões mais distantes no seu canvas
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  N.forEach(n => {
+    minX = Math.min(minX, n.x);
+    minY = Math.min(minY, n.y);
+    maxX = Math.max(maxX, n.x + n.w);
+    maxY = Math.max(maxY, n.y + n.h);
+  });
+
+  // Adiciona uma margem de respiro para os cartões não grudarem nas bordas do minimapa
+  minX = Math.min(0, minX - 100);
+  minY = Math.min(0, minY - 100);
+  maxX = Math.max(1600, maxX + 100);
+  maxY = Math.max(1000, maxY + 100);
+
+  const contentW = maxX - minX;
+  const contentH = maxY - minY;
+
+  // Fator de escala dinâmico para caber tudo perfeitamente no minimapa (160x100)
+  const scaleX = mapW / contentW;
+  const scaleY = mapH / contentH;
 
   minimap.innerHTML = '';
   N.forEach(n => {
     const el = document.createElement('div');
     el.className = 'minimap-node';
     const c = n.cls === 'macro' ? '#000000' : n.cls === 'object' ? '#be185d' : '#2563eb';
-    el.style.cssText = `left:${n.x * scaleX}px; top:${n.y * scaleY}px; width:${n.w * scaleX}px; height:${n.h * scaleY}px; background:${c};`;
+    // Posiciona os nós relativos ao menor ponto do mapa (minX, minY)
+    const posX = (n.x - minX) * scaleX;
+    const posY = (n.y - minY) * scaleY;
+    const posW = n.w * scaleX;
+    const posH = n.h * scaleY;
+    el.style.cssText = `left:${posX}px; top:${posY}px; width:${posW}px; height:${posH}px; background:${c};`;
     minimap.appendChild(el);
   });
 
-  const vW = canvasCont.clientWidth * scaleX;
-  const vH = canvasCont.clientHeight * scaleY;
-  const vX = canvasCont.scrollLeft * scaleX;
-  const vY = canvasCont.scrollTop * scaleY;
+  // O retângulo azul (viewport) que mostra onde você está na tela
+  const vW = (canvasCont.clientWidth / scale) * scaleX;
+  const vH = (canvasCont.clientHeight / scale) * scaleY;
+  const vX = (canvasCont.scrollLeft - minX) * scaleX;
+  const vY = (canvasCont.scrollTop - minY) * scaleY;
 
-  vp.style.cssText = `left:${vX}px; top:${vY}px; width:${Math.min(vW, mapW)}px; height:${Math.min(vH, mapH)}px;`;
+  vp.style.cssText = `left:${vX}px; top:${vY}px; width:${vW}px; height:${vH}px;`;
 }
 canvasCont.addEventListener('scroll', updateMinimap);
-
 
 /* ========================================================================= */
 /* CAMADA ADICIONAL 2: SCRIPTS DAS NOVAS EXIGÊNCIAS (Injeções)               */
