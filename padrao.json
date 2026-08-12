@@ -174,7 +174,7 @@
       "x": 1065,
       "y": 1042.5,
       "w": 260,
-      "h": 140,
+      "h": 156,
       "cls": "r4",
       "tag": "DESDOBRAMENTO PROPOSITIVO",
       "title": "Simulador Sociotécnico (PoC)",
@@ -255,5 +255,9 @@
     "mis",
     "jur",
     "resultado"
-  ]
+  ],
+  "customLinkColors": {
+    "n_bauman-n_macro": "#3b82f6",
+    "n_bazzo-n_macro": "#3b82f6"
+  }
 }
