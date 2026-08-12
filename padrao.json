@@ -2,8 +2,8 @@
   "nodes": [
     {
       "id": "macro",
-      "x": 636,
-      "y": 8,
+      "x": 683.5,
+      "y": 0,
       "w": 340,
       "h": 212,
       "cls": "macro",
@@ -28,7 +28,7 @@
     },
     {
       "id": "feenberg",
-      "x": 174,
+      "x": 190,
       "y": 260,
       "w": 294,
       "h": 157,
@@ -36,132 +36,132 @@
       "tag": "TEORIA CRÍTICA",
       "title": "Andrew Feenberg",
       "desc": "A técnica não é neutra, mas um campo de disputas. As tecnologias incorporam valores e escolhas sociais, podendo ser objeto de crítica, participação e reconstrução democrática.",
-      "action": "Fundamenta a criação do Simulador (PoC) não apenas como ferramenta técnica, mas como uma intervenção pedagógica orientada à desalienação e reapropriação crítica das plataformas.",
+      "action": "Fundamenta a urgência da desalienação algorítmica, embasando as diretrizes formativas e a própria PoC (simulador, caso mantido) como estratégias de reapropriação crítica e intervenção.",
       "z": 10
     },
     {
       "id": "socio",
-      "x": 646,
-      "y": 260,
+      "x": 720,
+      "y": 256,
       "w": 302,
       "h": 149,
       "cls": "core",
       "tag": "ESTRUTURA SOCIOTÉCNICA",
       "title": "Capitalismo de Vigilância",
-      "desc": "A mercantilização da experiência humana. A extração do 'superávit comportamental' para predição e modulação sob um manto de invisibilidade.",
+      "desc": "A mercantilização da experiência humana. A extração do \"superávit comportamental\" para predição e modulação sob um manto de invisibilidade.",
       "action": "Explicar o motor econômico invisível que se beneficia do engajamento extremista.",
       "z": 10
     },
     {
       "id": "zuboff",
-      "x": 430,
-      "y": 448,
-      "w": 220,
-      "h": 117,
+      "x": 318,
+      "y": 482,
+      "w": 227,
+      "h": 167,
       "cls": "core",
       "tag": "TEORIA DA VIGILÂNCIA",
       "title": "Shoshana Zuboff",
-      "desc": "A noção de 'Poder Instrumentário' atualiza o conceito de controle para além da vigilância clássica das prisões.",
-      "action": "Categoria analítica principal do novo panoptismo digital.",
+      "desc": "A noção de \"Poder Instrumentário\" supera a metáfora do Panóptico. O controle não opera mais pelo medo ou disciplina, mas por uma arquitetura digital que sintoniza e pastoreia comportamentos de forma automatizada e invisível.",
+      "action": "Fornece a categoria analítica central para explicar como a plataforma não apenas observa, mas modifica a ação humana para garantir engajamento (superávit comportamental).",
       "z": 10
     },
     {
       "id": "bruno",
-      "x": 680,
-      "y": 448,
-      "w": 230,
-      "h": 135,
+      "x": 584.5,
+      "y": 482,
+      "w": 244.5,
+      "h": 165,
       "cls": "core",
       "tag": "RACIONALIDADE ALGORÍTMICA",
       "title": "Fernanda Bruno",
-      "desc": "A racionalidade algorítmica e a modulação de comportamentos. O 'confisco do comum' e a captura da atenção dos usuários nas redes.",
-      "action": "Aproxima a teoria da vigilância para o contexto brasileiro e explica o funil de cooptação.",
+      "desc": "A racionalidade algorítmica como forma de modulação e governo das condutas. O \"confisco do comum\" evidencia a captura da atenção, da subjetividade e dos afetos dos usuários nas redes.",
+      "action": "Nacionaliza o debate da vigilância e fornece a chave sociotécnica para entender como a plataforma modula emoções, operando como a engrenagem de cooptação e radicalização do sujeito.",
       "z": 10
     },
     {
       "id": "vandijck",
-      "x": 944,
-      "y": 444,
-      "w": 220,
-      "h": 143,
+      "x": 872.5,
+      "y": 486,
+      "w": 237,
+      "h": 165,
       "cls": "core",
       "tag": "TEORIA DAS PLATAFORMAS",
       "title": "Van Dijck & Noble",
-      "desc": "A arquitetura das plataformas e a opressão algorítmica: como o design e a codificação de vieses estruturais (especialmente de gênero) operam para maximizar o engajamento.",
-      "action": "Conecta o modelo de negócio das Big Techs à modulação social e à propagação de tecnoculturas tóxicas.",
+      "desc": "A plataformização da sociedade e a opressão algorítmica: como o design e a codificação de vieses estruturais (especialmente de gênero) operam para maximizar o engajamento.",
+      "action": "Conecta o modelo de negócios das plataformas à propagação de tecnoculturas tóxicas, demonstrando que a misoginia algorítmica não é uma falha do sistema (bug).",
       "z": 10
     },
     {
       "id": "mis",
-      "x": 1146,
-      "y": 260,
+      "x": 1102.5,
+      "y": 284.5,
       "w": 298,
       "h": 145,
       "cls": "object",
       "tag": "FENÔMENO EMPÍRICO",
       "title": "Misoginia Digital",
       "desc": "Não se resume a um ódio psicológico individual, mas opera como um sistema de policiamento e punição social para manutenção das hierarquias de gênero.",
-      "action": "Foco do mapeamento netnográfico e da análise comportamental.",
+      "action": "Constitui o recorte temático da pesquisa. Foi eleita como o fenômeno observável para o mapeamento netnográfico de como a modulação algorítmica potencializa a radicalização do usuário na prática.",
       "z": 10
     },
     {
       "id": "manne",
-      "x": 1200,
-      "y": 448,
+      "x": 1406,
+      "y": 451.5,
       "w": 220,
-      "h": 119,
+      "h": 153,
       "cls": "object",
       "tag": "TEORIA DA MISOGINIA",
       "title": "Kate Manne",
-      "desc": "Misoginia como mecanismo punitivo focado nas mulheres que desafiam as normas patriarcais na esfera pública.",
-      "action": "Lente principal para analisar o discurso das tecnoculturas tóxicas.",
+      "desc": "A misoginia não como ódio psicológico individual, mas como o 'braço punitivo' do patriarcado. Um sistema focado em policiar e sancionar mulheres que desafiam as normas de gênero na esfera pública.",
+      "action": "Fornece base analítica para decodificar o discurso das tecnoculturas tóxicas, evidenciando que o assédio em rede atua, na prática, como a execução digital dessa sanção social.",
       "z": 10
     },
     {
       "id": "jur",
-      "x": 894,
-      "y": 634,
-      "w": 240,
-      "h": 125,
+      "x": 959.5,
+      "y": 682,
+      "w": 290,
+      "h": 184,
       "cls": "complement",
       "tag": "SUBSÍDIO NORMATIVO",
       "title": "Aparato Jurídico Brasileiro",
-      "desc": "Leis Carolina Dieckmann, Lola, Stalking e ECA Digital. Se aplicado apenas de modo punitivo, é insuficiente ('apagar fogo com oxigênio').",
-      "action": "Serve como repositório de preceitos que serão traduzidos pedagogicamente.",
+      "desc": "O marco regulatório (Leis Carolina Dieckmann, Lola, Stalking e ECA). A aplicação exclusivamente punitiva foca no indivíduo (sintoma) e ignora o design da plataforma, tornando-se estruturalmente insuficiente contra a escala algorítmica.",
+      "action": "Serve como base normativa cujos preceitos serão traduzidos de uma lógica estritamente sancionatória para uma práxis pedagógica de letramento sociotécnico.",
       "z": 10
     },
     {
       "id": "met_net",
-      "x": 1254,
+      "x": 1292.5,
       "y": 632,
       "w": 256,
-      "h": 130,
+      "h": 183,
       "cls": "m3",
       "tag": "ESTRATÉGIA METODOLÓGICA",
       "title": "Netnografia (Robert V. Kozinets)",
-      "desc": "Imersão em fóruns do Reddit, YouTube (conteúdo de amplo alcance e machosfera) e no X (Twitter). Apenas Big Techs.",
-      "action": "Capturar as dinâmicas de policiamento descritas por Manne in loco.",
+      "desc": "Imersão em fóruns do Reddit, YouTube (conteúdo de amplo alcance e machosfera) e no X (Twitter). A delimitação às Big Techs é proposital para observar o ódio operando estritamente sob a lógica comercial do engajamento.",
+      "action": "Mapear as interações in loco para evidenciar como o policiamento de gênero (Manne) se materializa e é impulsionado na arquitetura dessas plataformas.",
       "z": 10
     },
     {
       "id": "met_ana",
-      "x": 1262,
-      "y": 812,
+      "x": 1287,
+      "y": 857,
       "w": 248,
-      "h": 111,
+      "h": 143.5,
       "cls": "m5",
       "tag": "PERCURSO ANALÍTICO",
       "title": "Análise de Conteúdo",
-      "desc": "Método de Laurence Bardin. Categorização a priori (vigilância, modulação, policiamento) e a posteriori.",
-      "action": "Garante rigor na interpretação do volume textual coletado nas redes.",
+      "desc": "Método de Laurence Bardin. O corpus netnográfico será submetido a uma categorização a priori (ancorada nos eixos de vigilância, modulação e policiamento) e a categorias emergentes (a posteriori).",
+      "action": "Assegura o rigor epistemológico na transição entre o dado empírico bruto e a evidência científica, revelando os padrões discursivos que estruturam a radicalização na prática.",
       "z": 10
     },
     {
       "id": "resultado",
-      "x": 840,
-      "y": 812,
+      "x": 694,
+      "y": 907,
       "w": 300,
-      "h": 140,
+      "h": 175,
       "cls": "r2",
       "tag": "RESULTADO DA PESQUISA",
       "title": "Diagnóstico e Diretrizes Formativas",
@@ -171,35 +171,83 @@
     },
     {
       "id": "poc",
-      "x": 860,
-      "y": 1010,
+      "x": 1065,
+      "y": 1042.5,
       "w": 260,
       "h": 140,
       "cls": "r4",
-      "tag": "DESDOBRAMENTO APLICADO",
+      "tag": "DESDOBRAMENTO PROPOSITIVO",
       "title": "Simulador Sociotécnico (PoC)",
-      "desc": "Ferramenta interativa de Letramento Jurídico-Digital. Traduz a punição jurídica em pedagogia crítica, revelando ao usuário o panoptismo das plataformas.",
-      "action": "Materializa o conhecimento gerado em um produto opcional, blindando a pesquisa caso o foco recaia puramente na pesquisa básica.",
+      "desc": "Ferramenta opcional. Um ambiente interativo que evidencia pedagogicamente ao usuário a modulação invisível e a opacidade algorítmica das plataformas.",
+      "action": "Proposição em formato de Prova de Conceito (PoC). Seu escopo metodológico delimita-se à estruturação lógico-pedagógica do modelo, pavimentando o caminho para futuras intervenções em campo.",
       "z": 10
     }
   ],
   "links": [
-    [ "bazzo", "macro" ],
-    [ "macro", "feenberg" ],
-    [ "macro", "socio" ],
-    [ "macro", "mis" ],
-    [ "socio", "zuboff" ],
-    [ "socio", "bruno" ],
-    [ "socio", "vandijck" ],
-    [ "mis", "manne" ],
-    [ "socio", "mis" ],
-    [ "mis", "met_net" ],
-    [ "mis", "jur" ],
-    [ "met_net", "met_ana" ],
-    [ "jur", "resultado" ],
-    [ "met_ana", "resultado" ],
-    [ "macro", "resultado" ],
-    [ "resultado", "poc" ]
+    [
+      "macro",
+      "feenberg"
+    ],
+    [
+      "macro",
+      "socio"
+    ],
+    [
+      "macro",
+      "mis"
+    ],
+    [
+      "socio",
+      "zuboff"
+    ],
+    [
+      "socio",
+      "bruno"
+    ],
+    [
+      "socio",
+      "vandijck"
+    ],
+    [
+      "mis",
+      "manne"
+    ],
+    [
+      "socio",
+      "mis"
+    ],
+    [
+      "mis",
+      "met_net"
+    ],
+    [
+      "mis",
+      "jur"
+    ],
+    [
+      "met_net",
+      "met_ana"
+    ],
+    [
+      "jur",
+      "resultado"
+    ],
+    [
+      "met_ana",
+      "resultado"
+    ],
+    [
+      "macro",
+      "resultado"
+    ],
+    [
+      "resultado",
+      "poc"
+    ],
+    [
+      "macro",
+      "bazzo"
+    ]
   ],
   "spineNodes": [
     "macro",
@@ -207,8 +255,5 @@
     "mis",
     "jur",
     "resultado"
-  ],
-  "customLinkColors": {
-    "bazzo-macro": "#3b82f6"
-  }
+  ]
 }
