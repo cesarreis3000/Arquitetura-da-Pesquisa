@@ -780,28 +780,35 @@ function exitPresentation() {
 function updatePresentationLegend() {
   const leg = document.getElementById('presentation-legend');
   if (!leg) return;
-  
-  // Caça apenas os cartões que estão em uso no mapa atual
+
   const usedClasses = [...new Set(N.map(n => n.cls))];
   if (usedClasses.length === 0) { leg.style.display = 'none'; return; }
 
-  // Puxa as cores de todos os cartões possíveis (macro agora é #000000)
-  const allColorsMap = Object.assign({
+  // Cores fixas para evitar qualquer falha de carregamento
+  const localColorsMap = {
     macro:'#000000', core:'#2563eb', object:'#be185d', complement:'#b45309', output:'#0f766e',
     m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
     r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
-  }, LINK_COLORS);
-  
+  };
+
+  // Nomes fixos para evitar a caixinha vazia
+  const localCatNames = typeof userCatNames !== 'undefined' ? userCatNames : {
+    macro: 'Núcleo Macroestrutural', core: 'Fundamento / Autor', object: 'Fenômeno / Objeto', complement: 'Complemento', output: 'Desdobramento / PoC',
+    m1: 'Pesquisa Bibliográfica', m2: 'Análise Documental', m3: 'Entrevista / Campo', m4: 'Coleta de Dados', m5: 'Tratamento Analítico',
+    r1: 'Hipótese Confirmada', r2: 'Novo Paradigma', r3: 'Artigo / Publicação', r4: 'Protótipo / PoC', r5: 'Impacto Social'
+  };
+
   const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
   usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
 
-  // Cria um "container flex" que enfileira tudo na horizontal com espaçamento (gap)
-  let html = `<div style="display: flex; align-items: center; gap: 20px; justify-content: center;">`;
+  let html = `<div style="font-family: Georgia, serif; font-size: 13px; font-weight: bold; color: var(--navy); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">Legenda</div>
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">`;
 
   usedClasses.forEach(cls => {
-     const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
-     html += `<div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); font-weight: 600;">
-                <div style="background:${allColorsMap[cls]}; width:12px; height:12px; border-radius:3px;"></div>
+     const catName = localCatNames[cls] || cls;
+     const color = localColorsMap[cls] || '#64748b';
+     html += `<div style="display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); font-weight: 600;">
+                <div style="background:${color}; width:12px; height:12px; border-radius:3px;"></div>
                 <span>${catName}</span>
               </div>`;
   });
@@ -1925,7 +1932,7 @@ document.addEventListener('click', e => {
 });
 
 
-// ====================== PDF ======================
+// ====================== PDF DE PÁGINA ÚNICA ======================
 function exportPdf() {
   const isDark = document.body.classList.contains('dark');
   const printWin = window.open('', '_blank');
@@ -1945,8 +1952,10 @@ function exportPdf() {
   
   const allColors = Object.assign({
     macro: '#000000', core: isDark ? '#38bdf8' : '#2563eb',
-    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e'
-  }, LINK_COLORS);
+    object: isDark ? '#f472b6' : '#be185d', complement: '#b45309', output: isDark ? '#2dd4bf' : '#0f766e',
+    m1: '#8b5cf6', m2: '#d946ef', m3: '#0ea5e9', m4: '#84cc16', m5: '#10b981',
+    r1: '#f97316', r2: '#ef4444', r3: '#6366f1', r4: '#14b8a6', r5: '#f43f5e'
+  }, typeof LINK_COLORS !== 'undefined' ? LINK_COLORS : {});
 
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   N.forEach(n => {
@@ -1964,7 +1973,7 @@ function exportPdf() {
   const nodesHtml = N.map(n => {
     const c = allColors[n.cls] || allColors.core;
     const x = n.x + offsetX, y = n.y + offsetY;
-    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+    return `<div style="position:absolute;left:${x}px;top:${y}px;width:${n.w}px;min-height:${n.h}px;background:${cardBg};border:1px solid ${cardBorder};border-top:4px solid ${c};border-radius:12px;padding:14px;font-family:Georgia,serif;box-sizing:border-box;color:${textMain};box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); z-index: 10;">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:${textMuted};margin-bottom:6px">${esc(n.tag||'')}</div>
       <div style="font-size:${n.cls==='macro'?16:14}px;font-weight:700;color:${textMain};line-height:1.2;margin-bottom:8px">${esc(n.title||'')}</div>
       <div style="font-size:12px;color:${textMuted};line-height:1.45;display:block;">${esc(n.desc||'')}</div>
@@ -1975,11 +1984,12 @@ function exportPdf() {
   L.forEach(([a,b]) => {
     const A = N.find(n => n.id === a), B = N.find(n => n.id === b);
     if (!A || !B) return;
+    
     const p1 = getBorderPoint({x:A.x+offsetX, y:A.y+offsetY, w:A.w, h:A.h}, B.x+offsetX + B.w/2, B.y+offsetY + B.h/2);
     const p2 = getBorderPoint({x:B.x+offsetX, y:B.y+offsetY, w:B.w, h:B.h}, A.x+offsetX + A.w/2, A.y+offsetY + A.h/2);
     const midY = (p1.y + p2.y) / 2;
     const spine = isSpineEdge(a,b);
-    let color = customLinkColors[a+'-'+b] || (spine ? '#eab308' : (LINK_COLORS[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
+    let color = (typeof customLinkColors !== 'undefined' && customLinkColors[a+'-'+b]) ? customLinkColors[a+'-'+b] : (spine ? '#eab308' : (allColors[B.cls] || (isDark ? '#94a3b8' : '#64748b')));
     paths += `<path d="M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}" fill="none" stroke="${color}" stroke-width="${spine?3.2:2.1}" stroke-linecap="round" marker-end="url(#arrow)"/>`;
   });
 
@@ -1987,41 +1997,103 @@ function exportPdf() {
   const order = ['macro','core','object','complement','output','m1','m2','m3','m4','m5','r1','r2','r3','r4','r5'];
   usedClasses.sort((a,b) => order.indexOf(a) - order.indexOf(b));
 
+  const localNames = typeof userCatNames !== 'undefined' ? userCatNames : {
+    macro: 'Núcleo Macroestrutural', core: 'Fundamento / Autor', object: 'Fenômeno / Objeto', complement: 'Complemento', output: 'Desdobramento / PoC'
+  };
+
   let legendItemsHtml = '';
   usedClasses.forEach(cls => {
-    const catName = typeof userCatNames !== 'undefined' ? userCatNames[cls] : cls;
+    const catName = localNames[cls] || cls;
     const color = allColors[cls] || '#64748b';
     legendItemsHtml += `<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;background:${color};border-radius:50%"></div>${esc(catName)}</div>`;
   });
 
   const legendHtml = usedClasses.length > 0 ? `
-    <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-size:11px;color:${textMuted};background:${cardBg};padding:10px 24px;border-radius:30px;border:1px solid ${cardBorder}; white-space: nowrap; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <div style="position:absolute;top:20px;left:20px;display:flex;flex-direction:column;gap:8px;font-size:11px;color:${textMuted};background:${cardBg};padding:16px 20px;border-radius:12px;border:1px solid ${cardBorder}; box-shadow: 0 4px 12px rgba(0,0,0,0.05); z-index: 20;">
+      <div style="font-family:Georgia,serif;font-weight:bold;font-size:12px;color:${textMain};margin-bottom:6px;border-bottom:1px solid ${cardBorder};padding-bottom:6px;">Legenda</div>
       ${legendItemsHtml}
     </div>` : '';
 
+  // Cálculo rígido para FORÇAR UMA ÚNICA PÁGINA (A3 ou A2):
+  let printW, printH;
+  if (format === 'A3') {
+      printW = orientation === 'landscape' ? 1587 : 1122;
+      printH = orientation === 'landscape' ? 1122 : 1587;
+  } else { // A2
+      printW = orientation === 'landscape' ? 2245 : 1587;
+      printH = orientation === 'landscape' ? 1587 : 2245;
+  }
+
+  // Desconta uma margem de segurança maior para impedir vazamento vertical
+  const availableW = printW - 120;
+  const availableH = printH - 180; 
+  
+  const scaleW = availableW / mapW;
+  const scaleH = availableH / mapH;
+  const finalScale = Math.min(scaleW, scaleH, 1); 
+
   printWin.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arquitetura da Pesquisa</title>
   <style>
-    @page { size: ${format} ${orientation}; margin: 8mm; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Segoe UI,system-ui,sans-serif;background:${bgPage};color:${textMain};display:flex;flex-direction:column;align-items:center;padding-top:8mm;}
-    .header{text-align:center;margin-bottom:8mm}
-    h1{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
-    .sub{font-size:12px;color:${textMuted}}
-    #map{position:relative;width:${mapW}px;height:${mapH}px;background:${bgMap};border:1px solid ${cardBorder};border-radius:12px;overflow:visible;}
-    svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+    @page { size: ${format} ${orientation}; margin: 0 !important; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden !important; /* O BLOQUEIO ABSOLUTO DA SEGUNDA PÁGINA */
+      background: ${bgPage};
+      color: ${textMain};
+      font-family: Segoe UI, system-ui, sans-serif;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .page-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* Centraliza verticalmente no papel */
+      padding: 20px;
+    }
+    .header { text-align: center; margin-bottom: 20px; flex-shrink: 0; }
+    h1 { font-family: Georgia, serif; font-size: 24px; margin-bottom: 4px; }
+    .sub { font-size: 12px; color: ${textMuted}; }
+
+    .scale-wrapper {
+      transform: scale(${finalScale});
+      transform-origin: center center; /* Reduz em direção ao centro para não vazar a borda */
+      width: ${mapW}px;
+      height: ${mapH}px;
+      flex-shrink: 0;
+    }
+
+    #map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: ${bgMap};
+      border: 1px solid ${cardBorder};
+      border-radius: 12px;
+    }
+    svg { position: absolute; inset: 0; width: ${mapW}px; height: ${mapH}px; pointer-events: none; z-index: 0; }
   </style></head><body>
-  <div class="header">
-    <h1>Arquitetura da Pesquisa</h1>
-    <div class="sub">Mapas e Estruturas · PPGET</div>
-  </div>
-  <div id="map">
-    <svg viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
-    ${nodesHtml}
-    ${legendHtml}
+  <div class="page-container">
+    <div class="header">
+      <h1>Arquitetura da Pesquisa</h1>
+      <div class="sub">Mapas e Estruturas · PPGET</div>
+    </div>
+    <div class="scale-wrapper">
+        <div id="map">
+          <svg width="${mapW}" height="${mapH}" viewBox="0 0 ${mapW} ${mapH}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#64748b"/></marker></defs>${paths}</svg>
+          ${nodesHtml}
+          ${legendHtml}
+        </div>
+    </div>
   </div>
   <script>window.onload=function(){setTimeout(function(){window.print()},600)}<\/script></body></html>`);
   printWin.document.close();
-  toast('PDF Dinâmico gerado!');
 }
 
 // ====================== SISTEMA DE GALERIA DE AUTORES ======================
@@ -2199,7 +2271,9 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
 
   /* ===== TÍTULO + LEGENDA (MODO APRESENTAÇÃO) ===== */
   #presentation-title {
-    display: none; position: fixed; top: 24px; left: 30px;
+    display: none; position: fixed; 
+    top: 45px;  /* Desceu o título */
+    left: 45px; /* Afastou da borda esquerda */
     font-family: Georgia, serif; font-size: 20px; font-weight: bold;
     color: var(--navy); z-index: 3000; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
@@ -2215,17 +2289,16 @@ setStatus('Pronto · Use ✂ Desconectar e 🦴 Espinha');
   #presentation-legend {
     display: none; 
     position: fixed; 
-    bottom: 40px; 
-    left: 50%;                   
-    transform: translateX(-50%); 
+    top: 105px; /* Desceu acompanhando o título */
+    left: 45px; /* Acompanha o título */
+    transform: none; 
     background: rgba(255, 255, 255, 0.90); 
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border); 
-    border-radius: 30px;        
+    border-radius: 12px;        
     box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
-    padding: 12px 24px;           
+    padding: 16px 20px;            
     z-index: 3000;
-    white-space: nowrap;        
   }
   body.dark #presentation-legend { background: rgba(30, 41, 59, 0.90); border-color: rgba(255,255,255,0.1); }
   body.presentation #presentation-legend { display: block !important; }
