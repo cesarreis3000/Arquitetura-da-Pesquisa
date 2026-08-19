@@ -2033,6 +2033,8 @@ const autoresFotos = {
     'Flusser': 'https://www.uai.com.br/wp-content/uploads/2026/05/Design_sem_nome-2026-05-07T130009.019.jpg',
     'Zuboff': 'https://images.ft.com/v3/image/raw/ftcms%3Ae60fb43e-32c7-4180-87b2-c86e53e758f4?source=next-article&fit=scale-down&quality=highest&width=1440&dpr=1',
     'Van Dijck': 'https://www.nwo.nl/sites/nwo/files/styles/max_1600x1600/public/media-images/Spinozalaureaat%202021%20Jos%C3%A9%20van%20Dijck%20%28credits%20Studio%20Oostrum%29.jpg?itok=LH_BwIVh',
+    'Poell': 'https://www.uva.nl/binaries/_ht_1701881318512/700x0-webp/content/gallery/personen/p/o/thomas-poel--bykirstenvansanten-3.jpg',
+    'De Waal': 'https://civicinteractiondesign.com/wp-content/uploads/2018/09/martijn-de-waal-1.jpg',
     'Noble': 'https://images.squarespace-cdn.com/content/v1/5b6493dab27e396274fd7a35/cb275408-76ea-4686-9ba3-60176a844752/SafiyaNoble_2026.jpg.jpg?format=1000w',
     'Kate Manne': 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Kate_Manne%2C_author%2C_at_the_2024_National_Book_Awards_finalist_reading_7_%28cropped%29.jpg',
     'bell hooks': 'https://www.publishnews.com.br/estaticos/uploads/2021/12/C5qdxfQVdGyBv3v0JasDNl2aM6edhOGn7hlkIJF5TXVUaxMZR2T9KuczoNDaTvZ3FxCCDn9nX3dWdE6x.png',
@@ -2080,11 +2082,20 @@ function openAuthorsModal() {
         } else if (fotosEncontradas.length === 1) {
             imgHtml = `<img src="${fotosEncontradas[0]}" class="author-photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                        <div class="author-initials fallback-initials" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${init}</div>`;
-        } else {
+        } else if (fotosEncontradas.length === 2) {
             imgHtml = `
                 <div style="display:flex; width:100%; height:100%;">
                     <img src="${fotosEncontradas[0]}" style="width:50%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
                     <img src="${fotosEncontradas[1]}" style="width:50%; height:100%; object-fit:cover; border-left: 1px solid var(--border);" onerror="this.style.display='none'" />
+                </div>
+            `;
+        } else {
+            // Nova lógica ativada: divide o espaço em 3 partes (33.33%)
+            imgHtml = `
+                <div style="display:flex; width:100%; height:100%;">
+                    <img src="${fotosEncontradas[0]}" style="width:33.33%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
+                    <img src="${fotosEncontradas[1]}" style="width:33.33%; height:100%; object-fit:cover; border-right: 1px solid var(--border);" onerror="this.style.display='none'" />
+                    <img src="${fotosEncontradas[2]}" style="width:33.34%; height:100%; object-fit:cover;" onerror="this.style.display='none'" />
                 </div>
             `;
         }
