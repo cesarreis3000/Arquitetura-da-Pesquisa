@@ -9,7 +9,7 @@
       "cls": "macro",
       "tag": "NÚCLEO MACROESTRUTURAL",
       "title": "Educação Tecnológica e Formação Ética",
-      "desc": "Campo formativo que ultrapassa a dimensão instrumental da tecnologia, orientando-se para a compreensão crítica, a avaliação ética e a participação responsável nas relações sociotécnicas contemporneas.",
+      "desc": "Campo formativo que ultrapassa a dimensão instrumental da tecnologia, orientando-se para a compreensão crítica, a avaliação ética e a participação responsável nas relações sociotécnicas contemporâneas.",
       "action": "Constitui o eixo formativo da pesquisa. Fundamenta uma práxis educativa orientada ao desenvolvimento da capacidade de compreender criticamente as relações sociotécnicas, avaliar suas implicações éticas e agir de forma responsável na cultura digital.",
       "z": 10
     },
@@ -119,34 +119,21 @@
     },
     {
       "id": "n_manne",
-      "x": 290,
-      "y": 1107,
+      "x": 305,
+      "y": 1260,
       "w": 246,
       "h": 134,
       "cls": "core",
-      "tag": "TEORIA DA MISOGINIA",
+      "tag": "LENTE TEÓRICA",
       "title": "Kate Manne",
       "desc": "A misoginia como o braço punitivo do patriarcado: um sistema focado em policiar e sancionar mulheres que desafiam as normas de gênero na esfera pública.",
       "action": "Fornece a base conceitual para interpretar manifestações de hostilidade como práticas de policiamento, permitindo investigar como essas dinâmicas se manifestam digitalmente.",
       "z": 10
     },
     {
-      "id": "n_jur",
-      "x": 1016,
-      "y": 1539,
-      "w": 230,
-      "h": 169,
-      "cls": "complement",
-      "tag": "SUBSÍDIO NORMATIVO",
-      "title": "Aparato Jurídico Brasileiro",
-      "desc": "Conjunto de normas e instrumentos jurídicos relacionados à proteção da dignidade, da privacidade, da liberdade e da segurança no ambiente digital, mobilizados como referência normativa para a análise do fenômeno.",
-      "action": "Oferece o referencial normativo que permite situar as manifestações de misoginia digital no ordenamento brasileiro e contribuindo na formulação das diretrizes formativas.",
-      "z": 10
-    },
-    {
       "id": "n_met_net",
-      "x": 608,
-      "y": 1246,
+      "x": 613,
+      "y": 1260,
       "w": 330,
       "h": 166,
       "cls": "m3",
@@ -157,10 +144,23 @@
       "z": 10
     },
     {
+      "id": "n_jur",
+      "x": 1013,
+      "y": 1260,
+      "w": 230,
+      "h": 169,
+      "cls": "complement",
+      "tag": "SUBSÍDIO NORMATIVO",
+      "title": "Aparato Jurídico Brasileiro",
+      "desc": "Conjunto de normas e instrumentos jurídicos relacionados à proteção da dignidade, da privacidade, da liberdade e da segurança no ambiente digital, mobilizados como referência normativa para a análise do fenômeno.",
+      "action": "Oferece o referencial normativo que permite situar as manifestações de misoginia digital no ordenamento brasileiro, contribuindo na formulação das diretrizes formativas.",
+      "z": 10
+    },
+    {
       "id": "n_met_ana",
-      "x": 604,
-      "y": 1440,
-      "w": 326,
+      "x": 613,
+      "y": 1470,
+      "w": 330,
       "h": 155,
       "cls": "m5",
       "tag": "PERCURSO ANALÍTICO",
@@ -171,8 +171,8 @@
     },
     {
       "id": "n_diag",
-      "x": 618,
-      "y": 1627,
+      "x": 625,
+      "y": 1680,
       "w": 304,
       "h": 190,
       "cls": "r2",
@@ -184,15 +184,15 @@
     },
     {
       "id": "n_poc",
-      "x": 637,
-      "y": 1849,
+      "x": 651,
+      "y": 1920,
       "w": 252,
       "h": 211,
       "cls": "r4",
       "tag": "DESDOBRAMENTO PROPOSITIVO",
       "title": "Simulador Sociotécnico (PoC)",
       "desc": "Produto educacional (Prova de Conceito). Um ambiente interativo destinado a tornar perceptíveis, de forma pedagógica, como mecanismos sociotécnicos das plataformas podem influenciar a visibilidade, circulação e modulação de conteúdos associados a manifestações de hostilidade e desigualdade no ambiente digital.",
-      "action": "Constitui um desdobramento propositivo da pesquisa, destinado a tornar mais inteligíveis, em perspectiva pedagógica, as relações entre a arquitetura e os mecanismos algorítmicos das plataformas e a circulação e amplificação de diferentes manifestações de hostilidade e desigualdade no ambiente digital, tendo a misoginia digital como recorte empírico central.",
+      "action": "Constitui um desdobramento propositivo da pesquisa, destinado a tornar mais inteligíveis, em perspectiva pedagógica, as relações entre a arquitetura e os mecanismos algorítmicos das plataformas e a circulação e amplificação de diferentes manifestações de hostilidade e desigualdade no ambiente digital.",
       "z": 10
     }
   ],
@@ -254,15 +254,19 @@
       "n_met_net"
     ],
     [
-      "n_jur",
-      "n_diag"
-    ],
-    [
       "n_met_net",
       "n_met_ana"
     ],
     [
       "n_met_ana",
+      "n_diag"
+    ],
+    [
+      "n_jur",
+      "n_diag"
+    ],
+    [
+      "n_manne",
       "n_diag"
     ],
     [
