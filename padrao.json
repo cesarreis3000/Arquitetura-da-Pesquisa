@@ -1,263 +1,284 @@
 {
   "nodes": [
     {
-      "id": "macro",
-      "x": 683.5,
+      "id": "n_macro",
+      "x": 610,
       "y": 0,
       "w": 340,
       "h": 212,
       "cls": "macro",
       "tag": "NÚCLEO MACROESTRUTURAL",
       "title": "Educação Tecnológica e Formação Ética",
-      "desc": "O campo formativo amplo que ultrapassa a dimensão instrumental. Visa desenvolver a capacidade de compreender criticamente, avaliar eticamente e intervir de forma responsável nas relações sociotécnicas.",
-      "action": "Constitui o eixo estruturante da pesquisa. Fundamenta a práxis educativa orientada ao letramento crítico, superando a racionalidade punitiva em prol da emancipação sociotécnica do sujeito.",
+      "desc": "Campo formativo que ultrapassa a dimensão instrumental da tecnologia, orientando-se para a compreensão crítica, a avaliação ética e a participação responsável nas relações sociotécnicas contemporneas.",
+      "action": "Constitui o eixo formativo da pesquisa. Fundamenta uma práxis educativa orientada ao desenvolvimento da capacidade de compreender criticamente as relações sociotécnicas, avaliar suas implicações éticas e agir de forma responsável na cultura digital.",
       "z": 10
     },
     {
-      "id": "bazzo",
-      "x": 248,
-      "y": 64,
-      "w": 276,
-      "h": 153,
-      "cls": "core",
-      "tag": "FUNDAMENTO / EPT",
-      "title": "Walter Bazzo",
-      "desc": "Defende a Educação Tecnológica (sob o enfoque CTS) como vetor indispensável de desenvolvimento social, exigindo uma mudança cultural que supere a visão puramente instrumental da técnica.",
-      "action": "Fundamenta o papel da Educação Tecnológica não como mero treinamento operacional, mas como espaço indispensável de formação ética e letramento sociotécnico.",
-      "z": 10
-    },
-    {
-      "id": "feenberg",
-      "x": 190,
+      "id": "n_bazzo",
+      "x": 312,
       "y": 260,
-      "w": 294,
-      "h": 157,
+      "w": 220,
+      "h": 172,
       "cls": "core",
-      "tag": "TEORIA CRÍTICA",
+      "tag": "FUNDAMENTO DA EDUCAÇÃO TECNOLÓGICA",
+      "title": "Walter Antonio Bazzo",
+      "desc": "A Educação Tecnológica ultrapassa a formação instrumental e envolve a compreensão crítica das relações entre ciência, tecnologia e sociedade, incorporando dimensões sociais, éticas e cidadãs à formação.",
+      "action": "Fundamenta a compreensão da Educação Tecnológica como espaço de formação crítica e ética, capaz de preparar sujeitos para compreender e participar conscientemente das relações entre tecnologia e sociedade.",
+      "z": 10
+    },
+    {
+      "id": "n_feenberg",
+      "x": 620,
+      "y": 240,
+      "w": 326,
+      "h": 270,
+      "cls": "core",
+      "tag": "TEORIA CRÍTICA DA TECNOLOGIA | DIMENSÃO POLÍTICA",
       "title": "Andrew Feenberg",
-      "desc": "A técnica não é neutra, mas um campo de disputas. As tecnologias incorporam valores e escolhas sociais, podendo ser objeto de crítica, participação e reconstrução democrática.",
-      "action": "Fundamenta a urgência da desalienação algorítmica, embasando as diretrizes formativas e a própria PoC (simulador, caso mantido) como estratégias de reapropriação crítica e intervenção.",
+      "desc": "A tecnologia pode ser compreendida como uma construção sociotécnica na qual se articulam funcionalidade técnica, valores, interesses e relações sociais. Sua configuração não é inevitável: constitui-se historicamente e pode ser objeto de disputa, crítica e transformação democrática. Conceitos-chave: código técnico, instrumentalização e democratização.",
+      "action": "Fundamenta a leitura crítica das tecnologias digitais como configurações sociotécnicas, permitindo analisar como escolhas e valores sociais são incorporados às estruturas técnicas e como essas configurações podem ser objeto de crítica, disputa e transformação democrática.",
       "z": 10
     },
     {
-      "id": "socio",
-      "x": 720,
-      "y": 256,
-      "w": 302,
-      "h": 149,
-      "cls": "core",
-      "tag": "ESTRUTURA SOCIOTÉCNICA",
-      "title": "Capitalismo de Vigilância",
-      "desc": "A mercantilização da experiência humana. A extração do \"superávit comportamental\" para predição e modulação sob um manto de invisibilidade.",
-      "action": "Explicar o motor econômico invisível que se beneficia do engajamento extremista.",
+      "id": "n_socio",
+      "x": 619,
+      "y": 537,
+      "w": 320,
+      "h": 193,
+      "cls": "complement",
+      "tag": "ESTRUTURA SOCIOTÉCNICA DA SOCIEDADE DE PLATAFORMAS",
+      "title": "Sociedade de Plataformas",
+      "desc": "Ambiente sociotécnico no qual plataformas digitais articulam infraestrutura, dataficação, modelos de negócio, algoritmos e práticas de seleção e modulação, produzindo novas formas de organização da experiência social.",
+      "action": "Constitui o contexto estrutural no qual serão analisadas as relações entre arquitetura das plataformas, práticas algorítmicas e circulação de manifestações de misoginia.",
       "z": 10
     },
     {
-      "id": "zuboff",
-      "x": 318,
-      "y": 482,
-      "w": 227,
-      "h": 167,
+      "id": "n_zuboff",
+      "x": 244,
+      "y": 768,
+      "w": 246,
+      "h": 154,
       "cls": "core",
-      "tag": "TEORIA DA VIGILÂNCIA",
+      "tag": "CAPITALISMO DE VIGILÂNCIA",
       "title": "Shoshana Zuboff",
-      "desc": "A noção de \"Poder Instrumentário\" supera a metáfora do Panóptico. O controle não opera mais pelo medo ou disciplina, mas por uma arquitetura digital que sintoniza e pastoreia comportamentos de forma automatizada e invisível.",
-      "action": "Fornece a categoria analítica central para explicar como a plataforma não apenas observa, mas modifica a ação humana para garantir engajamento (superávit comportamental).",
+      "desc": "Analisa o capitalismo de vigilância como lógica econômica baseada na apropriação da experiência humana como matéria-prima para extração de dados, predição e intervenção comportamental, articulada ao Poder Instrumentário.",
+      "action": "Fornece categorias para compreender a dimensão econômica da coleta e utilização de dados comportamentais e sua relação com processos de predição e modulação.",
       "z": 10
     },
     {
-      "id": "bruno",
-      "x": 584.5,
-      "y": 482,
-      "w": 244.5,
-      "h": 165,
+      "id": "n_vandijck",
+      "x": 520,
+      "y": 768,
+      "w": 226,
+      "h": 148,
       "cls": "core",
-      "tag": "RACIONALIDADE ALGORÍTMICA",
+      "tag": "INFRAESTRUTURAS",
+      "title": "Van Dijck, Poell & De Waal",
+      "desc": "A plataformização reorganiza práticas sociais, instituições e valores públicos em torno de infraestruturas digitais, modelos de negócios e mecanismos de dataficação e seleção algorítmica.",
+      "action": "Permite compreender como as plataformas, enquanto infraestruturas digitais, reorganizam práticas sociais e relações institucionais, com implicações para valores públicos.",
+      "z": 10
+    },
+    {
+      "id": "n_bruno",
+      "x": 764,
+      "y": 764,
+      "w": 230,
+      "h": 142,
+      "cls": "core",
+      "tag": "RASTREIO E MODULAÇÃO",
       "title": "Fernanda Bruno",
-      "desc": "A racionalidade algorítmica como forma de modulação e governo das condutas. O \"confisco do comum\" evidencia a captura da atenção, da subjetividade e dos afetos dos usuários nas redes.",
-      "action": "Nacionaliza o debate da vigilância e fornece a chave sociotécnica para entender como a plataforma modula emoções, operando como a engrenagem de cooptação e radicalização do sujeito.",
+      "desc": "Analisa a racionalidade algorítmica associada a processos de rastreamento, classificação e modulação, permitindo compreender formas contemporâneas de vigilância e governo das condutas.",
+      "action": "Oferece categorias para analisar como práticas de rastreamento, classificação e modulação participam da produção de formas contemporâneas de visibilidade, monitoramento e governo das condutas nas plataformas digitais.",
       "z": 10
     },
     {
-      "id": "vandijck",
-      "x": 872.5,
-      "y": 486,
-      "w": 237,
-      "h": 165,
+      "id": "n_noble",
+      "x": 1022,
+      "y": 766,
+      "w": 238,
+      "h": 150,
       "cls": "core",
-      "tag": "TEORIA DAS PLATAFORMAS",
-      "title": "Van Dijck & Noble",
-      "desc": "A plataformização da sociedade e a opressão algorítmica: como o design e a codificação de vieses estruturais (especialmente de gênero) operam para maximizar o engajamento.",
-      "action": "Conecta o modelo de negócios das plataformas à propagação de tecnoculturas tóxicas, demonstrando que a misoginia algorítmica não é uma falha do sistema (bug).",
+      "tag": "ALGORITMOS E DESIGUALDADE",
+      "title": "Safiya Umoja Noble",
+      "desc": "Os sistemas algorítmicos não operam em um vazio social: processos de classificação e representação podem reproduzir e reforçar relações estruturais de desigualdade.",
+      "action": "Permite problematizar a neutralidade dos algoritmos e examinar como processos de classificação e visibilidade podem reproduzir ou reforçar desigualdades estruturais.",
       "z": 10
     },
     {
-      "id": "mis",
-      "x": 1102.5,
-      "y": 284.5,
-      "w": 298,
-      "h": 145,
+      "id": "n_mis",
+      "x": 614,
+      "y": 963,
+      "w": 328,
+      "h": 186,
       "cls": "object",
       "tag": "FENÔMENO EMPÍRICO",
       "title": "Misoginia Digital",
-      "desc": "Não se resume a um ódio psicológico individual, mas opera como um sistema de policiamento e punição social para manutenção das hierarquias de gênero.",
-      "action": "Constitui o recorte temático da pesquisa. Foi eleita como o fenômeno observável para o mapeamento netnográfico de como a modulação algorítmica potencializa a radicalização do usuário na prática.",
+      "desc": "Manifestações de hostilidade, desqualificação, constrangimento e punição dirigidas às mulheres em ambientes digitais, analisadas como possíveis expressões de policiamento de gênero.",
+      "action": "Constitui o recorte temático e empírico da pesquisa, permitindo investigar como as dinâmicas de interação e visibilidade se articulam à circulação de manifestações de misoginia nas plataformas digitais.",
       "z": 10
     },
     {
-      "id": "manne",
-      "x": 1406,
-      "y": 451.5,
-      "w": 220,
-      "h": 153,
-      "cls": "object",
+      "id": "n_manne",
+      "x": 300,
+      "y": 1220,
+      "w": 246,
+      "h": 134,
+      "cls": "core",
       "tag": "TEORIA DA MISOGINIA",
       "title": "Kate Manne",
-      "desc": "A misoginia não como ódio psicológico individual, mas como o 'braço punitivo' do patriarcado. Um sistema focado em policiar e sancionar mulheres que desafiam as normas de gênero na esfera pública.",
-      "action": "Fornece base analítica para decodificar o discurso das tecnoculturas tóxicas, evidenciando que o assédio em rede atua, na prática, como a execução digital dessa sanção social.",
+      "desc": "A misoginia como o braço punitivo do patriarcado: um sistema focado em policiar e sancionar mulheres que desafiam as normas de gênero na esfera pública.",
+      "action": "Fornece a base conceitual para interpretar manifestações de hostilidade como práticas de policiamento, permitindo investigar como essas dinâmicas se manifestam digitalmente.",
       "z": 10
     },
     {
-      "id": "jur",
-      "x": 959.5,
-      "y": 682,
-      "w": 290,
-      "h": 184,
+      "id": "n_jur",
+      "x": 1076,
+      "y": 1218,
+      "w": 260,
+      "h": 160,
       "cls": "complement",
       "tag": "SUBSÍDIO NORMATIVO",
       "title": "Aparato Jurídico Brasileiro",
-      "desc": "O marco regulatório (Leis Carolina Dieckmann, Lola, Stalking e ECA). A aplicação exclusivamente punitiva foca no indivíduo (sintoma) e ignora o design da plataforma, tornando-se estruturalmente insuficiente contra a escala algorítmica.",
-      "action": "Serve como base normativa cujos preceitos serão traduzidos de uma lógica estritamente sancionatória para uma práxis pedagógica de letramento sociotécnico.",
+      "desc": "Conjunto de normas e instrumentos jurídicos relacionados à proteção da dignidade, da privacidade, da liberdade e da segurança no ambiente digital, mobilizados como referência normativa para a análise do fenômeno.",
+      "action": "Oferece o referencial normativo que permite situar as manifestações de misoginia digital no ordenamento brasileiro e contribuindo na formulação das diretrizes formativas.",
       "z": 10
     },
     {
-      "id": "met_net",
-      "x": 1292.5,
-      "y": 632,
-      "w": 256,
-      "h": 183,
+      "id": "n_met_net",
+      "x": 629,
+      "y": 1218,
+      "w": 306,
+      "h": 150,
       "cls": "m3",
       "tag": "ESTRATÉGIA METODOLÓGICA",
-      "title": "Netnografia (Robert V. Kozinets)",
-      "desc": "Imersão em fóruns do Reddit, YouTube (conteúdo de amplo alcance e machosfera) e no X (Twitter). A delimitação às Big Techs é proposital para observar o ódio operando estritamente sob a lógica comercial do engajamento.",
-      "action": "Mapear as interações in loco para evidenciar como o policiamento de gênero (Manne) se materializa e é impulsionado na arquitetura dessas plataformas.",
+      "title": "Investigação Netnográfica",
+      "desc": "Imersão empírica em plataformas (Reddit, YouTube, X). Método focado em mapear e observar as interações in loco (Kozinets).",
+      "action": "Investigar, em contexto, como manifestações de policiamento de gênero se apresentam, circulam e interagem nos ambientes digitais selecionados.",
       "z": 10
     },
     {
-      "id": "met_ana",
-      "x": 1287,
-      "y": 857,
-      "w": 248,
-      "h": 143.5,
+      "id": "n_met_ana",
+      "x": 623,
+      "y": 1404,
+      "w": 286,
+      "h": 141,
       "cls": "m5",
       "tag": "PERCURSO ANALÍTICO",
       "title": "Análise de Conteúdo",
-      "desc": "Método de Laurence Bardin. O corpus netnográfico será submetido a uma categorização a priori (ancorada nos eixos de vigilância, modulação e policiamento) e a categorias emergentes (a posteriori).",
-      "action": "Assegura o rigor epistemológico na transição entre o dado empírico bruto e a evidência científica, revelando os padrões discursivos que estruturam a radicalização na prática.",
+      "desc": "Método de Laurence Bardin. Categorização do corpus netnográfico (a priori e a posteriori) para estruturar os dados coletados.",
+      "action": "Contribui para a sistematização e o rigor da análise na transição entre o dado empírico bruto (interações online) e a identificação de categorias, recorrências e dinâmicas interacionais.",
       "z": 10
     },
     {
-      "id": "resultado",
-      "x": 694,
-      "y": 907,
-      "w": 300,
-      "h": 175,
+      "id": "n_diag",
+      "x": 673,
+      "y": 1591,
+      "w": 304,
+      "h": 190,
       "cls": "r2",
       "tag": "RESULTADO DA PESQUISA",
       "title": "Diagnóstico e Diretrizes Formativas",
-      "desc": "A consolidação teórica e empírica do estudo. O mapeamento de como a misoginia opera via racionalidade algorítmica e a tradução do aparato jurídico em competências críticas.",
-      "action": "Responde diretamente à Pergunta de Pesquisa, entregando o conhecimento científico gerado pela dissertação.",
+      "desc": "Consolidação dos resultados teóricos e empíricos da pesquisa, permitindo caracterizar as manifestações de misoginia identificadas e suas relações com as dinâmicas sociotécnicas das plataformas.",
+      "action": "Sistematiza os resultados em resposta à pergunta de pesquisa, embasando a tradução pedagógica para competências críticas de letramento sociotécnico.",
       "z": 10
     },
     {
-      "id": "poc",
-      "x": 1065,
-      "y": 1042.5,
-      "w": 260,
-      "h": 158,
+      "id": "n_poc",
+      "x": 658,
+      "y": 1817,
+      "w": 252,
+      "h": 211,
       "cls": "r4",
       "tag": "DESDOBRAMENTO PROPOSITIVO",
       "title": "Simulador Sociotécnico (PoC)",
-      "desc": "Produto educacional em formato PoC. Um ambiente interativo que evidencia pedagogicamente ao usuário a modulação invisível e a opacidade algorítmica das plataformas.",
-      "action": "Proposição em formato de Prova de Conceito (PoC). Seu escopo metodológico delimita-se à estruturação lógico-pedagógica do modelo, pavimentando o caminho para futuras intervenções em campo.",
+      "desc": "Produto educacional (Prova de Conceito). Um ambiente interativo destinado a tornar perceptíveis, de forma pedagógica, como mecanismos sociotécnicos das plataformas podem influenciar a visibilidade, circulação e modulação de conteúdos associados a manifestações de hostilidade e desigualdade no ambiente digital.",
+      "action": "Constitui um desdobramento propositivo da pesquisa, destinado a tornar mais inteligíveis, em perspectiva pedagógica, as relações entre a arquitetura e os mecanismos algorítmicos das plataformas e a circulação e amplificação de diferentes manifestações de hostilidade e desigualdade no ambiente digital, tendo a misoginia digital como recorte empírico central.",
       "z": 10
     }
   ],
   "links": [
     [
-      "macro",
-      "feenberg"
+      "n_macro",
+      "n_feenberg"
     ],
     [
-      "macro",
-      "socio"
+      "n_macro",
+      "n_bazzo"
     ],
     [
-      "macro",
-      "mis"
+      "n_feenberg",
+      "n_socio"
     ],
     [
-      "socio",
-      "zuboff"
+      "n_socio",
+      "n_zuboff"
     ],
     [
-      "socio",
-      "bruno"
+      "n_socio",
+      "n_vandijck"
     ],
     [
-      "socio",
-      "vandijck"
+      "n_socio",
+      "n_bruno"
     ],
     [
-      "mis",
-      "manne"
+      "n_socio",
+      "n_noble"
     ],
     [
-      "socio",
-      "mis"
+      "n_zuboff",
+      "n_mis"
     ],
     [
-      "mis",
-      "met_net"
+      "n_vandijck",
+      "n_mis"
     ],
     [
-      "mis",
-      "jur"
+      "n_bruno",
+      "n_mis"
     ],
     [
-      "met_net",
-      "met_ana"
+      "n_noble",
+      "n_mis"
     ],
     [
-      "jur",
-      "resultado"
+      "n_mis",
+      "n_manne"
     ],
     [
-      "met_ana",
-      "resultado"
+      "n_mis",
+      "n_jur"
     ],
     [
-      "macro",
-      "resultado"
+      "n_mis",
+      "n_met_net"
     ],
     [
-      "resultado",
-      "poc"
+      "n_jur",
+      "n_diag"
     ],
     [
-      "macro",
-      "bazzo"
+      "n_met_net",
+      "n_met_ana"
+    ],
+    [
+      "n_met_ana",
+      "n_diag"
+    ],
+    [
+      "n_diag",
+      "n_poc"
     ]
   ],
   "spineNodes": [
-    "macro",
-    "socio",
-    "mis",
-    "jur",
-    "resultado"
+    "n_macro",
+    "n_feenberg",
+    "n_socio",
+    "n_mis",
+    "n_met_net",
+    "n_met_ana",
+    "n_diag",
+    "n_poc"
   ],
-  "customLinkColors": {
-    "n_bauman-n_macro": "#3b82f6",
-    "n_bazzo-n_macro": "#3b82f6"
-  }
+  "customLinkColors": {}
 }
